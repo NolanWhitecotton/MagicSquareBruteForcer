@@ -1,12 +1,5 @@
 #include "MagicSquareHeader.h"
-/*
-things to add
--arg support minimized=false, doRotations=true, min=1, max=req
--dynamic (proven?) ordering
-    -start near center?
-    -move in the position that minimizes the time until next line completion
-    -this can be cached once at the begining
-*/
+
 int main() {
     Square sq = Square(3);
 
