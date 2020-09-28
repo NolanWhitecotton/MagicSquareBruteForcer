@@ -1,0 +1,172 @@
+#include "MagicSquareHeader.h"
+
+Square::Square(int size) {
+    allocArray(size);
+}
+
+Square::Square(const Square& s) {
+    allocArray(s.getSize());
+    addAllFrom(s);
+    setRecurRange(s.getRecurMax());
+    setMinimized(s.getMinimized());
+}
+
+void Square::allocArray(int size) {
+    this->size = size;
+    this->addedNumCount = 0;
+
+    //create rows
+    Square::nums = (int**)calloc(size, sizeof(int*));
+    if (nums == nullptr) { exit(EXIT_FAILURE); }
+
+    //for all rows
+    for (int i = 0; i < size; i++) {
+        //create columns
+        int* r = (int*)calloc(size, sizeof(int));
+        if (r == nullptr) { exit(EXIT_FAILURE); }
+
+        Square::nums[i] = r;
+    }
+}
+
+Square::~Square() {
+    //free all columns
+    for (int i = 0; i < Square::size; i++) {
+        free(Square::nums[i]);
+    }
+
+    //free row
+    free(Square::nums);
+}
+
+int Square::getSize() const { return size; }
+int Square::isEmpty() const { return addedNumCount == 0; }
+int Square::getAddedNumCount() const { return addedNumCount; }
+int Square::getRecurMax() const { return recurMax; }
+int Square::getMinimized() const { return isMinimized; }
+
+void Square::addAllFrom(const Square& s) {
+    for (int i = 0; i < s.getAddedNumCount(); i++) {
+        this->add(s.getNum(i));
+    }
+}
+
+void Square::printSquare() const {//TODO print tranformations
+    if (this->isMinimized) {
+        for (int i = 0; i < pow(size,2); i++) {
+            std::cout << this->getNum(i) << ' ';
+        }
+    } else {
+        std::cout << "Size: " << size << " x " << size << std::endl;
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                std::cout << std::setw(3) << Square::nums[x][y];
+            }
+            std::cout << "\n";
+        }
+    }
+    std::cout << std::endl;
+}
+
+void Square::add(int n) {
+    if (getAddedNumCount() < pow(size, size)) {
+        //add number
+        int x = getLinearX(getAddedNumCount(), Square::size);
+        int y = getLinearY(getAddedNumCount(), Square::size);
+
+        nums[x][y] = n;
+        
+        //cache if at first row end
+        if (getAddedNumCount() == size) {//TODO if dynamic size, edit cache function accordingly, the rest should work
+            int sum = 0;
+            for (int i = 0; i < size; i++) {
+                sum += getNum(i);
+            }
+            lineSumCache = sum;
+        }
+
+        addedNumCount++;
+    }else{
+        std::cout << "Cannot insert another number" << std::endl;
+    }
+}
+
+int Square::getNum(int pos) const {
+    return nums[getLinearX(pos, size)][getLinearY(pos, size)];
+}
+
+int Square::getNum(int x, int y) const {
+    return Square::nums[x][y];
+}
+
+bool Square::isValid() const {
+    /*check uniqueness*/
+    for (int i = 0; i < getAddedNumCount() - 1; i++) {
+        if (this->getNum(i) == this->getNum(getAddedNumCount()-1)) {
+            return false;
+        }
+    }
+    
+    /*check if square is minimized*/
+    //check if the lowest corner is in the top left
+    int corners[3] = {getNum(0,size-1), getNum(size-1,0), getNum(size-1,size-1)};
+    for (int i = 0; i < 2; i++) {
+        if (corners[i] != 0 && getNum(0, 0) > corners[i]) {
+            return false;
+        }
+    }
+    
+    //check if its mirrored on the diag
+    if (getNum(0, 2) != 0 && getNum(2, 0) != 0 && getNum(0, 2) < getNum(2, 0)) {
+        return false;
+    }
+    
+    /*check linesums*/
+    if (this->getAddedNumCount() > this->size) {//if row is cached
+        //row
+        if (getLinearY(this->getAddedNumCount(), this->size) == 0) {
+            int sum = 0;
+            for (int i = 0; i < size; i++) {
+                sum += this->getNum(getLinearX(getAddedNumCount(), size) - 1, i);
+            }
+            if (sum != this->lineSumCache) {
+                return false;
+            }
+        }
+
+        //col
+        if(getAddedNumCount() >= size*(size-1)+1){
+            int sum = 0;
+            for (int i = 0; i < size; i++) {
+                sum += this->getNum(i, getLinearY(getAddedNumCount()-1, size) - 0);
+            }
+            if (sum != this->lineSumCache) {
+                return false;
+            }
+        }
+
+        //+ diag
+        if (getAddedNumCount() == size * (size - 1) + 1) {
+            int sum = 0;
+            for (int i = 0; i < size; i++) {
+                sum += this->getNum(i, size - i - 1);
+            }
+            if (sum != this->lineSumCache) {
+                return false;
+            }
+        }
+
+        //- diag
+        if (getAddedNumCount() == size * size) {
+            int sum = 0;
+            for (int i = 0; i < size; i++) {
+                sum += this->getNum(i, i);
+            }
+            if (sum != this->lineSumCache) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
