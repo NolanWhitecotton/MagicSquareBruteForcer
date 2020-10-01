@@ -29,3 +29,8 @@ Magic Square Brute Forcer is a program that allows you to find all possible magi
 		-i, indentical		Includes magic squares that are mirrors / rotations of found squares
 		-p [optional int] 	Prints the progress of the search, every given seconds
 		-o [Directory]		Save the found squares to an output file
+
+<h2> Examples </h2>
+`msbf -s 3 -m 9 -c -i`
+`msbf -s 3 --max 9 -ci`
+`msbf --size 3 --max 10 --min 2 -c`
