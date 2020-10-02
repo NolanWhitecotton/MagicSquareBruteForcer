@@ -3,6 +3,7 @@
 #include <iostream>
 #include <math.h>
 #include <iomanip>
+#include <string>
 
 class Square {
 private:
@@ -67,3 +68,15 @@ public:
 int convert2dtoLinear(int x, int y, int size);
 int getLinearX(int pos, int size);
 int getLinearY(int pos, int size);
+
+//returns the sum of a line starting at staryx, starty, and moving incx, incy each time
+//returns <0 if a zero is found
+int getLineSum(const Square& s, int startx, int starty, int incx, int incy);
+
+/*
+read the arguments and store them in the given variables*/
+void readArgs(int argc, char  *argv[], int *size, int *max,
+    int *min, int *progress,
+    bool *compact, bool *identical,
+    std::string *output);
+
