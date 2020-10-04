@@ -71,7 +71,7 @@ int getLinearY(int pos, int size);
 
 //returns the sum of a line starting at staryx, starty, and moving incx, incy each time
 //returns <0 if a zero is found
-int getLineSum(const Square& s, int startx, int starty, int incx, int incy);
+int getLineSum(const Square& s, int startR, int startC, int incR, int incC);
 
 /*
 read the arguments and store them in the given variables*/
@@ -80,3 +80,5 @@ void readArgs(int argc, char  *argv[], int *size, int *max,
     bool *compact, bool *identical,
     std::string *output);
 
+//returns true if min <= intput <= max
+bool inRange(int input, int min, int max);

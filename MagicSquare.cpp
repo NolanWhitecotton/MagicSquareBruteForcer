@@ -99,3 +99,37 @@ void readArgs(int argc, char* argv[], int* size, int* max,
         exit(EXIT_FAILURE);
     }
 }
+
+int getLineSum(const Square& s, int startR, int startC, int incR, int incC) {
+    //check ranges
+    if (!(inRange(incR, -1, 1) && inRange(incC, -1, 1) && 
+        inRange(startR, 0, s.getSize()-1) && inRange(startC, 0, s.getSize() - 1))) {
+        std::cout << "invalid getLineSum ranges";
+        exit(EXIT_FAILURE);
+    }
+
+    //get sum
+    int sum = 0, r = startR, c = startC;
+    bool atEnd = false;
+    while (!atEnd) {
+        //add sum
+        int toAdd = s.getNum(r, c);
+        if (toAdd == 0) {
+            return -1;
+        }
+        sum += toAdd;
+
+        //check atEnd
+        atEnd = (r == s.getSize() - 1 && incR > 0) || 
+                (c == s.getSize() - 1 && incC > 0);
+
+        //inc r and c
+        r += incR;
+        c += incC;
+    }
+    return sum;
+}
+
+bool inRange(int input, int min, int max) {
+    return input <= max && input >= min;
+}

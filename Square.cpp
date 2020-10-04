@@ -100,7 +100,7 @@ int Square::getNum(int x, int y) const {
 }
 
 bool Square::isValid() const {
-    /*check uniqueness*/
+    /*check that the newest number is not repeated*/
     for (int i = 0; i < getAddedNumCount() - 1; i++) {
         if (this->getNum(i) == this->getNum(getAddedNumCount()-1)) {
             return false;
@@ -115,58 +115,26 @@ bool Square::isValid() const {
             return false;
         }
     }
-    
     //check if its mirrored on the diag
     if (getNum(0, 2) != 0 && getNum(2, 0) != 0 && getNum(0, 2) < getNum(2, 0)) {
         return false;
     }
     
-    /*check linesums*/
-    //TODO make this code less copying with getLineSum()
+    /*check that the row and column and diagionals are all valid*/
+    //TODO call getLineSum backwards, so fails happen faster
     if (this->getAddedNumCount() > this->size) {//if row is cached
         //row
-        if (getLinearY(this->getAddedNumCount(), this->size) == 0) {
-            int sum = 0;
-            for (int i = 0; i < size; i++) {
-                sum += this->getNum(getLinearX(getAddedNumCount(), size) - 1, i);
-            }
-            if (sum != this->lineSumCache) {
-                return false;
-            }
-        }
-
+        int rSum = getLineSum(*this, getLinearX(getAddedNumCount(), size) - 1, 0, 0, 1);
+        if (rSum > 0 && rSum != this->lineSumCache) { return false; }
         //col
-        if(getAddedNumCount() >= size*(size-1)+1){
-            int sum = 0;
-            for (int i = 0; i < size; i++) {
-                sum += this->getNum(i, getLinearY(getAddedNumCount()-1, size) - 0);
-            }
-            if (sum != this->lineSumCache) {
-                return false;
-            }
-        }
-
+        int cSum = getLineSum(*this, 0, getLinearY(getAddedNumCount() - 1, size), 1, 0);
+        if (cSum > 0 && cSum != this->lineSumCache) { return false; }
         //+ diag
-        if (getAddedNumCount() == size * (size - 1) + 1) {
-            int sum = 0;
-            for (int i = 0; i < size; i++) {
-                sum += this->getNum(i, size - i - 1);
-            }
-            if (sum != this->lineSumCache) {
-                return false;
-            }
-        }
-
+        int pdSum = getLineSum(*this, 0, size - 1, 1, -1);
+        if (pdSum > 0 && pdSum != this->lineSumCache) { return false; }
         //- diag
-        if (getAddedNumCount() == size * size) {
-            int sum = 0;
-            for (int i = 0; i < size; i++) {
-                sum += this->getNum(i, i);
-            }
-            if (sum != this->lineSumCache) {
-                return false;
-            }
-        }
+        int ndSum = getLineSum(*this, 0, 0, 1, 1);
+        if (ndSum > 0 && ndSum != this->lineSumCache) { return false; }
     }
 
     return true;
