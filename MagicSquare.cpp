@@ -1,7 +1,7 @@
 #include "MagicSquareHeader.h"
 
 int main(int argc, char *argv[]) {
-    //get args
+    //arg defaults
     int size = 0, max = 0,
         min = 1, progress = 0;
     bool compact = false, identical = false;
@@ -26,9 +26,11 @@ int convert2dtoLinear(int x, int y, int size) {return x * size + y;}
 int getLinearX(int pos, int size) {return pos / size;}
 int getLinearY(int pos, int size) {return pos % size;}
 
-//determines the format the square is printed
-void Square::setMinimized(bool minimized) {
-    isMinimized = minimized;
+void print_vector(const std::vector<std::string>& s) {
+    for (auto it = s.begin(); it != s.end(); it++) {
+        std::cout << *it << " ";
+    }
+    std::cout << std::endl;
 }
 
 void readArgs(int argc, char* argv[], int* size, int* max,
@@ -36,51 +38,61 @@ void readArgs(int argc, char* argv[], int* size, int* max,
     bool* compact, bool* identical,
     std::string* output) {
 
-    for (int i = 1; i < argc; i++) {
-        std::string arg = argv[i];
-        
-        //max
-        if (arg == "-m" || arg == "--max") {
-            *max = std::stoi(argv[i + 1]);
-            i++;//TODO make this not horrible
-        }else
+    ArgReader ar = ArgReader(argc, argv);
+    while (ar.hasMoreArgs()) {
+        std::vector<std::string> s;
+        ar.next(s);
 
-        //size
-        if (arg == "-s" || arg == "--size") {
-            *size = std::stoi(argv[i + 1]);
-            i++;//TODO make this not horrible
-        }else
-
-        //min
-        if (arg == "-n" || arg == "--min") {
-            *min = std::stoi(argv[i + 1]);
-            i++;//TODO make this not horrible
-        }else
-
-        //output
-        if (arg == "-o" || arg == "--output") {
-            *output = ""; //TODO output file
-        }else
-
-        //progress
-        if (arg == "-p" || arg == "--progress") {
-            *progress = 1; //TODO progress, with optional next
-        } else
-
-        //flags
-        if (arg[0] == '-') {
-            for (int o = 1; o < arg.length(); o++) {
-                if (arg[o] == 'c') {
-                    *compact = true;
-                } else if (arg[o] == 'i'){
-                    *identical = true;
-                }else{
-                    std::cout << "Unknown flag '" << arg[o] << "'" << std::endl;
-                    exit(EXIT_FAILURE);
-                }
+        std::string a = s.at(0);
+        int optionCount = s.size();
+        if (a == "-m" || a == "--max") {
+            if (optionCount == 2) {
+                *max = std::stoi(s.at(1));
+            } else {
+                std::cout << a << " requires 2 arguments." << std::endl;
+                exit(EXIT_FAILURE);
             }
-        } else {
-            std::cout << "Unknown argument '" << arg << "'" << std::endl;
+        }
+        else if (a == "-s" || a == "--size") {
+            if (optionCount == 2) {
+                *size = std::stoi(s.at(1));
+            }
+            else {
+                std::cout << a << " requires 2 arguments." << std::endl;
+                exit(EXIT_FAILURE);
+            }
+        }
+        else if (a == "-n" || a == "--min") {
+            if (optionCount == 2) {
+               *min = std::stoi(s.at(1));
+            }
+            else {
+                std::cout << a << " requires 2 arguments." << std::endl;
+                exit(EXIT_FAILURE);
+            }
+        }
+        else if (a == "-o" || a == "--output") {
+            if (optionCount == 2) {
+                *output = s.at(1);
+            }
+            else {
+                std::cout << a << " requires 2 arguments." << std::endl;
+                exit(EXIT_FAILURE);
+            }
+        }
+        else if (a == "-p" || a == "--progress") {
+            if (optionCount == 2) {
+                *progress = stoi(s.at(1));
+            }
+            else {
+                *progress = 60;
+            }
+        }
+        else if (a == "-i" || a == "--identical") {
+            *identical = true;
+        }
+        else {
+            std::cout << "Unknown argument: " << a << std::endl;
             exit(EXIT_FAILURE);
         }
     }

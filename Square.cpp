@@ -172,3 +172,9 @@ void Square::setRecurRange(int min, int max) {
 void Square::setRecurRange(int max) {
     setRecurRange(1, max);
 }
+
+//determines the format the square is printed
+void Square::setMinimized(bool minimized) {
+    isMinimized = minimized;
+}
+

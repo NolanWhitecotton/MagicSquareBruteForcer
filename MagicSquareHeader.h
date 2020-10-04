@@ -4,6 +4,7 @@
 #include <math.h>
 #include <iomanip>
 #include <string>
+#include <vector>
 
 class Square {
 private:
@@ -73,8 +74,7 @@ int getLinearY(int pos, int size);
 //returns <0 if a zero is found
 int getLineSum(const Square& s, int startR, int startC, int incR, int incC);
 
-/*
-read the arguments and store them in the given variables*/
+//read the arguments and store them in the given variables
 void readArgs(int argc, char  *argv[], int *size, int *max,
     int *min, int *progress,
     bool *compact, bool *identical,
@@ -82,3 +82,22 @@ void readArgs(int argc, char  *argv[], int *size, int *max,
 
 //returns true if min <= intput <= max
 bool inRange(int input, int min, int max);
+
+class ArgReader {
+private:
+    int argc;
+    char** argv;
+
+    std::vector<int> argPositions;
+    int curArg;
+
+    void parseArgs();
+public:
+    ArgReader(int argc, char **argv);
+    bool hasMoreArgs();
+    void next(std::vector<std::string>& s);
+    int getArgumentCount();
+    int getCurrentArgNum();
+};
+
+void print_vector(const std::vector<std::string>& s);
