@@ -32,5 +32,5 @@ Magic Square Brute Forcer is a program that allows you to find all possible magi
 <h2> Examples </h2>
 
 `msbf -s 3 -m 9 -c -i` <br/>
-`msbf -s 3 --max 9 -ci`<br/>
+`msbf -s 3 --max 9 -c -i`<br/>
 `msbf --size 3 --max 10 --min 2 -c`<br/>
