@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <string>
 #include <vector>
+#include "time.h"
 
 class Square {
 private:
@@ -70,8 +71,14 @@ int convert2dtoLinear(int x, int y, int size);
 int getLinearX(int pos, int size);
 int getLinearY(int pos, int size);
 
-//returns the sum of a line starting at staryx, starty, and moving incx, incy each time
-//returns <0 if a zero is found
+/*
+returns the sum of a line starting at staryx, starty, and moving incx, incy each time
+returns <0 if a zero is found
+
+incC and incR -1 <= x <= 1
+startR or startC must be 0
+startR and startC must be  0 <= x < size
+*/
 int getLineSum(const Square& s, int startR, int startC, int incR, int incC);
 
 //read the arguments and store them in the given variables

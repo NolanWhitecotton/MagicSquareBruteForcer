@@ -13,6 +13,9 @@ int main(int argc, char *argv[]) {
         &compact, &identical, 
         &output);
 
+    time_t start;
+    time(&start);
+
     //calc squares
     Square sq = Square(size);
 
@@ -20,6 +23,9 @@ int main(int argc, char *argv[]) {
     sq.setRecurRange(min, max);
 
     sq.checkNextRecur();
+
+    time_t end;
+    time(&end);
 }
 
 int convert2dtoLinear(int x, int y, int size) {return x * size + y;}
@@ -132,7 +138,7 @@ int getLineSum(const Square& s, int startR, int startC, int incR, int incC) {
         sum += toAdd;
 
         //check atEnd
-        atEnd = (r == s.getSize() - 1 && incR > 0) || 
+        atEnd = (r == s.getSize() - 1 && incR > 0) || //TODO allow for this to flag at 0 if nessacary
                 (c == s.getSize() - 1 && incC > 0);
 
         //inc r and c
@@ -145,3 +151,23 @@ int getLineSum(const Square& s, int startR, int startC, int incR, int incC) {
 bool inRange(int input, int min, int max) {
     return input <= max && input >= min;
 }
+
+double Square::getCompletion() const {//this formula isnt very accurate and is just an estimation
+    int numC = pow(size, 2);
+    
+    double total = 0;
+    for (int i = 1; i <= numC; i++) {
+        double port = pow(((double)1 / (getRecurMax())), i);
+        total += port;
+    }
+
+    double percent = 0;
+    
+    for (int i = 0; i < numC; i++) {
+        double adding = ((double)this->getNum(i) / getRecurMax());
+        double port = pow(((double)1 / getRecurMax()), i + 1) / total;
+        percent += adding * port;
+    }
+    return percent*100;
+}
+
