@@ -7,46 +7,69 @@
 #include <vector>
 #include "time.h"
 
+class SquareManager {
+private:
+    bool isCompact;
+    int squareSize;
+    int recurMax;
+    int recurOffset;
+    bool showIdentical;
+public:
+    //constructors
+    SquareManager(bool isCompact, int squaresize, int reucrMin, int recurMax, bool showIdentical);
+
+    //getters
+    bool getIsCompact() const;
+    int  getSquareSize() const;
+    int getRecurMax() const;
+    int getRecurOffset() const;
+    bool getShowIdentical() const;
+
+    //methods
+    void startCheck();
+};
+
 class Square {
 private:
-    int size;
-    int **nums;
+    //data
+    SquareManager* manager;
+    int** nums;
     int addedNumCount;
-
-    bool isMinimized = false;
-    int recurMax;
-    bool recurOffset;
-
-    void allocArray(int size);
 
     int lineSumCache;
 
+    //constructor methods
+    void allocArray(int size);
     void addAllFrom(const Square& s);
+    void setManager(SquareManager* manager);
+
 public:
     /*contructors, destructors, and overloads*/
     //create an empty square
-    Square(int size);
+    Square(int size, SquareManager* manager);
 
     //copy construcor
     Square(const Square& s);
 
     //transform constructor
-    Square(const Square& s, bool mirrorX, bool mirrorY, bool rotCW, bool rotCC);//TODO transform constructor
+    Square(const Square& s, bool mirrorX, bool mirrorY, bool rotCW, bool rotCC);//TODO (ID2) transform constructor
 
     //destructor
     ~Square();
 
     /*const methods*/
-    int getSize() const;
     int isEmpty() const;
-    int getAddedNumCount() const;
     int getNum(int pos) const;
     int getNum(int x, int y) const;
     void printSquare() const;
     bool isValid() const;
+    double getCompletion() const;
+    SquareManager* getManager() const;
+    int getSize() const;
     int getRecurMax() const;
-    int getMinimized() const;
-
+    int getCompact() const;
+    int getAddedNumCount() const;
+    
     /*recursion*/
     void checkNextRecur() const;
 
@@ -54,13 +77,8 @@ public:
     //add n as the next int, update the caches if updateCaches is true
     void add(int n);
 
-    /*settings*/
-    void setRecurRange(int min, int max);
-    void setRecurRange(int max);
-    void setMinimized(bool minimized);
-
     /*rotation/mirror modifiers*/
-    void mirrorX();//TODO rot/mirrors
+    void mirrorX();//TODO (ID1) rot/mirrors
     void mirrorY();
     void rotCC();
     void rotCW();

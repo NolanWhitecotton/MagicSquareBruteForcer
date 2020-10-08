@@ -7,7 +7,7 @@ ArgReader::ArgReader(int argc, char** argv) {
 	this->parseArgs();
 }
 
-void ArgReader::parseArgs() {//-m 9 -s 3 -i
+void ArgReader::parseArgs() {
 	for (int i = 1; i < this->argc; i++) {
 		if (this->argv[i][0] == '-') {
 			this->argPositions.push_back(i);

@@ -13,19 +13,21 @@ int main(int argc, char *argv[]) {
         &compact, &identical, 
         &output);
 
+    //start timer
     time_t start;
     time(&start);
 
     //calc squares
-    Square sq = Square(size);
+    SquareManager sqm = SquareManager(compact, size, min, max, identical);
+    sqm.startCheck();
 
-    sq.setMinimized(compact);
-    sq.setRecurRange(min, max);
-
-    sq.checkNextRecur();
-
+    //end timer
     time_t end;
     time(&end);
+
+    //print completion
+    int calcTime = std::difftime(end,start);
+    std::cout << "done in " << calcTime << " second" << (calcTime==1 ? "" : "s") << "." << std::endl;;
 }
 
 int convert2dtoLinear(int x, int y, int size) {return x * size + y;}
@@ -39,6 +41,7 @@ void print_vector(const std::vector<std::string>& s) {
     std::cout << std::endl;
 }
 
+//read the arguments and store them in variables
 void readArgs(int argc, char* argv[], int* size, int* max,
     int* min, int* progress,
     bool* compact, bool* identical,
@@ -97,6 +100,9 @@ void readArgs(int argc, char* argv[], int* size, int* max,
         else if (a == "-i" || a == "--identical") {
             *identical = true;
         }
+        else if (a == "-c" || a == "--compact") {
+            *compact = true;
+        }
         else {
             std::cout << "Unknown argument: " << a << std::endl;
             exit(EXIT_FAILURE);
@@ -138,7 +144,7 @@ int getLineSum(const Square& s, int startR, int startC, int incR, int incC) {
         sum += toAdd;
 
         //check atEnd
-        atEnd = (r == s.getSize() - 1 && incR > 0) || //TODO allow for this to flag at 0 if nessacary
+        atEnd = (r == s.getSize() - 1 && incR > 0) || //TODO (EF1) allow for this to flag at 0 if nessacary for reverse checking
                 (c == s.getSize() - 1 && incC > 0);
 
         //inc r and c
@@ -152,8 +158,9 @@ bool inRange(int input, int min, int max) {
     return input <= max && input >= min;
 }
 
-double Square::getCompletion() const {//this formula isnt very accurate and is just an estimation
-    int numC = pow(size, 2);
+//get an aproximation for how much of the square is calculated
+double Square::getCompletion() const {
+    int numC = pow(this->getSize(), 2);
     
     double total = 0;
     for (int i = 1; i <= numC; i++) {
@@ -170,4 +177,3 @@ double Square::getCompletion() const {//this formula isnt very accurate and is j
     }
     return percent*100;
 }
-

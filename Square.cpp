@@ -1,18 +1,17 @@
 #include "MagicSquareHeader.h"
 
-Square::Square(int size) {
+Square::Square(int size, SquareManager* manager) {
+    this->setManager(manager);
     allocArray(size);
 }
 
 Square::Square(const Square& s) {
-    allocArray(s.getSize());
-    addAllFrom(s);
-    setRecurRange(s.getRecurMax());
-    setMinimized(s.getMinimized());
+    this->setManager(s.getManager());
+    this->allocArray(s.getSize());
+    this->addAllFrom(s);
 }
 
 void Square::allocArray(int size) {
-    this->size = size;
     this->addedNumCount = 0;
 
     //create rows
@@ -31,19 +30,19 @@ void Square::allocArray(int size) {
 
 Square::~Square() {
     //free all columns
-    for (int i = 0; i < Square::size; i++) {
-        free(Square::nums[i]);
+    for (int i = 0; i < this->getSize(); i++) {
+        free(this->nums[i]);
     }
 
     //free row
-    free(Square::nums);
+    free(this->nums);
 }
 
-int Square::getSize() const { return size; }
+int Square::getSize() const { return this->getManager()->getSquareSize(); }
 int Square::isEmpty() const { return addedNumCount == 0; }
 int Square::getAddedNumCount() const { return addedNumCount; }
-int Square::getRecurMax() const { return recurMax; }
-int Square::getMinimized() const { return isMinimized; }
+int Square::getRecurMax() const { return this->getManager()->getRecurMax(); }
+int Square::getCompact() const { return this->getManager()->getIsCompact(); }
 
 void Square::addAllFrom(const Square& s) {
     for (int i = 0; i < s.getAddedNumCount(); i++) {
@@ -51,15 +50,15 @@ void Square::addAllFrom(const Square& s) {
     }
 }
 
-void Square::printSquare() const {//TODO print tranformations
-    if (this->isMinimized) {
-        for (int i = 0; i < pow(size,2); i++) {
+void Square::printSquare() const {//TODO (ID3) print tranformations
+    if (this->getCompact()) {
+        for (int i = 0; i < pow(this->getSize(),2); i++) {
             std::cout << this->getNum(i) << ' ';
         }
     } else {
-        std::cout << "Size: " << size << " x " << size << std::endl;
-        for (int x = 0; x < size; x++) {
-            for (int y = 0; y < size; y++) {
+        std::cout << "Size: " << this->getSize() << " x " << this->getSize() << std::endl;
+        for (int x = 0; x < this->getSize(); x++) {
+            for (int y = 0; y < this->getSize(); y++) {
                 std::cout << std::setw(3) << Square::nums[x][y];
             }
             std::cout << "\n";
@@ -69,17 +68,16 @@ void Square::printSquare() const {//TODO print tranformations
 }
 
 void Square::add(int n) {
-    if (getAddedNumCount() < pow(size, size)) {
+    if (getAddedNumCount() < pow(this->getSize(), this->getSize())) {
         //add number
-        int x = getLinearX(getAddedNumCount(), Square::size);
-        int y = getLinearY(getAddedNumCount(), Square::size);
-
+        int x = getLinearX(getAddedNumCount(), this->getSize());
+        int y = getLinearY(getAddedNumCount(), this->getSize());
         nums[x][y] = n;
-        
+
         //cache if at first row end
-        if (getAddedNumCount() == size) {//TODO if dynamic size, edit cache function accordingly, the rest should work
+        if (getAddedNumCount() == this->getSize()) {//TODO (DI) if dynamic insertion, edit cache function accordingly, the rest should work
             int sum = 0;
-            for (int i = 0; i < size; i++) {
+            for (int i = 0; i < this->getSize(); i++) {
                 sum += getNum(i);
             }
             lineSumCache = sum;
@@ -92,11 +90,11 @@ void Square::add(int n) {
 }
 
 int Square::getNum(int pos) const {
-    return nums[getLinearX(pos, size)][getLinearY(pos, size)];
+    return nums[getLinearX(pos, this->getSize())][getLinearY(pos, this->getSize())];
 }
 
-int Square::getNum(int x, int y) const {
-    return Square::nums[x][y];
+int Square::getNum(int r, int c) const {
+    return Square::nums[r][c];
 }
 
 bool Square::isValid() const {
@@ -109,7 +107,12 @@ bool Square::isValid() const {
     
     /*check if square is minimized*/
     //check if the lowest corner is in the top left
-    int corners[3] = {getNum(0,size-1), getNum(size-1,0), getNum(size-1,size-1)};
+    int corners[3] = {
+        getNum(0,this->getSize() -1), 
+        getNum(this->getSize() -1,0), 
+        getNum(this->getSize() -1, this->getSize() -1)
+    };
+
     for (int i = 0; i < 2; i++) {
         if (corners[i] != 0 && getNum(0, 0) > corners[i]) {
             return false;
@@ -121,16 +124,16 @@ bool Square::isValid() const {
     }
     
     /*check that the row and column and diagionals are all valid*/
-    //TODO call getLineSum backwards, so fails happen faster
-    if (this->getAddedNumCount() > this->size) {//if row is cached
+    //TODO (EF2) call getLineSum backwards, so fails happen faster
+    if (this->getAddedNumCount() > this->getSize()) {//if row is cached
         //row
-        int rSum = getLineSum(*this, getLinearX(getAddedNumCount(), size) - 1, 0, 0, 1);
+        int rSum = getLineSum(*this, getLinearX(getAddedNumCount(), this->getSize()) - 1, 0, 0, 1);
         if (rSum > 0 && rSum != this->lineSumCache) { return false; }
         //col
-        int cSum = getLineSum(*this, 0, getLinearY(getAddedNumCount() - 1, size), 1, 0);
+        int cSum = getLineSum(*this, 0, getLinearY(getAddedNumCount() - 1, this->getSize()), 1, 0);
         if (cSum > 0 && cSum != this->lineSumCache) { return false; }
         //+ diag
-        int pdSum = getLineSum(*this, 0, size - 1, 1, -1);
+        int pdSum = getLineSum(*this, 0, this->getSize() - 1, 1, -1);
         if (pdSum > 0 && pdSum != this->lineSumCache) { return false; }
         //- diag
         int ndSum = getLineSum(*this, 0, 0, 1, 1);
@@ -141,18 +144,18 @@ bool Square::isValid() const {
 }
 
 void Square::checkNextRecur() const {
-    static int recurs = 0;
+    int recurs = 0;
     recurs++;
     //std::cout << recurs << std::endl;
-    //TODO progress reports
+    //TODO (PR) progress reports
     //base case of complete square
     if (this->getAddedNumCount() >= pow(this->getSize(), 2)) {
         this->printSquare();
         return;
     }
-
+    
     //tail recur all numbers within range
-    for (int i = 1; i <= this->recurMax; i++) {
+    for (int i = 1; i <= this->getRecurMax(); i++) {
         Square newSq = Square(*this);
         newSq.add(i);
 
@@ -162,19 +165,10 @@ void Square::checkNextRecur() const {
     }
 }
 
-//set recur max, and offset
-void Square::setRecurRange(int min, int max) {
-    this->recurMax = max - min + 1;
-    this->recurOffset = min;
+void Square::setManager(SquareManager* manager) {
+    this->manager = manager;
 }
 
-//set the recur max
-void Square::setRecurRange(int max) {
-    setRecurRange(1, max);
+SquareManager* Square::getManager() const {
+    return this->manager;
 }
-
-//determines the format the square is printed
-void Square::setMinimized(bool minimized) {
-    isMinimized = minimized;
-}
-
