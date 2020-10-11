@@ -1,21 +1,21 @@
-#include "MagicSquareHeader.h"
+#include "MagicSquareBruteForcer.h"
 
-Square::Square(int size, SquareManager* manager) {
-    this->setManager(manager);
+Square::Square(int size, SquareTemplate* tmplt) {
+    setTemplate(tmplt);
     allocArray(size);
 }
 
 Square::Square(const Square& s) {
-    this->setManager(s.getManager());
-    this->allocArray(s.getSize());
-    this->addAllFrom(s);
+    setTemplate(s.getTemplate());
+    allocArray(s.getSize());
+    addAllFrom(s);
 }
 
 void Square::allocArray(int size) {
-    this->addedNumCount = 0;
+    addedNumCount = 0;
 
     //create rows
-    Square::nums = (int**)calloc(size, sizeof(int*));
+    nums = (int**)calloc(size, sizeof(int*));
     if (nums == nullptr) { exit(EXIT_FAILURE); }
 
     //for all rows
@@ -24,42 +24,42 @@ void Square::allocArray(int size) {
         int* r = (int*)calloc(size, sizeof(int));
         if (r == nullptr) { exit(EXIT_FAILURE); }
 
-        Square::nums[i] = r;
+        nums[i] = r;
     }
 }
 
 Square::~Square() {
     //free all columns
-    for (int i = 0; i < this->getSize(); i++) {
-        free(this->nums[i]);
+    for (int i = 0; i < getSize(); i++) {
+        free(nums[i]);
     }
 
     //free row
-    free(this->nums);
+    free(nums);
 }
 
-int Square::getSize() const { return this->getManager()->getSquareSize(); }
+int Square::getSize() const { return getTemplate()->getSquareSize(); }
 int Square::isEmpty() const { return addedNumCount == 0; }
 int Square::getAddedNumCount() const { return addedNumCount; }
-int Square::getRecurMax() const { return this->getManager()->getRecurMax(); }
-int Square::getCompact() const { return this->getManager()->getIsCompact(); }
+int Square::getRecurMax() const { return getTemplate()->getRecurMax(); }
+int Square::getCompact() const { return getTemplate()->getIsCompact(); }
 
 void Square::addAllFrom(const Square& s) {
     for (int i = 0; i < s.getAddedNumCount(); i++) {
-        this->add(s.getNum(i));
+        add(s.getNum(i));
     }
 }
 
 void Square::printSquare() const {//TODO (ID3) print tranformations
-    if (this->getCompact()) {
-        for (int i = 0; i < pow(this->getSize(),2); i++) {
-            std::cout << this->getNum(i) << ' ';
+    if (getCompact()) {
+        for (int i = 0; i < pow(getSize(),2); i++) {
+            std::cout << getNum(i) << ' ';
         }
     } else {
-        std::cout << "Size: " << this->getSize() << " x " << this->getSize() << std::endl;
-        for (int x = 0; x < this->getSize(); x++) {
-            for (int y = 0; y < this->getSize(); y++) {
-                std::cout << std::setw(3) << Square::nums[x][y];
+        std::cout << "Size: " << getSize() << " x " << getSize() << std::endl;
+        for (int r = 0; r < getSize(); r++) {
+            for (int c = 0; c < getSize(); c++) {
+                std::cout << std::setw(3) << nums[r][c];
             }
             std::cout << "\n";
         }
@@ -68,16 +68,16 @@ void Square::printSquare() const {//TODO (ID3) print tranformations
 }
 
 void Square::add(int n) {
-    if (getAddedNumCount() < pow(this->getSize(), this->getSize())) {
+    if (getAddedNumCount() < pow(getSize(), getSize())) {
         //add number
-        int x = getLinearX(getAddedNumCount(), this->getSize());
-        int y = getLinearY(getAddedNumCount(), this->getSize());
-        nums[x][y] = n;
+        int r = getTemplate()->getLinearR(getAddedNumCount());
+        int c = getTemplate()->getLinearC(getAddedNumCount());
+        nums[r][c] = n;
 
         //cache if at first row end
-        if (getAddedNumCount() == this->getSize()) {//TODO (DI) if dynamic insertion, edit cache function accordingly, the rest should work
+        if (getAddedNumCount() == getSize()) {//TODO (DI) if dynamic insertion, edit cache function accordingly, the rest should work
             int sum = 0;
-            for (int i = 0; i < this->getSize(); i++) {
+            for (int i = 0; i < getSize(); i++) {
                 sum += getNum(i);
             }
             lineSumCache = sum;
@@ -90,17 +90,17 @@ void Square::add(int n) {
 }
 
 int Square::getNum(int pos) const {
-    return nums[getLinearX(pos, this->getSize())][getLinearY(pos, this->getSize())];
+    return nums[getTemplate()->getLinearR(pos)][getTemplate()->getLinearC(pos)];
 }
 
 int Square::getNum(int r, int c) const {
-    return Square::nums[r][c];
+    return nums[r][c];
 }
 
 bool Square::isValid() const {
     /*check that the newest number is not repeated*/
     for (int i = 0; i < getAddedNumCount() - 1; i++) {
-        if (this->getNum(i) == this->getNum(getAddedNumCount()-1)) {
+        if (getNum(i) == getNum(getAddedNumCount()-1)) {
             return false;
         }
     }
@@ -108,9 +108,9 @@ bool Square::isValid() const {
     /*check if square is minimized*/
     //check if the lowest corner is in the top left
     int corners[3] = {
-        getNum(0,this->getSize() -1), 
-        getNum(this->getSize() -1,0), 
-        getNum(this->getSize() -1, this->getSize() -1)
+        getNum(0,getSize()-1), 
+        getNum(getSize()-1, 0), 
+        getNum(getSize()-1, getSize()-1)
     };
 
     for (int i = 0; i < 2; i++) {
@@ -125,19 +125,19 @@ bool Square::isValid() const {
     
     /*check that the row and column and diagionals are all valid*/
     //TODO (EF2) call getLineSum backwards, so fails happen faster
-    if (this->getAddedNumCount() > this->getSize()) {//if row is cached
+    if (getAddedNumCount() > getSize()) {//if row is cached
         //row
-        int rSum = getLineSum(*this, getLinearX(getAddedNumCount(), this->getSize()) - 1, 0, 0, 1);
-        if (rSum > 0 && rSum != this->lineSumCache) { return false; }
+        int rSum = getLineSum(getTemplate()->getLinearR(getAddedNumCount()) - 1, 0, 0, 1);
+        if (rSum > 0 && rSum != lineSumCache) { return false; }
         //col
-        int cSum = getLineSum(*this, 0, getLinearY(getAddedNumCount() - 1, this->getSize()), 1, 0);
-        if (cSum > 0 && cSum != this->lineSumCache) { return false; }
+        int cSum = getLineSum(0, getTemplate()->getLinearC(getAddedNumCount() - 1), 1, 0);
+        if (cSum > 0 && cSum != lineSumCache) { return false; }
         //+ diag
-        int pdSum = getLineSum(*this, 0, this->getSize() - 1, 1, -1);
-        if (pdSum > 0 && pdSum != this->lineSumCache) { return false; }
+        int pdSum = getLineSum(0, getSize() - 1, 1, -1);
+        if (pdSum > 0 && pdSum != lineSumCache) { return false; }
         //- diag
-        int ndSum = getLineSum(*this, 0, 0, 1, 1);
-        if (ndSum > 0 && ndSum != this->lineSumCache) { return false; }
+        int ndSum = getLineSum(0, 0, 1, 1);
+        if (ndSum > 0 && ndSum != lineSumCache) { return false; }
     }
 
     return true;
@@ -149,13 +149,13 @@ void Square::checkNextRecur() const {
     //std::cout << recurs << std::endl;
     //TODO (PR) progress reports
     //base case of complete square
-    if (this->getAddedNumCount() >= pow(this->getSize(), 2)) {
-        this->printSquare();
+    if (getAddedNumCount() >= pow(getSize(), 2)) {
+        printSquare();
         return;
     }
     
     //tail recur all numbers within range
-    for (int i = 1; i <= this->getRecurMax(); i++) {
+    for (int i = 1; i <= getRecurMax(); i++) {
         Square newSq = Square(*this);
         newSq.add(i);
 
@@ -165,10 +165,59 @@ void Square::checkNextRecur() const {
     }
 }
 
-void Square::setManager(SquareManager* manager) {
-    this->manager = manager;
+void Square::setTemplate(SquareTemplate* tmplt) {
+    this->tmplt = tmplt;
 }
 
-SquareManager* Square::getManager() const {
-    return this->manager;
+SquareTemplate* Square::getTemplate() const {
+    return tmplt;
+}
+
+double Square::getCompletion() const {
+    int numC = (int)pow(getSize(), 2);
+
+    double total = 0;
+    for (int i = 1; i <= numC; i++) {
+        double port = pow(((double)1 / (getRecurMax())), i);
+        total += port;
+    }
+
+    double percent = 0;
+
+    for (int i = 0; i < numC; i++) {
+        double adding = ((double)getNum(i) / getRecurMax());
+        double port = pow(((double)1 / getRecurMax()), i + 1) / total;
+        percent += adding * port;
+    }
+    return percent * 100;
+}
+
+int Square::getLineSum(int startR, int startC, int incR, int incC) const{
+    //check ranges
+    if (!(inRange(incR, -1, 1) && inRange(incC, -1, 1) &&
+        inRange(startR, 0, getSize() - 1) && inRange(startC, 0, getSize() - 1))) {
+        std::cout << "invalid getLineSum ranges";
+        exit(EXIT_FAILURE);
+    }
+
+    //get sum
+    int sum = 0, r = startR, c = startC;
+    bool atEnd = false;
+    while (!atEnd) {
+        //add sum
+        int toAdd = getNum(r, c);
+        if (toAdd == 0) {
+            return -1;
+        }
+        sum += toAdd;
+
+        //check atEnd
+        atEnd = (r == getSize() - 1 && incR > 0) || //TODO (EF1) allow for this to flag at 0 if nessacary for reverse checking
+            (c == getSize() - 1 && incC > 0);
+
+        //inc r and c
+        r += incR;
+        c += incC;
+    }
+    return sum;
 }

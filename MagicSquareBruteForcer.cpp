@@ -1,4 +1,4 @@
-#include "MagicSquareHeader.h"
+#include "MagicSquareBruteForcer.h"
 
 int main(int argc, char *argv[]) {
     //arg defaults
@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
     time(&start);
 
     //calc squares
-    SquareManager sqm = SquareManager(compact, size, min, max, identical);
+    SquareTemplate sqm = SquareTemplate(compact, size, min, max, identical);
     sqm.startCheck();
 
     //end timer
@@ -30,12 +30,8 @@ int main(int argc, char *argv[]) {
     std::cout << "done in " << calcTime << " second" << (calcTime==1 ? "" : "s") << "." << std::endl;;
 }
 
-int convert2dtoLinear(int x, int y, int size) {return x * size + y;}
-int getLinearX(int pos, int size) {return pos / size;}
-int getLinearY(int pos, int size) {return pos % size;}
-
 void print_vector(const std::vector<std::string>& s) {
-    for (auto it = s.begin(); it != s.end(); it++) {
+    for (std::vector<std::string>::const_iterator it = s.begin(); it != s.end(); it++) {
         std::cout << *it << " ";
     }
     std::cout << std::endl;
@@ -124,56 +120,6 @@ void readArgs(int argc, char* argv[], int* size, int* max,
     }
 }
 
-int getLineSum(const Square& s, int startR, int startC, int incR, int incC) {
-    //check ranges
-    if (!(inRange(incR, -1, 1) && inRange(incC, -1, 1) && 
-        inRange(startR, 0, s.getSize()-1) && inRange(startC, 0, s.getSize() - 1))) {
-        std::cout << "invalid getLineSum ranges";
-        exit(EXIT_FAILURE);
-    }
-
-    //get sum
-    int sum = 0, r = startR, c = startC;
-    bool atEnd = false;
-    while (!atEnd) {
-        //add sum
-        int toAdd = s.getNum(r, c);
-        if (toAdd == 0) {
-            return -1;
-        }
-        sum += toAdd;
-
-        //check atEnd
-        atEnd = (r == s.getSize() - 1 && incR > 0) || //TODO (EF1) allow for this to flag at 0 if nessacary for reverse checking
-                (c == s.getSize() - 1 && incC > 0);
-
-        //inc r and c
-        r += incR;
-        c += incC;
-    }
-    return sum;
-}
-
 bool inRange(int input, int min, int max) {
     return input <= max && input >= min;
-}
-
-//get an aproximation for how much of the square is calculated
-double Square::getCompletion() const {
-    int numC = pow(this->getSize(), 2);
-    
-    double total = 0;
-    for (int i = 1; i <= numC; i++) {
-        double port = pow(((double)1 / (getRecurMax())), i);
-        total += port;
-    }
-
-    double percent = 0;
-    
-    for (int i = 0; i < numC; i++) {
-        double adding = ((double)this->getNum(i) / getRecurMax());
-        double port = pow(((double)1 / getRecurMax()), i + 1) / total;
-        percent += adding * port;
-    }
-    return percent*100;
 }

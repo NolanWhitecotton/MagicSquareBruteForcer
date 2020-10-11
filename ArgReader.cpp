@@ -1,27 +1,27 @@
-#include "MagicSquareHeader.h"
+#include "MagicSquareBruteForcer.h"
 
 ArgReader::ArgReader(int argc, char** argv) {
 	this->argc = argc;
 	this->argv = argv;
-	this->curArg = 0;
-	this->parseArgs();
+	curArg = 0;
+	parseArgs();
 }
 
 void ArgReader::parseArgs() {
-	for (int i = 1; i < this->argc; i++) {
-		if (this->argv[i][0] == '-') {
-			this->argPositions.push_back(i);
+	for (int i = 1; i < argc; i++) {
+		if (argv[i][0] == '-') {
+			argPositions.push_back(i);
 		}
 	}
 }
 
 bool ArgReader::hasMoreArgs() {
-	return curArg < argPositions.size();
+	return curArg < (int)argPositions.size();
 }
 
 void ArgReader::next(std::vector<std::string> &s) {
 	//get the number of options following curArg
-	int optCount = curArg < argPositions.size() - 1 ?
+	int optCount = curArg < (int)argPositions.size() - 1 ?
 		argPositions[curArg + 1]- argPositions[curArg] :
 		argc - argPositions[curArg];
 
@@ -35,7 +35,7 @@ void ArgReader::next(std::vector<std::string> &s) {
 }
 
 int ArgReader::getArgumentCount() {
-	return this->argPositions.size();
+	return argPositions.size();
 }
 
 int ArgReader::getCurrentArgNum() {
