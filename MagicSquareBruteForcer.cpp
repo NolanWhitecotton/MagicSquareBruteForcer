@@ -114,7 +114,7 @@ void readArgs(int argc, char* argv[], int* size, int* max,
         std::cout << "invalid max: " << *max << std::endl;
         exit(EXIT_FAILURE);
     }
-    if (min >= max) {
+    if (*min >= *max) {
         std::cout << "max must be greater than min" << std::endl;
         exit(EXIT_FAILURE);
     }
