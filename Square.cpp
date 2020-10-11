@@ -124,19 +124,18 @@ bool Square::isValid() const {
     }
     
     /*check that the row and column and diagionals are all valid*/
-    //TODO (EF2) call getLineSum backwards, so fails happen faster
     if (getAddedNumCount() > getSize()) {//if row is cached
         //row
-        int rSum = getLineSum(getTemplate()->getLinearR(getAddedNumCount()) - 1, 0, 0, 1);
+        int rSum = getLineSum(getTemplate()->getLinearR(getAddedNumCount()) - 1, getSize()-1, 0, -1);
         if (rSum > 0 && rSum != lineSumCache) { return false; }
         //col
-        int cSum = getLineSum(0, getTemplate()->getLinearC(getAddedNumCount() - 1), 1, 0);
+        int cSum = getLineSum(getSize()-1, getTemplate()->getLinearC(getAddedNumCount() - 1), -1, 0);
         if (cSum > 0 && cSum != lineSumCache) { return false; }
         //+ diag
-        int pdSum = getLineSum(0, getSize() - 1, 1, -1);
+        int pdSum = getLineSum(getSize()-1, 0, -1, 1);
         if (pdSum > 0 && pdSum != lineSumCache) { return false; }
         //- diag
-        int ndSum = getLineSum(0, 0, 1, 1);
+        int ndSum = getLineSum(getSize() - 1, getSize() - 1, -1, -1);
         if (ndSum > 0 && ndSum != lineSumCache) { return false; }
     }
 
@@ -201,6 +200,9 @@ int Square::getLineSum(int startR, int startC, int incR, int incC) const{
     }
 
     //get sum
+    int goalR = (startR + incR * getSize()) + (incR >= 0 ? -1 : 1);
+    int goalC = (startC + incC * getSize()) + (incC >= 0 ? -1 : 1);
+
     int sum = 0, r = startR, c = startC;
     bool atEnd = false;
     while (!atEnd) {
@@ -212,8 +214,8 @@ int Square::getLineSum(int startR, int startC, int incR, int incC) const{
         sum += toAdd;
 
         //check atEnd
-        atEnd = (r == getSize() - 1 && incR > 0) || //TODO (EF1) allow for this to flag at 0 if nessacary for reverse checking
-            (c == getSize() - 1 && incC > 0);
+        
+        atEnd = ((r == goalR) || (c == goalC));
 
         //inc r and c
         r += incR;
