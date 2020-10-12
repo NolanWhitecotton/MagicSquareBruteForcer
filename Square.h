@@ -3,16 +3,16 @@
 class Square {
 private:
     //data
-    SquareTemplate* tmplt;
-    int** nums;
-    int addedNumCount;
+    SquareTemplate* m_tmplt;
+    int** m_nums;
+    int m_addedNumCount;
 
-    int lineSumCache;
+    int m_lineSumCache;
 
     //constructor methods
-    void allocArray(int size);
-    void addAllFrom(const Square& s);
-    void setTemplate(SquareTemplate* tmplt);
+    void m_allocArray(int size);
+    void m_addAllFrom(const Square& s);
+    void m_setTemplate(SquareTemplate* tmplt);
 
 public:
     /*contructors, destructors, and overloads*/
@@ -37,6 +37,7 @@ public:
     double getCompletion() const;
     SquareTemplate* getTemplate() const;
     int getAddedNumCount() const;
+    int getLineSumCache() const;
 
     //pass through to template
     int getSize() const;

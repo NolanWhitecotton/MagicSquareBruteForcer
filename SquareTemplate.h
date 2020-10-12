@@ -2,11 +2,11 @@
 
 class SquareTemplate {
 private:
-    bool isCompact;
-    int squareSize;
-    int recurMax;
-    int recurOffset;
-    bool showIdentical;
+    bool m_isCompact;
+    int m_squareSize;
+    int m_recurMax;
+    int m_recurOffset;
+    bool m_showIdentical;
 public:
     //constructors
     SquareTemplate(bool isCompact, int squaresize, int reucrMin, int recurMax, bool showIdentical);

@@ -1,37 +1,37 @@
 #include "MagicSquareBruteForcer.h"
 
 ArgReader::ArgReader(int argc, char** argv) {
-	this->argc = argc;
-	this->argv = argv;
-	curArg = 0;
-	parseArgs();
+	m_argc = argc;
+	m_argv = argv;
+	m_curArg = 0;
+	m_parseArgs();
 }
 
-void ArgReader::parseArgs() {
-	for (int i = 1; i < argc; i++) {
-		if (argv[i][0] == '-') {
+void ArgReader::m_parseArgs() {
+	for (int i = 1; i < m_argc; i++) {
+		if (m_argv[i][0] == '-') {
 			argPositions.push_back(i);
 		}
 	}
 }
 
 bool ArgReader::hasMoreArgs() {
-	return curArg < (int)argPositions.size();
+	return getCurrentArgNum() < (int)argPositions.size();
 }
 
 void ArgReader::next(std::vector<std::string> &s) {
 	//get the number of options following curArg
-	int optCount = curArg < (int)argPositions.size() - 1 ?
-		argPositions[curArg + 1]- argPositions[curArg] :
-		argc - argPositions[curArg];
+	int optCount = getCurrentArgNum() < (int)argPositions.size() - 1 ?
+		argPositions[getCurrentArgNum() + 1]- argPositions[getCurrentArgNum()] :
+		m_argc - argPositions[getCurrentArgNum()];
 
 	//add arguments to v
 	for (int i = 0; i < optCount; i++) {
-		s.push_back(argv[argPositions[curArg] + i]);
+		s.push_back(m_argv[argPositions[getCurrentArgNum()] + i]);
 	}
 
 	//inc curArg
-	curArg++;
+	m_curArg++;
 }
 
 int ArgReader::getArgumentCount() {
@@ -39,5 +39,5 @@ int ArgReader::getArgumentCount() {
 }
 
 int ArgReader::getCurrentArgNum() {
-	return curArg;
+	return m_curArg;
 }

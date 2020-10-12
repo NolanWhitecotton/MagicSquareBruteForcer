@@ -2,13 +2,13 @@
 
 class ArgReader {
 private:
-    int argc;
-    char** argv;
+    int m_argc;
+    char** m_argv;
 
     std::vector<int> argPositions;
-    int curArg;
+    int m_curArg;
 
-    void parseArgs();
+    void m_parseArgs();
 public:
     ArgReader(int argc, char** argv);
     bool hasMoreArgs();
