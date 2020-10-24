@@ -18,8 +18,8 @@ int main(int argc, char *argv[]) {
     time(&start);
 
     //calc squares
-    SquareTemplate sqm = SquareTemplate(compact, size, min, max, identical);
-    sqm.startCheck();
+    SquareTemplate sqt = SquareTemplate(compact, size, min, max, identical);
+    sqt.startCheck();
 
     //end timer
     time_t end;
@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
 
     //print completion
     int calcTime = std::difftime(end,start);
-    std::cout << "done in " << calcTime << " second" << (calcTime==1 ? "" : "s") << "." << std::endl;;
+    std::cout << "done in " << calcTime << " second" << (calcTime==1 ? "" : "s") << "." << std::endl;
 }
 
 void print_vector(const std::vector<std::string>& s) {

@@ -109,24 +109,28 @@ bool Square::isValid() const {
     
     /*check if square is minimized*/
     //check if the lowest corner is in the top left
-    int corners[3] = {
+    int corners[4] = {
+        getNum(0,0),
         getNum(0,getSize()-1), 
         getNum(getSize()-1, 0), 
         getNum(getSize()-1, getSize()-1)
     };
 
-    for (int i = 0; i < 2; i++) {
-        if (corners[i] != 0 && getNum(0, 0) > corners[i]) {
-            return false;
+    for (int i = 1; i < 4; i++) {
+        if (corners[i] != 0) {
+            if (corners[i] < corners[0]) {
+                return false;
+            }
         }
     }
+
     //check if its mirrored on the diag
-    if (getNum(0, 2) != 0 && getNum(2, 0) != 0 && getNum(0, 2) < getNum(2, 0)) {
+    if (getNum(0, 1) != 0 && getNum(1, 0) != 0 && getNum(0, 1) > getNum(1, 0)) {
         return false;
     }
     
     /*check that the row and column and diagionals are all valid*/
-    //TODO create getLineSumCache
+    
     if (getAddedNumCount() > getSize()) {//if row is cached
         //row
         int rSum = getLineSum(getTemplate()->getLinearR(getAddedNumCount()) - 1, getSize()-1, 0, -1);
