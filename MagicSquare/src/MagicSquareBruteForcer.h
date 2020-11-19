@@ -11,7 +11,6 @@
 //class includes
 #include "SquareTemplate.h"
 #include "Square.h"
-#include "ArgReader.h"
 
 //read the arguments and store them in the given variables
 void readArgs(int argc, char  *argv[], int *size, int *max,

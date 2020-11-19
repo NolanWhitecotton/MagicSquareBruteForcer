@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\ArgReader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\MagicSquareBruteForcer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -34,9 +31,6 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\ArgReader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\MagicSquareBruteForcer.h">
       <Filter>Header Files</Filter>
     </ClInclude>

@@ -154,14 +154,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\ArgReader.cpp" />
     <ClCompile Include="src\MagicSquareBruteForcer.cpp" />
     <ClCompile Include="src\Square.cpp" />
     <ClCompile Include="src\SquareTemplate.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\cxxopts.hpp" />
-    <ClInclude Include="src\ArgReader.h" />
     <ClInclude Include="src\MagicSquareBruteForcer.h" />
     <ClInclude Include="src\Square.h" />
     <ClInclude Include="src\SquareTemplate.h" />

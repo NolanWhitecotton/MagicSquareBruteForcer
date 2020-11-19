@@ -1,37 +1,60 @@
 #include "MagicSquareBruteForcer.h"
-//#include "../Dependencies/cxxopts.hpp"
+#include "../Dependencies/cxxopts.hpp"
 
 int main(int argc, char *argv[]) {
-    //test cxxopts
-    /*cxxopts::Options options("MyProgram", "One line description of MyProgram");
+    //read args with cxxopts 2.2.0
+    cxxopts::Options options("MSBF", "Find all the possible magic squares of size n using number n-m");
 
     options.add_options()
-        ("d,debug", "Enable debugging") // a bool parameter
-        ("i,integer", "Int param", cxxopts::value<int>())
-        ("f,file", "File name", cxxopts::value<std::string>())
-        ("v,verbose", "Verbose output", cxxopts::value<bool>()->default_value("false"))
+        ("s,size", "The size of the square", cxxopts::value<int>())
+        ("m,max", "The max number to search with inclusive", cxxopts::value<int>())
+        ("n,min", "The minimum number to search with inclusive", cxxopts::value<int>()->default_value("1"))
+        ("c,compact", "Weather or not to use compact output", cxxopts::value<bool>()->default_value("false")->implicit_value("true"))
+        ("i,identical", "Weather or not to include mirrors and rotations", cxxopts::value<bool>()->default_value("true")->implicit_value("false"))
+        ("o,output", "Weather or not to include mirrors and rotations", cxxopts::value<std::string>())
         ;
+
+    int size, max, min, progress;
+    bool compact, identical;
+    std::string ouput;
+
     try {
-        auto result = options.parse(argc, argv);
-        std::cout << result["file"].as<std::string>() << " is the sdpecificifed file";
-    }
-    catch (cxxopts::OptionException e) {
+        cxxopts::ParseResult result = options.parse(argc, argv);
+   
+        //read options
+        size = result["s"].as<int>();
+        max = result["m"].as<int>();
+        min = result["n"].as<int>();
+        progress = 0;//TODO (PR) progress reports
+        compact = result["c"].as<bool>();
+        identical = result["i"].as<bool>();
+        std::string output = "";//TODO file output
+
+    } catch (cxxopts::OptionException e) {
         std::cout << e.what();
+        exit(EXIT_FAILURE);
     }
-    */
 
-    //arg defaults
-    int size = 0, max = 0,
-        min = 1, progress = 0;
-    bool compact = false, identical = false;
-    std::string output = "";
+    //check arg ranges
+    bool rangeError = false;
+    if (size < 1) {
+        std::cout << "Size must be greater than 0" << std::endl;
+        rangeError = true;
+    }
+
+    if (max < pow(size,2)) {
+        std::cout << "Max must be >=size^2" << std::endl;
+        rangeError = true;
+    }
+    if (min >= max) {
+        std::cout << "Max must be greater than min" << std::endl;
+        rangeError = true;
+    }
+
+    if (rangeError) {
+        exit(EXIT_FAILURE);
+    }
     
-    //read args
-    readArgs(argc, argv, &size, &max, 
-        &min, &progress, 
-        &compact, &identical, 
-        &output);
-
     //start timer
     time_t start;
     time(&start);
@@ -54,89 +77,6 @@ void print_vector(const std::vector<std::string>& s) {
         std::cout << *it << " ";
     }
     std::cout << std::endl;
-}
-
-//read the arguments and store them in variables
-void readArgs(int argc, char* argv[], int* size, int* max,
-    int* min, int* progress,
-    bool* compact, bool* identical,
-    std::string* output) {
-
-    ArgReader ar = ArgReader(argc, argv);
-    while (ar.hasMoreArgs()) {
-        std::vector<std::string> s;
-        ar.next(s);
-
-        std::string a = s.at(0);
-        int optionCount = s.size();
-        if (a == "-m" || a == "--max") {
-            if (optionCount == 2) {
-                *max = std::stoi(s.at(1));
-            } else {
-                std::cout << a << " requires 2 arguments." << std::endl;
-                exit(EXIT_FAILURE);
-            }
-        }
-        else if (a == "-s" || a == "--size") {
-            if (optionCount == 2) {
-                *size = std::stoi(s.at(1));
-            }
-            else {
-                std::cout << a << " requires 2 arguments." << std::endl;
-                exit(EXIT_FAILURE);
-            }
-        }
-        else if (a == "-n" || a == "--min") {
-            if (optionCount == 2) {
-               *min = std::stoi(s.at(1));
-            }
-            else {
-                std::cout << a << " requires 2 arguments." << std::endl;
-                exit(EXIT_FAILURE);
-            }
-        }
-        else if (a == "-o" || a == "--output") {
-            if (optionCount == 2) {
-                *output = s.at(1);
-            }
-            else {
-                std::cout << a << " requires 2 arguments." << std::endl;
-                exit(EXIT_FAILURE);
-            }
-        }
-        else if (a == "-p" || a == "--progress") {
-            if (optionCount == 2) {
-                *progress = stoi(s.at(1));
-            }
-            else {
-                *progress = 60;
-            }
-        }
-        else if (a == "-i" || a == "--identical") {
-            *identical = true;
-        }
-        else if (a == "-c" || a == "--compact") {
-            *compact = true;
-        }
-        else {
-            std::cout << "Unknown argument: " << a << std::endl;
-            exit(EXIT_FAILURE);
-        }
-    }
-
-    //check bounds on args
-    if (*size <= 0) {
-        std::cout << "invalid size: " << *size << std::endl;
-        exit(EXIT_FAILURE);
-    }
-    if (*max <= 0) {
-        std::cout << "invalid max: " << *max << std::endl;
-        exit(EXIT_FAILURE);
-    }
-    if (*min >= *max) {
-        std::cout << "max must be greater than min" << std::endl;
-        exit(EXIT_FAILURE);
-    }
 }
 
 bool inRange(int input, int min, int max) {
