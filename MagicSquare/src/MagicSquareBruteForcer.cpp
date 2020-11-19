@@ -1,6 +1,25 @@
 #include "MagicSquareBruteForcer.h"
+//#include "../Dependencies/cxxopts.hpp"
 
 int main(int argc, char *argv[]) {
+    //test cxxopts
+    /*cxxopts::Options options("MyProgram", "One line description of MyProgram");
+
+    options.add_options()
+        ("d,debug", "Enable debugging") // a bool parameter
+        ("i,integer", "Int param", cxxopts::value<int>())
+        ("f,file", "File name", cxxopts::value<std::string>())
+        ("v,verbose", "Verbose output", cxxopts::value<bool>()->default_value("false"))
+        ;
+    try {
+        auto result = options.parse(argc, argv);
+        std::cout << result["file"].as<std::string>() << " is the sdpecificifed file";
+    }
+    catch (cxxopts::OptionException e) {
+        std::cout << e.what();
+    }
+    */
+
     //arg defaults
     int size = 0, max = 0,
         min = 1, progress = 0;
