@@ -53,20 +53,22 @@ void Square::m_addAllFrom(const Square& s) {
 }
 
 void Square::printSquare() const {//TODO (ID3) print tranformations
+    using namespace std;
+
     if (getCompact()) {
         for (int i = 0; i < pow(getSize(),2); i++) {
-            std::cout << getNum(i) << ' ';
+            cout << getNum(i) << ' ';
         }
     } else {
-        std::cout << "Size: " << getSize() << " x " << getSize() << std::endl;
+        cout << "Size: " << getSize() << " x " << getSize() << endl;
         for (int r = 0; r < getSize(); r++) {
             for (int c = 0; c < getSize(); c++) {
-                std::cout << std::setw(3) << getNum(r,c);
+                cout << setw(3) << getNum(r,c);
             }
-            std::cout << "\n";
+            cout << "\n";
         }
     }
-    std::cout << std::endl;
+    cout << endl;
 }
 
 void Square::add(int n) {
