@@ -1,0 +1,19 @@
+Dynamic Insertion (DI)
+	Add a method to define the Square::Add order
+	Make isValid work with the Square::Add order
+	Multiple Insertion (MI)
+		insert multiple things then check them all
+
+Progress Reports (PR)
+
+Make template alloc squares and distribute them
+
+retry multi threading but in prod instead of debug
+	add option for thread count
+
+print the steps its going through as it does them with -v enabled
+
+add tests
+	use assert
+
+testargs: -m 9 -s 3 -c 

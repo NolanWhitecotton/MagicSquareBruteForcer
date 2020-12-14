@@ -51,7 +51,7 @@ struct Args {
             ("m,max", "The max number to search with inclusive", cxxopts::value<int>())
             ("n,min", "The minimum number to search with inclusive", cxxopts::value<int>()->default_value("1"))
             ("c,compact", "Weather or not to use compact output", cxxopts::value<bool>()->default_value("false")->implicit_value("true"))
-            ("i,identical", "Weather or not to include mirrors and rotations", cxxopts::value<bool>()->default_value("true")->implicit_value("false"))
+            ("i,identical", "Weather or not to include mirrors and rotations", cxxopts::value<bool>()->default_value("false")->implicit_value("true"))
             ("o,output", "Weather or not to include mirrors and rotations", cxxopts::value<std::string>())
             ;
 

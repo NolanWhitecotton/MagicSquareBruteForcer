@@ -13,6 +13,9 @@ private:
     void m_allocArray(int size);
     void m_addAllFrom(const Square& s);
     void m_setTemplate(SquareTemplate* tmplt);
+    void m_deconstruct2d(int** arr);
+
+    void m_fPrintSquare(char lineDelim, bool printHeader, bool showIdentical) const;
 
 public:
     /*contructors, destructors, and overloads*/
@@ -21,9 +24,6 @@ public:
 
     //copy construcor
     Square(const Square& s);
-
-    //transform constructor
-    Square(const Square& s, bool mirrorR, bool mirrorC, bool rotCW, bool rotCC);//TODO (ID2) transform constructor
 
     //destructor
     ~Square();
@@ -61,10 +61,4 @@ public:
     /*modifiers*/
     //add n as the next int, update the caches if updateCaches is true
     void add(int n);
-
-    /*rotation/mirror modifiers*/
-    void mirrorR();//TODO (ID1) rot/mirrors
-    void mirrorC();
-    void rotCC();
-    void rotCW();
 };

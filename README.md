@@ -6,10 +6,10 @@ Magic Square Brute Forcer is a program that allows you to find all possible magi
 -Prints all possible magic squares of a given range and size<br/> 
 
 <h2>Planned features</h2><br/>
--Mapping to identical squares<br/>
 -Dynamic/Optimized ordering for faster calculations<br/>
 -Optional progress reports to show the progress<br/>
 -Output file
+-Multithreading
 
 <h2>Usage</h2>
 

@@ -29,6 +29,10 @@ void Square::m_allocArray(int size) {
 }
 
 Square::~Square() {
+    m_deconstruct2d(m_nums);
+}
+
+void Square::m_deconstruct2d(int** arr) {
     //free all columns
     for (int i = 0; i < getSize(); i++) {
         free(m_nums[i]);
@@ -52,23 +56,87 @@ void Square::m_addAllFrom(const Square& s) {
     }
 }
 
-void Square::printSquare() const {//TODO (ID3) print tranformations
+void Square::printSquare() const {
+    if (getCompact()) {
+        m_fPrintSquare('\0', false, m_tmplt->getShowIdentical());
+    } else {
+        m_fPrintSquare('\n', true, m_tmplt->getShowIdentical());
+    }
+}
+
+void Square::m_fPrintSquare(char lineDelim, bool printHeader, bool showIdentical) const{
     using namespace std;
 
-    if (getCompact()) {
-        for (int i = 0; i < pow(getSize(),2); i++) {
-            cout << getNum(i) << ' ';
-        }
-    } else {
+    if(printHeader) 
         cout << "Size: " << getSize() << " x " << getSize() << endl;
-        for (int r = 0; r < getSize(); r++) {
-            for (int c = 0; c < getSize(); c++) {
-                cout << setw(3) << getNum(r,c);
-            }
-            cout << "\n";
+
+    //print current square
+    for (int r = 0; r < getSize(); r++) {
+        for (int c = 0; c < getSize(); c++) {
+            cout << setw(3) << getNum(r, c);
         }
+        cout << lineDelim;
     }
     cout << endl;
+
+    //print all symetries of the current square
+    if (showIdentical) {
+        for (int c = 0; c < getSize(); c++) {
+            for (int r = 0; r < getSize(); r++) {
+                cout << setw(3) << getNum(r, c);
+            }
+            cout << lineDelim;
+        }
+        cout << endl;
+
+        for (int r = getSize() - 1; r >= 0; r--) {
+            for (int c = 0; c < getSize(); c++) {
+                cout << setw(3) << getNum(r, c);
+            }
+            cout << lineDelim;
+        }
+        cout << endl;
+
+        for (int c = getSize() - 1; c >= 0; c--) {
+            for (int r = 0; r < getSize(); r++) {
+                cout << setw(3) << getNum(r, c);
+            }
+            cout << lineDelim;
+        }
+        cout << endl;
+
+        for (int r = 0; r < getSize(); r++) {
+            for (int c = getSize() - 1; c >= 0; c--) {
+                cout << setw(3) << getNum(r, c);
+            }
+            cout << lineDelim;
+        }
+        cout << endl;
+
+        for (int c = 0; c < getSize(); c++) {
+            for (int r = getSize() - 1; r >= 0; r--) {
+                cout << setw(3) << getNum(r, c);
+            }
+            cout << lineDelim;
+        }
+        cout << endl;
+
+        for (int r = getSize() - 1; r >= 0; r--) {
+            for (int c = getSize() - 1; c >= 0; c--) {
+                cout << setw(3) << getNum(r, c);
+            }
+            cout << lineDelim;
+        }
+        cout << endl;
+
+        for (int c = getSize() - 1; c >= 0; c--) {
+            for (int r = getSize() - 1; r >= 0; r--) {
+                cout << setw(3) << getNum(r, c);
+            }
+            cout << lineDelim;
+        }
+        cout << endl;
+    }
 }
 
 void Square::add(int n) {
