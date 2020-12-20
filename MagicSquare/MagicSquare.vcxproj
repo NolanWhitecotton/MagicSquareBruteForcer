@@ -164,9 +164,6 @@
     <ClInclude Include="src\Square.h" />
     <ClInclude Include="src\SquareTemplate.h" />
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\rotation ideas.txt" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

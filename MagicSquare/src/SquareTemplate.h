@@ -1,5 +1,9 @@
 #pragma once
 
+#include <vector>
+#include <thread>
+#include <mutex>
+
 class SquareTemplate {
 private:
     bool m_isCompact;
@@ -7,9 +11,12 @@ private:
     int m_recurMax;
     int m_recurOffset;
     bool m_showIdentical;
+    std::mutex* m_outputMutex;
+
 public:
     //constructors
     SquareTemplate(bool isCompact, int squaresize, int reucrMin, int recurMax, bool showIdentical);
+    ~SquareTemplate();
 
     //getters
     bool getIsCompact() const;
@@ -20,8 +27,11 @@ public:
 
     //methods
     void startCheck();
+    void startCheckThreaded();
 
     int convert2dtoLinear(int r, int c);
     int getLinearR(int pos);
     int getLinearC(int pos);
+
+    std::mutex* getOutputMutex();
 };

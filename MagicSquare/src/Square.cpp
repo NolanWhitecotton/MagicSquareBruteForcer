@@ -67,6 +67,9 @@ void Square::printSquare() const {
 void Square::m_fPrintSquare(char lineDelim, bool printHeader, bool showIdentical) const{
     using namespace std;
 
+    //lock mutex
+    getTemplate()->getOutputMutex()->lock();
+
     if(printHeader) 
         cout << "Size: " << getSize() << " x " << getSize() << endl;
 
@@ -137,6 +140,9 @@ void Square::m_fPrintSquare(char lineDelim, bool printHeader, bool showIdentical
         }
         cout << endl;
     }
+
+    //unlock mutex
+    getTemplate()->getOutputMutex()->unlock();
 }
 
 void Square::add(int n) {

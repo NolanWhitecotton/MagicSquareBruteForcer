@@ -16,7 +16,8 @@ int main(int argc, char *argv[]) {
 
     //calc squares
     SquareTemplate sqt = SquareTemplate(a.compactOutput, a.size, a.min, a.max, a.outputIdentical);
-    sqt.startCheck();
+    //sqt.startCheck();//single thread
+    sqt.startCheckThreaded();//mutli thread
 
     //end timer
     time_t end;
