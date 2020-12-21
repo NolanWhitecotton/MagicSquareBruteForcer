@@ -11,6 +11,7 @@ private:
     int m_recurMax;
     int m_recurOffset;
     bool m_showIdentical;
+
     std::mutex* m_outputMutex;
 
 public:
@@ -26,8 +27,7 @@ public:
     bool getShowIdentical() const;
 
     //methods
-    void startCheck();
-    void startCheckThreaded();
+    void startCheckThreaded(int threadCount);
 
     int convert2dtoLinear(int r, int c);
     int getLinearR(int pos);

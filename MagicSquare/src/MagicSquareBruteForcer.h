@@ -41,6 +41,7 @@ struct Args {
 	bool outputIdentical;
 	int progressReportFrequency;
 	std::string outpuDir;
+    int threadCount;
 
 	void loadArgs(int argc, char* argv[]){
         //read args with cxxopts 2.2.0
@@ -53,6 +54,7 @@ struct Args {
             ("c,compact", "Weather or not to use compact output", cxxopts::value<bool>()->default_value("false")->implicit_value("true"))
             ("i,identical", "Weather or not to include mirrors and rotations", cxxopts::value<bool>()->default_value("false")->implicit_value("true"))
             ("o,output", "Weather or not to include mirrors and rotations", cxxopts::value<std::string>())
+            ("t,threads", "The number of threads to try and run on", cxxopts::value<int>()->default_value("1"))
             ;
 
         try {
@@ -66,7 +68,7 @@ struct Args {
             compactOutput = result["c"].as<bool>();
             outputIdentical = result["i"].as<bool>();
             std::string outpuDir = "";//TODO file output
-
+            threadCount = result["t"].as<int>();
         }
         catch (cxxopts::OptionException e) {
             std::cout << e.what();
@@ -92,6 +94,10 @@ struct Args {
         }
         if (min >= max) {
             std::cout << "Max must be greater than min" << std::endl;
+            rangeError = true;
+        }
+        if (threadCount < 1) {
+            std::cout << "Must use at least one thread" << std::endl;
             rangeError = true;
         }
 

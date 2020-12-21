@@ -21,41 +21,60 @@ int SquareTemplate::getRecurMax() const { return m_recurMax; }
 int SquareTemplate::getRecurOffset() const { return m_recurOffset; }
 bool SquareTemplate::getShowIdentical() const { return m_showIdentical; }
 
-void SquareTemplate::startCheck() {//TODO (MI) multiple numbers can be instered at the same time if their sum is known to equal the square cache
-	Square sq = Square(getSquareSize(), &*this);
-	sq.checkNextRecur();
-}
-
-void SquareTemplate::startCheckThreaded() {
+void SquareTemplate::startCheckThreaded(int threadCount) {
+	//prep operations to run on threads
 	std::vector<std::thread> threadList;
+	std::stack<Square*> s;
 
-	//prep threaded operations
-	//std::stack<> s;
-
-	//create threads
-	for (int i = 1; i <= getRecurMax(); i++) {//TODO allow variable amout of threads specificed in args
-		threadList.emplace_back([this, i]() {
-			Square sq = Square(getSquareSize(), &*this);
-			sq.add(i);
-			sq.checkNextRecur();
-		});
+	//prep work to be done
+	for(int i = getRecurMax(); i > 0; i--) {//backwards so single threaded will be in order
+		Square* newS = new Square(getSquareSize(), &*this);
+		newS->add(i);
+		s.push(newS);
 	}
 
-	//check that minimal number of thereads are parked
-	bool done = false;
-	while (!done) {
-		done = true;
-		for (int i = 0; i < threadList.size(); i++) {
-			if (!threadList[i].joinable()) {
-				done = false;
+	//create threads
+	for (int i = 0; i < threadCount; i++) {
+		if (s.empty()) {
+			break;
+		}
+
+		Square* sq = s.top();
+		s.pop();
+
+		threadList.emplace_back(
+			[sq]() {
+				sq->checkNextRecur();
+			}
+		);
+	}
+
+	//if a thread is empty, delete it an add a new thread
+	//TODO budding if the thread queue is empty
+	while (!s.empty()) {
+		for (int i = 0; i < threadList.size(); i++) {//for every thread
+			if (threadList[i].joinable()) {//if thread is joinable
+				//delete thread
+				threadList[i].join();
+				threadList.erase(threadList.begin()+i);
+
+				//add new thread
+				Square* sq = s.top();
+				s.pop();
+
+				threadList.emplace_back(
+					[sq]() {
+						sq->checkNextRecur();
+					}
+				);
+
+				//break for loop since threadList and s have been modified
 				break;
 			}
 		}
-		
-
 	}
 
-	//join threads
+	//join all threads
 	for (auto& t : threadList){
 		t.join();
 	}

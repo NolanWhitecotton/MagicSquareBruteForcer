@@ -170,10 +170,7 @@ void Square::add(int n) {
 int Square::getNum(int pos) const {
     return getNum(getTemplate()->getLinearR(pos), getTemplate()->getLinearC(pos));
 }
-
-int Square::getNum(int r, int c) const {
-    return m_nums[r][c];
-}
+int Square::getNum(int r, int c) const {return m_nums[r][c];}
 
 bool Square::isValid() const {
     /*check that the newest number is not repeated*/
@@ -247,13 +244,8 @@ void Square::checkNextRecur() const {
     }
 }
 
-void Square::m_setTemplate(SquareTemplate* tmplt) {
-    m_tmplt = tmplt;
-}
-
-SquareTemplate* Square::getTemplate() const {
-    return m_tmplt;
-}
+void Square::m_setTemplate(SquareTemplate* tmplt) {m_tmplt = tmplt;}
+SquareTemplate* Square::getTemplate() const {return m_tmplt;}
 
 double Square::getCompletion() const {
     int numC = (int)pow(getSize(), 2);
