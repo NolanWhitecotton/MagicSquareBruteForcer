@@ -15,24 +15,13 @@
 //dependency includes
 #include "../Dependencies/cxxopts.hpp"
 
-/// <summary>
-/// return if a value is within a range
-/// </summary>
-/// <param name="input">the input to test</param>
-/// <param name="min">the maximum value for input</param>
-/// <param name="max">the minimum value for input</param>
-/// <returns></returns>
+//return if a value is within a range
 bool inRange(int input, int min, int max);
 
-/// <summary>
-/// prints a formatted version of a vector
-/// </summary>
-/// <param name="s">the vector to print</param>
+//prints a formatted version of a vector
 void print_vector(const std::vector<std::string>& s);
 
-/// <summary>
-/// stores the commandline arguments
-/// </summary>
+//stores the commandline arguments
 struct Args {
 	int size;
 	int max;
@@ -87,7 +76,6 @@ struct Args {
             std::cout << "Size must be greater than 0" << std::endl;
             rangeError = true;
         }
-
         if (max < pow(size, 2)) {
             std::cout << "Max must be >=size^2" << std::endl;
             rangeError = true;

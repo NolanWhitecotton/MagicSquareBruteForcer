@@ -14,6 +14,15 @@ private:
 
     std::mutex* m_outputMutex;
 
+
+
+    int minPosSum;
+    int maxPosSum;
+
+    std::vector<int> nums;
+    void findRangeRecur(int min, int count, int maxSize, int maxNum, int sum);
+    void findPossibleRanges(int size, int max);
+
 public:
     //constructors
     SquareTemplate(bool isCompact, int squaresize, int reucrMin, int recurMax, bool showIdentical);
@@ -32,6 +41,8 @@ public:
     int convert2dtoLinear(int r, int c);
     int getLinearR(int pos);
     int getLinearC(int pos);
+    int getMinPosSum() const { return minPosSum; }
+    int getMaxPosSum() const { return maxPosSum; }
 
     std::mutex* getOutputMutex();
 };

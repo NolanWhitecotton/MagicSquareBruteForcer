@@ -23,7 +23,7 @@ void Square::m_allocArray(int size) {
         //create columns
         int* r = (int*)calloc(size, sizeof(int));
         if (r == nullptr) { exit(EXIT_FAILURE); }
-
+        
         m_nums[i] = r;
     }
 }
@@ -58,83 +58,50 @@ void Square::m_addAllFrom(const Square& s) {
 
 void Square::printSquare() const {
     if (getCompact()) {
-        m_fPrintSquare('\0', false, m_tmplt->getShowIdentical());
+        m_printSquare('\0', false, m_tmplt->getShowIdentical());
     } else {
-        m_fPrintSquare('\n', true, m_tmplt->getShowIdentical());
+        m_printSquare('\n', true, m_tmplt->getShowIdentical());
     }
 }
 
-void Square::m_fPrintSquare(char lineDelim, bool printHeader, bool showIdentical) const{
+bool getKthBit(unsigned int n, unsigned int k) {return ((n & (1 << (k - 1))) >> (k - 1)) == 1;}
+void Square::m_printSquare(char lineDelim, bool printHeader, bool showIdentical) const {
     using namespace std;
 
     //lock mutex
     getTemplate()->getOutputMutex()->lock();
 
-    if(printHeader) 
-        cout << "Size: " << getSize() << " x " << getSize() << endl;
+    //print square(s)
+    for (int i = 0; i < (showIdentical ? 8 : 1); i++) {//for all rotations/reflections to print
+        //print the square header
+        if (printHeader)
+            cout << "Size: " << getSize() << " x " << getSize() << endl;
 
-    //print current square
-    for (int r = 0; r < getSize(); r++) {
-        for (int c = 0; c < getSize(); c++) {
-            cout << setw(3) << getNum(r, c);
-        }
-        cout << lineDelim;
-    }
-    cout << endl;
+        //get the modifiers from the binary representation of i
+        bool firstsub = getKthBit(i, 1); //read the row backwards
+        bool secondsub = getKthBit(i, 2); //read the col backwards
+        bool reverse = getKthBit(i, 3); //swap r and c
 
-    //print all symetries of the current square
-    if (showIdentical) {
-        for (int c = 0; c < getSize(); c++) {
-            for (int r = 0; r < getSize(); r++) {
-                cout << setw(3) << getNum(r, c);
-            }
-            cout << lineDelim;
-        }
-        cout << endl;
-
-        for (int r = getSize() - 1; r >= 0; r--) {
-            for (int c = 0; c < getSize(); c++) {
-                cout << setw(3) << getNum(r, c);
-            }
-            cout << lineDelim;
-        }
-        cout << endl;
-
-        for (int c = getSize() - 1; c >= 0; c--) {
-            for (int r = 0; r < getSize(); r++) {
-                cout << setw(3) << getNum(r, c);
-            }
-            cout << lineDelim;
-        }
-        cout << endl;
-
+        //for every position on the square
         for (int r = 0; r < getSize(); r++) {
-            for (int c = getSize() - 1; c >= 0; c--) {
-                cout << setw(3) << getNum(r, c);
-            }
-            cout << lineDelim;
-        }
-        cout << endl;
+            for (int c = 0; c < getSize(); c++) {
+                //declare the position on the square
+                int first = r, second = c;
 
-        for (int c = 0; c < getSize(); c++) {
-            for (int r = getSize() - 1; r >= 0; r--) {
-                cout << setw(3) << getNum(r, c);
-            }
-            cout << lineDelim;
-        }
-        cout << endl;
+                //apply modifiers
+                if (reverse) {
+                    first = c;
+                    second = r;
+                }
 
-        for (int r = getSize() - 1; r >= 0; r--) {
-            for (int c = getSize() - 1; c >= 0; c--) {
-                cout << setw(3) << getNum(r, c);
-            }
-            cout << lineDelim;
-        }
-        cout << endl;
+                if (firstsub)
+                    first = getSize() - first - 1;
+                if (secondsub)
+                    second = getSize() - second - 1;
 
-        for (int c = getSize() - 1; c >= 0; c--) {
-            for (int r = getSize() - 1; r >= 0; r--) {
-                cout << setw(3) << getNum(r, c);
+                //print number
+                cout << setw(3) << getNum(first, second);
+
             }
             cout << lineDelim;
         }
@@ -144,6 +111,7 @@ void Square::m_fPrintSquare(char lineDelim, bool printHeader, bool showIdentical
     //unlock mutex
     getTemplate()->getOutputMutex()->unlock();
 }
+
 
 void Square::add(int n) {
     if (getAddedNumCount() < pow(getSize(), getSize())) {
@@ -202,10 +170,8 @@ bool Square::isValid() const {
         return false;
     }
     
-    /*check that the row and column and diagionals are all valid*/
-    
+    //check that the row and column and diagionals are all valid
     if (getAddedNumCount() > getSize()) {//if row is cached
-        //row
         int rSum = getLineSum(getTemplate()->getLinearR(getAddedNumCount()) - 1, getSize()-1, 0, -1);
         if (rSum > 0 && rSum != getLineSumCache()) { return false; }
         //col
@@ -219,21 +185,25 @@ bool Square::isValid() const {
         if (ndSum > 0 && ndSum != getLineSumCache()) { return false; }
     }
 
+    //check that the linesum cache is within the valid range
+    if (getAddedNumCount() == getSize()+1) {//if row is cached
+        if (!inRange(getLineSumCache(), getTemplate()->getMinPosSum(), getTemplate()->getMaxPosSum())) {
+            return false;
+        }
+    }
+
     return true;
 }
 
 void Square::checkNextRecur() const {
-    int recurs = 0;
-    recurs++;
-    //std::cout << recurs << std::endl;
     //TODO (PR) progress reports
-    //base case of complete square
+    //base case of complete valid square
     if (getAddedNumCount() >= pow(getSize(), 2)) {
         printSquare();
         return;
     }
     
-    //tail recur all numbers within range
+    //recur for all valid squares with every legal number appended
     for (int i = 1; i <= getRecurMax(); i++) {
         Square newSq = Square(*this);
         newSq.add(i);
@@ -246,25 +216,6 @@ void Square::checkNextRecur() const {
 
 void Square::m_setTemplate(SquareTemplate* tmplt) {m_tmplt = tmplt;}
 SquareTemplate* Square::getTemplate() const {return m_tmplt;}
-
-double Square::getCompletion() const {
-    int numC = (int)pow(getSize(), 2);
-
-    double total = 0;
-    for (int i = 1; i <= numC; i++) {
-        double port = pow(((double)1 / (getRecurMax())), i);
-        total += port;
-    }
-
-    double percent = 0;
-
-    for (int i = 0; i < numC; i++) {
-        double adding = ((double)getNum(i) / getRecurMax());
-        double port = pow(((double)1 / getRecurMax()), i + 1) / total;
-        percent += adding * port;
-    }
-    return percent * 100;
-}
 
 int Square::getLineSum(int startR, int startC, int incR, int incC) const{
     //check ranges
@@ -289,12 +240,12 @@ int Square::getLineSum(int startR, int startC, int incR, int incC) const{
         sum += toAdd;
 
         //check atEnd
-        
         atEnd = ((r == goalR) || (c == goalC));
 
         //inc r and c
         r += incR;
         c += incC;
     }
+
     return sum;
 }

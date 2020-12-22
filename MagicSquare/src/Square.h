@@ -15,7 +15,7 @@ private:
     void m_setTemplate(SquareTemplate* tmplt);
     void m_deconstruct2d(int** arr);
 
-    void m_fPrintSquare(char lineDelim, bool printHeader, bool showIdentical) const;
+    void m_printSquare(char lineDelim, bool printHeader, bool showIdentical) const;
 
 public:
     /*contructors, destructors, and overloads*/
@@ -34,7 +34,6 @@ public:
     int getNum(int r, int c) const;
     void printSquare() const;
     bool isValid() const;
-    double getCompletion() const;
     SquareTemplate* getTemplate() const;
     int getAddedNumCount() const;
     int getLineSumCache() const;
@@ -44,16 +43,8 @@ public:
     int getRecurMax() const;
     int getCompact() const;
 
-    /// <summary>
-    /// calculate the sum of a given line in a given direction
-    /// </summary>
-    /// <param name="startR">the starting row</param>
-    /// <param name="startC">the starting column</param>
-    /// <param name="incR">increment step for row</param>
-    /// <param name="incC">increment step for column</param>
-    /// <returns>the sum of a line provided, or negative if a zero is hit</returns>
+    //calculate the sum of a given line in a given direction
     int getLineSum(int startR, int startC, int incR, int incC) const;
-
 
     /*recursion*/
     void checkNextRecur() const;
