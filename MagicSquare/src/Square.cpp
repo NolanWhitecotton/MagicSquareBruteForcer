@@ -15,16 +15,17 @@ void Square::m_allocArray(int size) {
     m_addedNumCount = 0;
 
     //create rows
-    m_nums = (int**)calloc(size, sizeof(int*));
-    if (m_nums == nullptr) { exit(EXIT_FAILURE); }
+    m_nums = (new int*[size]);
+    //if (!m_nums) {exit(EXIT_FAILURE);}
 
     //for all rows
     for (int i = 0; i < size; i++) {
         //create columns
-        int* r = (int*)calloc(size, sizeof(int));
-        if (r == nullptr) { exit(EXIT_FAILURE); }
-        
-        m_nums[i] = r;
+        m_nums[i] = new int[size];
+        for (int o = 0; o < size; o++) {//for call c
+            m_nums[i][o] = 0;
+        }
+        if (!m_nums[i]) { exit(EXIT_FAILURE); }
     }
 }
 
@@ -33,13 +34,13 @@ Square::~Square() {
 }
 
 void Square::m_deconstruct2d(int** arr) {
-    //free all columns
+    //delete all columns
     for (int i = 0; i < getSize(); i++) {
-        free(m_nums[i]);
+        delete m_nums[i];
     }
 
-    //free row
-    free(m_nums);
+    //delete row
+    delete m_nums;
 }
 
 int Square::getSize() const { return getTemplate()->getSquareSize(); }
