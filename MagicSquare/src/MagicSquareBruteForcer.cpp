@@ -11,20 +11,18 @@ int main(int argc, char *argv[]) {
     }
     
     //start timer
-    time_t start;
-    time(&start);
+    std::chrono::steady_clock::time_point start = std::chrono::high_resolution_clock::now();
 
     //calc squares
     SquareTemplate sqt = SquareTemplate(a.compactOutput, a.size, a.min, a.max, a.outputIdentical);
     sqt.startCheckThreaded(a.threadCount);
 
     //end timer
-    time_t end;
-    time(&end);
+    std::chrono::steady_clock::time_point end = std::chrono::high_resolution_clock::now();
 
     //print completion message
-    int calcTime = std::difftime(end,start);
-    std::cout << "done in " << calcTime << " second" << (calcTime==1 ? "" : "s") << "." << std::endl;
+    std::chrono::duration<double> calcTime = end - start;
+    std::cout << "done in " << round(calcTime.count()*1000) << " ms" << "." << std::endl;
 }
 
 void print_vector(const std::vector<std::string>& s) {

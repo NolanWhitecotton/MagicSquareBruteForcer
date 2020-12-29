@@ -14,8 +14,6 @@ private:
 
     std::mutex* m_outputMutex;
 
-
-
     int minPosSum;
     int maxPosSum;
 

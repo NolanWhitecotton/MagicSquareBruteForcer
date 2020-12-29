@@ -6,7 +6,7 @@
 #include <iomanip>
 #include <string>
 #include <vector>
-#include "time.h"
+#include <chrono>
 
 //class includes
 #include "SquareTemplate.h"
