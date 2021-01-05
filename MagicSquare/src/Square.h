@@ -16,7 +16,6 @@ private:
     void m_setTemplate(SquareTemplate* tmplt);
 
     void m_printSquare(char lineDelim, bool printHeader, bool showIdentical) const;
-
 public:
     /*contructors, destructors, and overloads*/
     //create an empty square
@@ -28,9 +27,7 @@ public:
     //destructor
     ~Square();
 
-    /*const methods*/
     //data getters
-    int isEmpty() const;
     int getNum(int pos) const;
     int getNum(int r, int c) const;
     SquareTemplate* getTemplate() const;

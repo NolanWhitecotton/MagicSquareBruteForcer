@@ -15,15 +15,13 @@ void Square::m_allocArray(int size) {
     m_addedNumCount = 0;
 
     //create rows
-    m_numsLinear = (new int[size*size]);//alloc size^2 ints
+    m_numsLinear = (new int[size*size]());//alloc size^2 ints
     if (!m_numsLinear) { exit(EXIT_FAILURE); }
 
     //set all ints to 0
     for (int i = 0; i < size*size; i++) {
         m_numsLinear[i] = 0;
     }
-
-    if (!m_numsLinear) {exit(EXIT_FAILURE);}
 }
 
 Square::~Square() {
@@ -33,7 +31,6 @@ Square::~Square() {
 int Square::getSize() const { return getTemplate()->getSquareSize(); }
 int Square::getRecurMax() const { return getTemplate()->getRecurMax(); }
 int Square::getCompact() const { return getTemplate()->getIsCompact(); }
-int Square::isEmpty() const { return m_addedNumCount == 0; }
 int Square::getAddedNumCount() const { return m_addedNumCount; }
 int Square::getLineSumCache() const { return m_lineSumCache; }
 
@@ -69,6 +66,11 @@ void Square::m_printSquare(char lineDelim, bool printHeader, bool showIdentical)
         bool secondsub = getKthBit(i, 2); //read the col backwards
         bool reverse = getKthBit(i, 3); //swap r and c
 
+
+        //calc charWidth
+        int biggestNum = (getTemplate()->getRecurMax() + getTemplate()->getRecurOffset());
+        int charWidth = ceil(((double)biggestNum / 10));
+
         //for every position on the square
         for (int r = 0; r < getSize(); r++) {
             for (int c = 0; c < getSize(); c++) {
@@ -86,9 +88,12 @@ void Square::m_printSquare(char lineDelim, bool printHeader, bool showIdentical)
                 if (secondsub)
                     second = getSize() - second - 1;
 
-                //print number
-                cout << setw(3) << getNum(first, second);
+                //calc num with offset
+                int num = getNum(first, second);
+                num += getTemplate()->getRecurOffset() - 1;
 
+                //print number
+                cout << setw(charWidth+1) << num;
             }
             cout << lineDelim;
         }
@@ -100,24 +105,19 @@ void Square::m_printSquare(char lineDelim, bool printHeader, bool showIdentical)
 }
 
 void Square::add(int n) {
-    
-    if (getAddedNumCount() < getSize()*getSize()) {
-        //add number
-        m_numsLinear[getAddedNumCount()] = n;//TODO (DI)
+    //add number
+    m_numsLinear[getAddedNumCount()] = n;//TODO (DI)
 
-        //cache if at first row end
-        if (getAddedNumCount() == getSize()) {//TODO (DI) if dynamic insertion, edit cache function accordingly, the rest should work
-            int sum = 0;
-            for (int i = 0; i < getSize(); i++) {
-                sum += getNum(i);
-            }
-            m_lineSumCache = sum;
+    //cache if at first row end
+    if (getAddedNumCount() == getSize()) {//TODO (DI) if dynamic insertion, edit cache function accordingly, the rest should work
+        int sum = 0;
+        for (int i = 0; i < getSize(); i++) {
+            sum += getNum(i);
         }
-
-        m_addedNumCount++;
-    }else{
-        std::cout << "Cannot insert another number" << std::endl;
+        m_lineSumCache = sum;
     }
+
+    m_addedNumCount++;
 }
 
 int Square::getNum(int pos) const {
