@@ -76,7 +76,7 @@ struct Args {
             std::cout << "Size must be greater than 0" << std::endl;
             rangeError = true;
         }
-        if (max < pow(size, 2)) {
+        if (max < size*size) {
             std::cout << "Max must be >=size^2" << std::endl;
             rangeError = true;
         }
