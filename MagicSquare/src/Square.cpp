@@ -23,7 +23,7 @@ void Square::m_allocArray(int size) {
     m_addedNumCount = 0;
 
     //create rows
-    m_numsLinear = (new int[size*size]());//alloc size^2 ints
+    m_numsLinear = (new int[(int)size*size]());//alloc size^2 ints
     if (!m_numsLinear) { exit(EXIT_FAILURE); }
 }
 
@@ -71,8 +71,8 @@ void Square::m_printSquare(char lineDelim, bool printHeader, bool showIdentical)
 
 
         //calc charWidth
-        int biggestNum = (getTemplate()->getRecurMax() + getTemplate()->getRecurOffset());
-        int charWidth = ceil(((double)biggestNum / 10));
+        int biggestNum = (getTemplate()->getRecurMax() + getTemplate()->getRecurOffset() - 1);
+        int outputWidth = std::to_string(biggestNum).length()+1;
 
         //for every position on the square
         for (int r = 0; r < getSize(); r++) {
@@ -96,7 +96,7 @@ void Square::m_printSquare(char lineDelim, bool printHeader, bool showIdentical)
                 num += getTemplate()->getRecurOffset() - 1;
 
                 //print number
-                cout << setw(charWidth+1) << num;
+                cout << setw(outputWidth) << num;
             }
             cout << lineDelim;
         }
