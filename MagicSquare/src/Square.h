@@ -14,6 +14,7 @@ private:
     void m_allocArray(int size);
     void m_addAllFrom(const Square& s);
     void m_setTemplate(SquareTemplate* tmplt);
+    void m_setAllZero();
 
     void m_printSquare(char lineDelim, bool printHeader, bool showIdentical) const;
 public:

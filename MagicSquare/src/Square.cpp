@@ -3,6 +3,7 @@
 Square::Square(int size, SquareTemplate* tmplt) {
     m_setTemplate(tmplt);
     m_allocArray(size);
+    m_setAllZero();
 }
 
 Square::Square(const Square& s) {
@@ -11,17 +12,19 @@ Square::Square(const Square& s) {
     m_addAllFrom(s);
 }
 
+void Square::m_setAllZero() {
+    //set all ints to 0
+    for (int i = 0; i < getSize() * getSize(); i++) {
+        m_numsLinear[i] = 0;
+    }
+}
+
 void Square::m_allocArray(int size) {
     m_addedNumCount = 0;
 
     //create rows
     m_numsLinear = (new int[size*size]());//alloc size^2 ints
     if (!m_numsLinear) { exit(EXIT_FAILURE); }
-
-    //set all ints to 0
-    for (int i = 0; i < size*size; i++) {
-        m_numsLinear[i] = 0;
-    }
 }
 
 Square::~Square() {

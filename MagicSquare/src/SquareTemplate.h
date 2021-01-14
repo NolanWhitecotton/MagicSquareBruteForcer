@@ -3,6 +3,7 @@
 #include <vector>
 #include <thread>
 #include <mutex>
+#include <stack>
 
 class SquareTemplate {
 private:

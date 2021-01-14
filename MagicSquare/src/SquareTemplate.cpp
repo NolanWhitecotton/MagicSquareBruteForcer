@@ -1,6 +1,4 @@
 #include "MagicSquareBruteForcer.h"
-#include <stack>
-
 
 SquareTemplate::SquareTemplate(bool isCompact, int squareSize, int reucrMin, int recurMax, bool showIdentical) {
 	m_isCompact = isCompact;
