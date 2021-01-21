@@ -29,12 +29,23 @@ namespace UnitTest1{
 			Square* sq = new Square(3, st);
 
 			//asserts
-			Assert::AreEqual(sq->getSize(),3);
-			
+			Assert::AreEqual(sq->getSize(), 3);
+			Assert::AreEqual(sq->getTemplate()==st,true);
 		}
 
-		TEST_METHOD(test) {
-			Assert::AreEqual(1, 1);
+		TEST_METHOD(TestSquareAdd) {
+			//prep
+			SquareTemplate* st = new SquareTemplate(true, 3, 1, 9, false); //-m 9 -c -s 3
+			Square* sq = new Square(3, st);
+
+			//test
+			sq->add(1);
+			sq->add(5);
+
+			//asserts
+			Assert::AreEqual(sq->getAddedNumCount(), 2);
+			Assert::AreEqual(sq->getNum(0), 1);
+			Assert::AreEqual(sq->getNum(1), 5);
 		}
 	};
 }
