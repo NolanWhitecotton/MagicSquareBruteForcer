@@ -2,20 +2,13 @@
 
 int main(int argc, char *argv[]) {
     //read arguments
-    Args a;
-    a.loadArgs(argc, argv);
-
-    if (a.checkArgRanges()) {
-        std::cout << "error";
-        exit(EXIT_FAILURE);
-    }
+    Args* a = new Args(argc, argv);
     
     //start timer
     std::chrono::steady_clock::time_point start = std::chrono::high_resolution_clock::now();
 
     //calc squares
-    SquareTemplate sqt = SquareTemplate(a.compactOutput, a.size, a.min, a.max, a.outputIdentical);
-    sqt.startCheckThreaded(a.threadCount);
+    ThreadManager tm(a);
 
     //end timer
     std::chrono::steady_clock::time_point end = std::chrono::high_resolution_clock::now();

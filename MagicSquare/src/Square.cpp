@@ -24,7 +24,7 @@ void Square::m_allocArray(int size) {
     m_addedNumCount = 0;
 
     //create rows
-    m_numsLinear = std::make_unique<int[]>((int)size*size);
+    m_numsLinear = std::make_unique<int[]>((size_t)size*size);
 }
 
 Square::~Square() {}
@@ -70,7 +70,7 @@ void Square::m_printSquare(char lineDelim, bool printHeader, bool showIdentical)
 
         //calc charWidth
         int biggestNum = (getTemplate()->getRecurMax() + getTemplate()->getRecurOffset() - 1);
-        int outputWidth = std::to_string(biggestNum).length()+1;
+        int outputWidth = (int)std::to_string(biggestNum).length()+1;
 
         //for every position on the square
         for (int r = 0; r < getSize(); r++) {
@@ -141,7 +141,7 @@ int Square::getNum(int pos) const {
     return m_numsLinear[pos];
 }
 int Square::getNum(int r, int c) const {
-    return m_numsLinear[r*getSize()+c];
+    return m_numsLinear[(size_t)r * getSize() + c];
 }
 
 bool Square::isValid() const {//TODO (DI)

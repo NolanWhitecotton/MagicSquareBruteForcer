@@ -24,7 +24,7 @@ private:
 
 public:
     //constructors
-    SquareTemplate(bool isCompact, int squaresize, int reucrMin, int recurMax, bool showIdentical);
+    SquareTemplate(Args *a);
     ~SquareTemplate();
 
     //getters
@@ -35,8 +35,6 @@ public:
     bool getShowIdentical() const;
 
     //methods
-    void startCheckThreaded(int threadCount);
-
     int convert2dtoLinear(int r, int c);
     int getLinearR(int pos);
     int getLinearC(int pos);
@@ -44,4 +42,16 @@ public:
     int getMaxPosSum() const { return maxPosSum; }
 
     std::mutex* getOutputMutex();
+};
+
+
+class ThreadManager {
+private:
+    SquareTemplate* tmplt;
+
+    void createTemplate(Args* a);
+    void startCheckThreaded(Args* a);
+
+public:
+    ThreadManager(Args* a);
 };

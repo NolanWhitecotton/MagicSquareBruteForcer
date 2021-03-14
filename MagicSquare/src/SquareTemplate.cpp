@@ -1,13 +1,13 @@
 #include "MagicSquareBruteForcer.h"
 
-SquareTemplate::SquareTemplate(bool isCompact, int squareSize, int reucrMin, int recurMax, bool showIdentical) {
-	m_isCompact = isCompact;
-	m_squareSize = squareSize;
-	m_showIdentical = showIdentical;
+SquareTemplate::SquareTemplate(Args *a) {
+	m_isCompact = a->compactOutput;
+	m_squareSize = a->size;
+	m_showIdentical = a->outputIdentical;
 
 	//calculate max and offset
-	m_recurMax = recurMax - reucrMin + 1;
-	m_recurOffset = reucrMin;
+	m_recurMax = a->max - a->min + 1;
+	m_recurOffset = a->min;
 
 	//create mutex
 	m_outputMutex = new std::mutex();
@@ -23,20 +23,25 @@ int SquareTemplate::getRecurMax() const { return m_recurMax; }
 int SquareTemplate::getRecurOffset() const { return m_recurOffset; }
 bool SquareTemplate::getShowIdentical() const { return m_showIdentical; }
 
-void SquareTemplate::startCheckThreaded(int threadCount) {
+//void ThreadManager::createTemplate(bool isCompact, int squareSize, int recurMin, int recurMax, bool showIdentical) {
+void ThreadManager::createTemplate(Args *a) {
+	tmplt = new SquareTemplate(a);
+}
+
+void ThreadManager::startCheckThreaded(Args *a) {
 	//prep operations to run on threads
 	std::vector<std::thread> threadList;
 	std::stack<Square*> s;
 
 	//prep work to be done
-	for(int i = getRecurMax(); i > 0; i--) {//backwards so single threaded will be in order
-		Square* newS = new Square(getSquareSize(), &*this);
+	for(int i = tmplt->getRecurMax(); i > 0; i--) {//backwards so single threaded will be in order
+		Square* newS = new Square(tmplt->getSquareSize(), tmplt);
 		newS->add(i);
 		s.push(newS);
 	}
 
 	//create threads
-	for (int i = 0; i < threadCount; i++) {
+	for (int i = 0; i < a->threadCount; i++) {
 		if (s.empty()) {
 			break;
 		}
@@ -71,9 +76,9 @@ void SquareTemplate::startCheckThreaded(int threadCount) {
 					}
 				);
 
-				getOutputMutex()->lock();
+				tmplt->getOutputMutex()->lock();
 				std::cout << "Starting new thread " << s.size() << " jobs left to do." << std::endl;
-				getOutputMutex()->unlock();
+				tmplt->getOutputMutex()->unlock();
 
 				//break for loop since threadList and s have been modified
 				break;
@@ -85,6 +90,11 @@ void SquareTemplate::startCheckThreaded(int threadCount) {
 	for (auto& t : threadList){
 		t.join();
 	}
+}
+
+ThreadManager::ThreadManager(Args *a){
+	createTemplate(a);
+	startCheckThreaded(a);
 }
 
 int SquareTemplate::convert2dtoLinear(int r, int c) { return r * getSquareSize() + c; }
@@ -128,7 +138,7 @@ void SquareTemplate::findPossibleRanges(int size, int max) {
 	
 	//edge cases
 	if (!end) {
-		maxPosSum = nums.size() - 1;
+		maxPosSum = (int)nums.size() - 1;
 	}
 	if (!start) {
 		std::cout << "There are no possible squares given this range." << std::endl;

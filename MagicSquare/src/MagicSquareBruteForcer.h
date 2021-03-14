@@ -8,10 +8,6 @@
 #include <vector>
 #include <chrono>
 
-//class includes
-#include "SquareTemplate.h"
-#include "Square.h"
-
 //dependency includes
 #include "../Dependencies/cxxopts.hpp"
 
@@ -23,16 +19,16 @@ void print_vector(const std::vector<std::string>& s);
 
 //stores the commandline arguments
 struct Args {
-	int size;
-	int max;
-	int min;
-	bool compactOutput;
-	bool outputIdentical;
-	int progressReportFrequency;
-	std::string outpuDir;
-    int threadCount;
+	int size = 0;
+	int max = 0;
+	int min = 0;
+	bool compactOutput = false;
+	bool outputIdentical = false;
+	int progressReportFrequency = 100;
+	std::string outpuDir = "c:/";
+    int threadCount = 1;
 
-	void loadArgs(int argc, char* argv[]){
+	Args(int argc, char* argv[]){
         //read args with cxxopts 2.2.0
         cxxopts::Options options("MSBF", "Find all the possible magic squares of size n using number n-m");
 
@@ -63,12 +59,14 @@ struct Args {
             std::cout << e.what();
             exit(EXIT_FAILURE);
         }
+
+        if (checkArgRanges()) {
+            std::cout << "error";
+            exit(EXIT_FAILURE);
+        }
 	}
 
-	/// <summary>
-	/// checks the ranges on the arguments and returns weather there was an error or not
-	/// </summary>
-	/// <returns></returns>
+	//checks the ranges on the arguments and returns weather there was an error or not
 	bool checkArgRanges() {
         //check arg ranges
         bool rangeError = false;
@@ -92,3 +90,7 @@ struct Args {
 		return rangeError;
 	}
 };
+
+//class includes
+#include "SquareTemplate.h"
+#include "Square.h"
