@@ -24,13 +24,10 @@ void Square::m_allocArray(int size) {
     m_addedNumCount = 0;
 
     //create rows
-    m_numsLinear = (new int[(int)size*size]());//alloc size^2 ints
-    if (!m_numsLinear) { exit(EXIT_FAILURE); }
+    m_numsLinear = std::make_unique<int[]>((int)size*size);
 }
 
-Square::~Square() {
-    delete m_numsLinear;
-}
+Square::~Square() {}
 
 int Square::getSize() const { return getTemplate()->getSquareSize(); }
 int Square::getRecurMax() const { return getTemplate()->getRecurMax(); }

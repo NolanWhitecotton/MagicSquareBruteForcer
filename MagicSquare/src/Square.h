@@ -5,7 +5,7 @@ private:
     //data
     SquareTemplate* m_tmplt;
 
-    int* m_numsLinear;//size^2 ints
+    std::unique_ptr<int[]> m_numsLinear;//size^2 ints
     int m_addedNumCount;
 
     int m_lineSumCache;
