@@ -14,11 +14,11 @@ namespace UnitTest1{
 			SquareTemplate *st = new SquareTemplate(true, 3, 1, 9, false); //-m 9 -c -s 3
 
 			//asserts
-			Assert::AreEqual(st->getIsCompact(), true);
-			Assert::AreEqual(st->getSquareSize(), 3);
-			Assert::AreEqual(st->getRecurMax(), 9);
-			Assert::AreEqual(st->getRecurOffset(), 1);
-			Assert::AreEqual(st->getShowIdentical(), false);
+			Assert::AreEqual(true, st->getIsCompact());
+			Assert::AreEqual(3, st->getSquareSize());
+			Assert::AreEqual(9, st->getRecurMax());
+			Assert::AreEqual(1, st->getRecurOffset());
+			Assert::AreEqual(false, st->getShowIdentical());
 		}
 
 		TEST_METHOD(TestSquareIntConstructor) {
@@ -29,8 +29,8 @@ namespace UnitTest1{
 			Square* sq = new Square(3, st);
 
 			//asserts
-			Assert::AreEqual(sq->getSize(), 3);
-			Assert::AreEqual(sq->getTemplate()==st,true);
+			Assert::AreEqual(3, sq->getSize());
+			Assert::AreEqual(true, sq->getTemplate()==st);
 		}
 
 		TEST_METHOD(TestSquareAdd) {
@@ -43,32 +43,39 @@ namespace UnitTest1{
 			sq->add(5);
 
 			//asserts
-			Assert::AreEqual(sq->getAddedNumCount(), 2);
-			Assert::AreEqual(sq->getNum(0), 1);
-			Assert::AreEqual(sq->getNum(1), 5);
+			Assert::AreEqual(2, sq->getAddedNumCount());
+			Assert::AreEqual(1, sq->getNum(0));
+			Assert::AreEqual(5, sq->getNum(1));
 		}
 	TEST_METHOD(TestRemove) {
-			//prep
+			//setup square
 			SquareTemplate* st = new SquareTemplate(true, 3, 1, 9, false); //-m 9 -c -s 3
 			Square* sq = new Square(3, st);
 			sq->add(2);
 			sq->add(7);
 
-			Assert::AreEqual(sq->getAddedNumCount(), 2);
+			//check that it got added correctly
+			Assert::AreEqual(2, sq->getAddedNumCount());
 			
-			//sq->removeLastAdd();
+			//remove 7
+			sq->removeLastAdd();
 			
-			//Assert::AreEqual(sq->getAddedNumCount(), 1);
-			//Assert::AreEqual(sq->getLineSumCache(), 0);
+			//check that one got removed, and cache still isnt set
+			Assert::AreEqual(1, sq->getAddedNumCount());
+			Assert::AreEqual(0, sq->getLineSumCache());
 
-			//sq->add(7);
+			//add the 7 back and add a 6
+			sq->add(7);
 			sq->add(6);
 
-			Assert::AreEqual(sq->getLineSumCache(), 15);//wrong
+			//check that linesum is now set
+			Assert::AreEqual(15, sq->getLineSumCache());
 
+			//remove the 6
 			sq->removeLastAdd();
 
-			Assert::AreEqual(sq->getLineSumCache(), 0);
+			//check that linesum is not set anymore
+			Assert::AreEqual(0, sq->getLineSumCache());
 		}
 	};
 }
