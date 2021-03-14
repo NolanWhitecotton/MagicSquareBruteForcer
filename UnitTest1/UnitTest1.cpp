@@ -47,5 +47,28 @@ namespace UnitTest1{
 			Assert::AreEqual(sq->getNum(0), 1);
 			Assert::AreEqual(sq->getNum(1), 5);
 		}
+	TEST_METHOD(TestRemove) {
+			//prep
+			SquareTemplate* st = new SquareTemplate(true, 3, 1, 9, false); //-m 9 -c -s 3
+			Square* sq = new Square(3, st);
+			sq->add(2);
+			sq->add(7);
+
+			Assert::AreEqual(sq->getAddedNumCount(), 2);
+			
+			//sq->removeLastAdd();
+			
+			//Assert::AreEqual(sq->getAddedNumCount(), 1);
+			//Assert::AreEqual(sq->getLineSumCache(), 0);
+
+			//sq->add(7);
+			sq->add(6);
+
+			Assert::AreEqual(sq->getLineSumCache(), 15);//wrong
+
+			sq->removeLastAdd();
+
+			Assert::AreEqual(sq->getLineSumCache(), 0);
+		}
 	};
 }

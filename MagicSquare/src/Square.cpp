@@ -102,7 +102,7 @@ void Square::m_printSquare(char lineDelim, bool printHeader, bool showIdentical)
         }
         cout << endl;
     }
-
+    
     //unlock mutex
     getTemplate()->getOutputMutex()->unlock();
 }
@@ -110,6 +110,8 @@ void Square::m_printSquare(char lineDelim, bool printHeader, bool showIdentical)
 void Square::add(int n) {
     //add number
     m_numsLinear[getAddedNumCount()] = n;//TODO (DI)
+
+    m_addedNumCount++;
 
     //cache if at first row end
     if (getAddedNumCount() == getSize()) {//TODO (DI) if dynamic insertion, edit cache function accordingly, the rest should work
@@ -120,7 +122,21 @@ void Square::add(int n) {
         m_lineSumCache = sum;
     }
 
-    m_addedNumCount++;
+    
+}
+
+//undoes the last add
+void Square::removeLastAdd() {
+    //undo possible cache
+    if (getAddedNumCount() == getSize()) {
+        m_lineSumCache = 0;
+    }
+
+    //dec addedNumCount
+    m_addedNumCount--;
+
+    //delete number
+    m_numsLinear[getAddedNumCount()] = 0;
 }
 
 int Square::getNum(int pos) const {
@@ -176,7 +192,7 @@ bool Square::isValid() const {//TODO (DI)
     }
 
     //check that the linesum cache is within the valid range
-    if (getAddedNumCount() == getSize()+1) {//if row is cached
+    if (getAddedNumCount() == getSize()) {//if row is cached
         if (!inRange(getLineSumCache(), getTemplate()->getMinPosSum(), getTemplate()->getMaxPosSum())) {
             return false;
         }
@@ -194,8 +210,8 @@ void Square::checkNextRecur() const {
     }
     
     //recur for all valid squares with every legal number appended
-    for (int i = 1; i <= getRecurMax(); i++) {
-        Square newSq = Square(*this);
+    for (int i = 1; i <= getRecurMax(); i++) {//TODO (DI)
+        Square newSq = Square(*this);//TODO this is really slow and awkward, calls new on m_nums
         newSq.add(i);
 
         if (newSq.isValid()) {

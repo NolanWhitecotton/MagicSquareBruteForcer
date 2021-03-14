@@ -54,4 +54,5 @@ public:
 
     //modifiers
     void add(int n);//add n as the next int, update the caches if updateCaches is true
+    void removeLastAdd();
 };
