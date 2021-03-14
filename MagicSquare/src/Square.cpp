@@ -20,6 +20,7 @@ void Square::m_setAllZero() {
 }
 
 void Square::m_allocArray(int size) {
+    m_lineSumCache = 0;
     m_addedNumCount = 0;
 
     //create rows
