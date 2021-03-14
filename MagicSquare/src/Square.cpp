@@ -202,7 +202,7 @@ bool Square::isValid() const {//TODO (DI)
     return true;
 }
 
-void Square::checkNextRecur() const {
+void Square::checkNextRecur() {
     //TODO (PR) progress reports
     //base case of complete valid square
     if (getAddedNumCount() >= getSize()*getSize()) {
@@ -212,12 +212,13 @@ void Square::checkNextRecur() const {
     
     //recur for all valid squares with every legal number appended
     for (int i = 1; i <= getRecurMax(); i++) {//TODO (DI)
-        Square newSq = Square(*this);//TODO this is really slow and awkward, calls new on m_nums
-        newSq.add(i);
+        add(i);
 
-        if (newSq.isValid()) {
-            newSq.checkNextRecur();
+        if (isValid()) {
+            checkNextRecur();
         }
+
+        removeLastAdd();
     }
 }
 

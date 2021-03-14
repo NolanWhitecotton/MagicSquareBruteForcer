@@ -50,7 +50,7 @@ public:
     int getLineSum(int startR, int startC, int incR, int incC) const;
 
     //recursion
-    void checkNextRecur() const;
+    void checkNextRecur();
 
     //modifiers
     void add(int n);//add n as the next int, update the caches if updateCaches is true
