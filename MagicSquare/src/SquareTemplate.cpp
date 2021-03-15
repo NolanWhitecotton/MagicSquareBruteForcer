@@ -48,8 +48,8 @@ void ThreadManager::startCheckThreaded(Args *a) {
 		}
 
 		threadList.emplace_back(
-			[&s, &stackmutex]() {//grab from the queue and calculate it until queue is empty
-
+			[&s, &stackmutex]() {
+				//grab from the queue and calculate it until queue is empty
 				stackmutex->lock();
 				while (!s.empty()) {
 					Square* sq = s.top();
@@ -68,7 +68,8 @@ void ThreadManager::startCheckThreaded(Args *a) {
 
 	//join all threads
 	for (auto& t : threadList){
-		t.join();
+		if(t.joinable())
+			t.join();
 	}
 }
 

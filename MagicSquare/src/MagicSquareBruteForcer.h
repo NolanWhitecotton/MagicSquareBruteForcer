@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include <chrono>
+#include <thread>
 
 //dependency includes
 #include "../Dependencies/cxxopts.hpp"
@@ -39,7 +40,7 @@ struct Args {
             ("c,compact", "Weather or not to use compact output", cxxopts::value<bool>()->default_value("false")->implicit_value("true"))
             ("i,identical", "Weather or not to include mirrors and rotations", cxxopts::value<bool>()->default_value("false")->implicit_value("true"))
             ("o,output", "Weather or not to include mirrors and rotations", cxxopts::value<std::string>())
-            ("t,threads", "The number of threads to try and run on", cxxopts::value<int>()->default_value("1"))
+            ("t,threads", "The number of threads to try and run on", cxxopts::value<int>()->default_value(std::to_string(std::thread::hardware_concurrency())))
             ;
 
         try {
