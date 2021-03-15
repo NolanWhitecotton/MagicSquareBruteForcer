@@ -14,7 +14,7 @@ SquareTemplate::SquareTemplate(Args *a) {
 
 	//compile the ranges
 	findPossibleRanges(m_squareSize, m_recurMax);
-	//TODO (DI) create order
+	//TODO (DI) create instertion/checking orders
 }
 
 bool SquareTemplate::getIsCompact() const { return m_isCompact; }

@@ -107,12 +107,12 @@ void Square::m_printSquare(char lineDelim, bool printHeader, bool showIdentical)
 
 void Square::add(int n) {
     //add number
-    m_numsLinear[getAddedNumCount()] = n;//TODO (DI)
+    m_numsLinear[getAddedNumCount()] = n;//TODO (DI) change which number gets added dynamically
 
     m_addedNumCount++;
 
     //cache if at first row end
-    if (getAddedNumCount() == getSize()) {//TODO (DI) if dynamic insertion, edit cache function accordingly, the rest should work
+    if (getAddedNumCount() == getSize()) {//TODO (DI) cache should by dynamic
         int sum = 0;
         for (int i = 0; i < getSize(); i++) {
             sum += getNum(i);
@@ -126,7 +126,7 @@ void Square::add(int n) {
 //undoes the last add
 void Square::removeLastAdd() {
     //undo possible cache
-    if (getAddedNumCount() == getSize()) {
+    if (getAddedNumCount() == getSize()) { //TODO (DI) cache should clear dynamically
         m_lineSumCache = 0;
     }
 
@@ -134,7 +134,7 @@ void Square::removeLastAdd() {
     m_addedNumCount--;
 
     //delete number
-    m_numsLinear[getAddedNumCount()] = 0;
+    m_numsLinear[getAddedNumCount()] = 0;//TODO (DI) number should be reset dynamically
 }
 
 int Square::getNum(int pos) const {
@@ -144,7 +144,7 @@ int Square::getNum(int r, int c) const {
     return m_numsLinear[(size_t)r * getSize() + c];
 }
 
-bool Square::isValid() const {//TODO (DI)
+bool Square::isValid() const {//TODO (DI) each test should be picked dynamically
     /*check that the newest number is not repeated*/
     for (int i = 0; i < getAddedNumCount() - 1; i++) {
         if (getNum(i) == getNum(getAddedNumCount()-1)) {
@@ -208,11 +208,16 @@ void Square::checkNextRecur() {
     }
     
     //recur for all valid squares with every legal number appended
-    for (int i = 1; i <= getRecurMax(); i++) {//TODO (DI)
+    for (int i = 1; i <= getRecurMax(); i++) {
         add(i);
 
         if (isValid()) {
-            checkNextRecur();
+            if (true) {//TODO if fork on depth && depth is reached
+                checkNextRecur();
+            } else {
+                //TODO (FK) write fork methods
+                //TODO (FK) figure out how to add to work queue
+            }
         }
 
         removeLastAdd();
