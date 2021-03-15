@@ -32,8 +32,9 @@ void ThreadManager::startCheckThreaded(Args *a) {
 	//prep operations to run on threads
 	std::vector<std::thread> threadList;
 	std::stack<Square*> s;
+	std::mutex *stackmutex = new std::mutex();
 
-	//prep work to be done
+	//queue work to be done
 	for(int i = tmplt->getRecurMax(); i > 0; i--) {//backwards so single threaded will be in order
 		Square* newS = new Square(tmplt->getSquareSize(), tmplt);
 		newS->add(i);
@@ -42,48 +43,27 @@ void ThreadManager::startCheckThreaded(Args *a) {
 
 	//create threads
 	for (int i = 0; i < a->threadCount; i++) {
-		if (s.empty()) {
+		if (s.empty()) {//check that there arent more threads than queue length
 			break;
 		}
 
-		Square* sq = s.top();
-		s.pop();
-
 		threadList.emplace_back(
-			[sq]() {
-				sq->checkNextRecur();
+			[&s, &stackmutex]() {//grab from the queue and calculate it until queue is empty
+
+				stackmutex->lock();
+				while (!s.empty()) {
+					Square* sq = s.top();
+					s.pop();
+					stackmutex->unlock();
+
+					sq->checkNextRecur();
+					delete sq;
+
+					stackmutex->lock();
+				}
+				stackmutex->unlock();
 			}
 		);
-	}
-
-	//if a thread is empty, delete it an add a new thread
-	//TODO budding if the thread queue is empty
-	while (!s.empty()) {
-		for (int i = 0; i < threadList.size(); i++) {//for every thread
-			if (threadList[i].joinable()) {//if thread is joinable
-				//delete thread
-				threadList[i].join();
-				threadList.erase(threadList.begin()+i);
-
-				//get job to do
-				Square* sq = s.top();
-				s.pop();
-
-				//add to new thread
-				threadList.emplace_back(
-					[sq]() {
-						sq->checkNextRecur();
-					}
-				);
-
-				tmplt->getOutputMutex()->lock();
-				std::cout << "Starting new thread " << s.size() << " jobs left to do." << std::endl;
-				tmplt->getOutputMutex()->unlock();
-
-				//break for loop since threadList and s have been modified
-				break;
-			}
-		}
 	}
 
 	//join all threads
