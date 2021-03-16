@@ -1,19 +1,17 @@
 Dynamic Insertion (DI)
 	Add a method to define the Square::Add order
+	Add a method to define the Sqiare::removeLastAdd order/checks
 	Make isValid work with the Square::Add order
 	Multiple Insertion (MI)
 		insert multiple things then check them all
 
 Progress Reports (PR)
+	
+Fork at depth (FK)
+	Fork after a certain depth, and use this in the thread allocation and/or dynamically
 
-Make template alloc squares and distribute them
+Print the steps its going through as it does them with -v enabled
 
-retry multi threading but in prod instead of debug
-	add option for thread count
-
-print the steps its going through as it does them with -v enabled
-
-add tests
-	use assert
-
-testargs: -m 9 -s 3 -c 
+output manager
+	allow a tee to a file for output
+	show warnings/thread updates
