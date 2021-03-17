@@ -49,7 +49,10 @@ void Square::printSquare() const {
     }
 }
 
-bool getKthBit(unsigned int n, unsigned int k) {return ((n & (1 << (k - 1))) >> (k - 1)) == 1;}
+bool getKthBit(unsigned int n, unsigned int k) {
+    return ((n & (1 << (k - 1))) >> (k - 1)) == 1;
+}
+
 void Square::m_printSquare(char lineDelim, bool printHeader, bool showIdentical) const {
     using namespace std;
 
@@ -66,7 +69,6 @@ void Square::m_printSquare(char lineDelim, bool printHeader, bool showIdentical)
         bool firstsub = getKthBit(i, 1); //read the row backwards
         bool secondsub = getKthBit(i, 2); //read the col backwards
         bool reverse = getKthBit(i, 3); //swap r and c
-
 
         //calc charWidth
         int biggestNum = (getTemplate()->getRecurMax() + getTemplate()->getRecurOffset() - 1);
@@ -119,8 +121,6 @@ void Square::add(int n) {
         }
         m_lineSumCache = sum;
     }
-
-    
 }
 
 //undoes the last add
@@ -176,16 +176,17 @@ bool Square::isValid() const {//TODO (DI) each test should be picked dynamically
     
     //check that the row and column and diagionals are all valid
     if (getAddedNumCount() > getSize()) {//if row is cached
-        int rSum = getLineSum(getTemplate()->getLinearR(getAddedNumCount()) - 1, getSize()-1, 0, -1);
+        //row
+        int rSum = getLineSum(true, false, false, getTemplate()->getLinearR(getAddedNumCount()) - 1);
         if (rSum > 0 && rSum != getLineSumCache()) { return false; }
         //col
-        int cSum = getLineSum(getSize()-1, getTemplate()->getLinearC(getAddedNumCount() - 1), -1, 0);
+        int cSum = getLineSum(false, false, false, getTemplate()->getLinearC(getAddedNumCount()) - 1);
         if (cSum > 0 && cSum != getLineSumCache()) { return false; }
         //+ diag
-        int pdSum = getLineSum(getSize()-1, 0, -1, 1);
+        int pdSum = getLineSum(false, true, true, 0);
         if (pdSum > 0 && pdSum != getLineSumCache()) { return false; }
         //- diag
-        int ndSum = getLineSum(getSize() - 1, getSize() - 1, -1, -1);
+        int ndSum = getLineSum(false, true, false, 0);
         if (ndSum > 0 && ndSum != getLineSumCache()) { return false; }
     }
 
@@ -227,27 +228,55 @@ void Square::checkNextRecur() {
 void Square::m_setTemplate(SquareTemplate* tmplt) {m_tmplt = tmplt;}
 SquareTemplate* Square::getTemplate() const {return m_tmplt;}
 
-int Square::getLineSum(int startR, int startC, int incR, int incC) const{
-    //get sum
-    int goalR = (startR + incR * getSize()) + (incR >= 0 ? -1 : 1);
-    int goalC = (startC + incC * getSize()) + (incC >= 0 ? -1 : 1);
+//diag is true if you want a diag, false if you want row or col
+//row is true if you want a row, false if col
+//positive is true if you want a postive diag 
+//num is the row or col to caluclate
+int Square::getLineSum(bool row, bool diag, bool positive, int num) const{
+    int sum = 0;//the current linesum
+    int incAmt;//the amount of increment by
+    int pos;//the current position
 
-    int sum = 0, r = startR, c = startC;
-    bool atEnd = false;
-    while (!atEnd) {
-        //add sum
-        int toAdd = getNum(r, c);
-        if (toAdd == 0) {
-            return -1;
+    //calculate pos and inc ammount for the given bools
+    //forwards
+    /*if (diag) {//diag
+        if (positive) {//positive diag
+            pos = getSize() - 1;
+            incAmt = getSize() - 1;
+        }else {//negative diag
+            pos = 0;
+            incAmt = getSize() + 1;
         }
+    }else if (row) {//row
+        pos = num *getSize();
+        incAmt = 1;
+    } else {//col
+        pos = num;
+        incAmt = getSize();
+    }*/
+    //reverse TODO (DI) use forewards, this is faster without DI
+    if (diag) {//diag
+	    if (positive) {//positive diag
+		    pos = getSize() * (getSize()-1);
+		    incAmt = -2;
+	    }else {//negative diag
+		    pos = getSize()*getSize() - 1;
+		    incAmt = -1*(getSize()+1);
+	    }
+    }else if (row) {//row
+	    pos = ((num+1) * getSize())-1;
+	    incAmt = -1;
+    } else {//col
+	    pos = getSize()*(getSize() - 1) + num;
+	    incAmt = -1*getSize();
+    }
+
+    //calculate sum
+    for (int goal = pos + getSize() * incAmt; pos != goal; pos += incAmt) {
+        int toAdd = getNum(pos);
+        if (toAdd == 0)
+            return -1;
         sum += toAdd;
-
-        //check atEnd
-        atEnd = ((r == goalR) || (c == goalC));
-
-        //inc r and c
-        r += incR;
-        c += incC;
     }
 
     return sum;

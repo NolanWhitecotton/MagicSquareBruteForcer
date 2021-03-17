@@ -47,7 +47,8 @@ public:
     int getCompact() const;
 
     //calculate the sum of a given line in a given direction
-    int getLineSum(int startR, int startC, int incR, int incC) const;
+    //int getLineSum(int startR, int startC, int incR, int incC) const;
+    int getLineSum(bool row, bool diag, bool positive, int num) const;
 
     //recursion
     void checkNextRecur();
