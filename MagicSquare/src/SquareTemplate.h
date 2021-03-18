@@ -4,6 +4,7 @@
 #include <thread>
 #include <mutex>
 #include <stack>
+#include "Args.h"
 
 class SquareTemplate {
 private:
@@ -41,16 +42,4 @@ public:
     int convert2dtoLinear(int r, int c) { return r * getSquareSize() + c; }
     int getLinearR(int pos) { return pos / getSquareSize(); }
     int getLinearC(int pos) { return pos % getSquareSize(); }
-};
-
-
-class ThreadManager {
-private:
-    SquareTemplate* tmplt;
-
-    void createTemplate(Args* a);
-    void startCheckThreaded(Args* a);
-
-public:
-    ThreadManager(Args* a);
 };
