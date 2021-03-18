@@ -1,4 +1,5 @@
 #pragma once
+#include "SquareTemplate.h"
 
 class Square {
 private:

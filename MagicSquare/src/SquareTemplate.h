@@ -1,9 +1,6 @@
 #pragma once
-
 #include <vector>
-#include <thread>
 #include <mutex>
-#include <stack>
 #include "Args.h"
 
 class SquareTemplate {

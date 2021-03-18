@@ -1,4 +1,7 @@
-#include "MagicSquareBruteForcer.h"
+#include "Square.h"
+#include <iomanip> //setw
+#include <iostream> //cout
+#include <mutex>
 
 Square::Square(int size, SquareTemplate* tmplt) {
     m_setTemplate(tmplt);

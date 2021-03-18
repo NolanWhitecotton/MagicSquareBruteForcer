@@ -165,7 +165,6 @@
   <ItemGroup>
     <ClInclude Include="Dependencies\cxxopts.hpp" />
     <ClInclude Include="src\Args.h" />
-    <ClInclude Include="src\MagicSquareBruteForcer.h" />
     <ClInclude Include="src\Square.h" />
     <ClInclude Include="src\SquareTemplate.h" />
     <ClInclude Include="src\ThreadManager.h" />

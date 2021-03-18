@@ -1,7 +1,5 @@
 #pragma once
-
-#include "../Dependencies/cxxopts.hpp"
-#include <thread>
+#include <string>
 
 //stores the commandline arguments
 struct Args {
@@ -15,5 +13,6 @@ struct Args {
 	int threadCount = 1;
 
 	Args(int argc, char* argv[]);
+
 	bool checkArgRanges();
 };

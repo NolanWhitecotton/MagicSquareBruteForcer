@@ -1,4 +1,6 @@
 #include "Args.h"
+#include "../Dependencies/cxxopts.hpp"
+#include <thread>//hardware concurency
 
 Args::Args(int argc, char* argv[]) {
     //read args with cxxopts 2.2.0

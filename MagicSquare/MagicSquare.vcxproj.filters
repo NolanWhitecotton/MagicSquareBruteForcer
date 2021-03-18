@@ -32,9 +32,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\MagicSquareBruteForcer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\SquareTemplate.h">
       <Filter>Header Files</Filter>
     </ClInclude>

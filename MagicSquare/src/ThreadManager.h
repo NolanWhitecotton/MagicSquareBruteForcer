@@ -1,6 +1,6 @@
 #pragma once
 #include "SquareTemplate.h"
-#include "MagicSquareBruteForcer.h"
+#include "Args.h"
 
 class ThreadManager {
 private:

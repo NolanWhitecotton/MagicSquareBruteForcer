@@ -1,4 +1,6 @@
-#include "MagicSquareBruteForcer.h"
+#include "Args.h"
+#include "ThreadManager.h"
+#include <iostream>//cout
 
 int main(int argc, char *argv[]) {
     //read arguments
