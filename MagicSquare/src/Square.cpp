@@ -183,9 +183,8 @@ bool Square::isValid() const {//TODO (DI) each test should be picked dynamically
 
     //check that the linesum cache is within the valid range
     if (getAddedNumCount() == getSize()) {//if row is cached
-        if (!inRange(getLineSumCache(), getTemplate()->getMinPosSum(), getTemplate()->getMaxPosSum())) {
+        if(getLineSumCache() < getTemplate()->getMinPosSum() || getLineSumCache() > getTemplate()->getMaxPosSum())
             return false;
-        }
     }
 
     return true;
