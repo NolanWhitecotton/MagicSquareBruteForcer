@@ -170,7 +170,9 @@ bool Square::isValid() const {//TODO (DI) each test should be picked dynamically
     }
 
     //check if its mirrored on the diag
-    if (getNum(0, 1) != 0 && getNum(1, 0) != 0 && getNum(0, 1) > getNum(1, 0)) {
+    int val01 = getNum(0, 1);
+    int val10 = getNum(1, 0);
+    if (val01 != 0 && val10 != 0 && val01 > val10) {
         return false;
     }
     
