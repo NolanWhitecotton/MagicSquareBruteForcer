@@ -15,9 +15,6 @@
 //return if a value is within a range
 bool inRange(int input, int min, int max);
 
-//prints a formatted version of a vector
-void print_vector(const std::vector<std::string>& s);
-
 //stores the commandline arguments
 struct Args {
 	int size = 0;

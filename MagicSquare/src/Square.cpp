@@ -3,7 +3,6 @@
 Square::Square(int size, SquareTemplate* tmplt) {
     m_setTemplate(tmplt);
     m_allocArray(size);
-    m_setAllZero();
 }
 
 Square::Square(const Square& s) {
@@ -12,28 +11,20 @@ Square::Square(const Square& s) {
     m_addAllFrom(s);
 }
 
-void Square::m_setAllZero() {
-    //set all ints to 0
-    for (int i = 0; i < getSize() * getSize(); i++) {
-        m_numsLinear[i] = 0;
-    }
-}
-
 void Square::m_allocArray(int size) {
     m_lineSumCache = 0;
     m_addedNumCount = 0;
 
     //create rows
     m_numsLinear = std::make_unique<int[]>((size_t)size*size);
+
+    //set all ints to 0
+    for (int i = 0; i < getSize() * getSize(); i++) {
+        m_numsLinear[i] = 0;
+    }
 }
 
 Square::~Square() {}
-
-int Square::getSize() const { return getTemplate()->getSquareSize(); }
-int Square::getRecurMax() const { return getTemplate()->getRecurMax(); }
-int Square::getCompact() const { return getTemplate()->getIsCompact(); }
-int Square::getAddedNumCount() const { return m_addedNumCount; }
-int Square::getLineSumCache() const { return m_lineSumCache; }
 
 void Square::m_addAllFrom(const Square& s) {
     for (int i = 0; i < s.getAddedNumCount(); i++) {
