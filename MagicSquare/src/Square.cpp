@@ -41,8 +41,9 @@ void Square::printSquare() const {
     }
 }
 
-bool getKthBit(unsigned int n, unsigned int k) {
-    return ((n & (1 << (k - 1))) >> (k - 1)) == 1;
+bool getBitFlag(int n, int pos) {
+    int bitMask = 1 << (pos - 1); //if n is 3, then this will give 0b100
+    return (n & bitMask) == bitMask;
 }
 
 void Square::m_printSquare(char lineDelim, bool printHeader, bool showIdentical) const {
@@ -52,19 +53,22 @@ void Square::m_printSquare(char lineDelim, bool printHeader, bool showIdentical)
     getTemplate()->getOutputMutex()->lock();
 
     //print square(s)
-    for (int i = 0; i < (showIdentical ? 8 : 1); i++) {//for all rotations/reflections to print
+    for (int i = 0; i < (showIdentical ? 0b1000 : 0b001); i++) {//for all rotations/reflections to print
         //print the square header
         if (printHeader)
             cout << "Size: " << getSize() << " x " << getSize() << endl;
 
         //get the modifiers from the binary representation of i
-        bool firstsub = getKthBit(i, 1); //read the row backwards
-        bool secondsub = getKthBit(i, 2); //read the col backwards
-        bool reverse = getKthBit(i, 3); //swap r and c
+        bool firstsub = getBitFlag(i, 1); //read the row backwards
+        bool secondsub = getBitFlag(i, 2); //read the col backwards
+        bool reverse = getBitFlag(i, 3); //swap r and c
 
         //calc charWidth
         int biggestNum = (getTemplate()->getRecurMax() + getTemplate()->getRecurOffset() - 1);
         int outputWidth = (int)std::to_string(biggestNum).length()+1;
+        if (getTemplate()->getRecurOffset() < 1) {//room for negative signs
+            outputWidth++;
+        }
 
         //for every position on the square
         for (int r = 0; r < getSize(); r++) {
@@ -250,7 +254,7 @@ int Square::getLineSum(bool row, bool diag, bool positive, int num) const{
     if (diag) {//diag
 	    if (positive) {//positive diag
 		    pos = getSize() * (getSize()-1);
-		    incAmt = -2;
+		    incAmt = -1*getSize()+1;
 	    }else {//negative diag
 		    pos = getSize()*getSize() - 1;
 		    incAmt = -1*(getSize()+1);

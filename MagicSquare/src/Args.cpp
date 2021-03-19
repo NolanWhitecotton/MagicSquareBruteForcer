@@ -52,8 +52,8 @@ bool Args::checkArgRanges() {
         std::cout << "Size must be greater than 0" << std::endl;
         rangeError = true;
     }
-    if (max < size * size) {
-        std::cout << "Max must be >=size^2" << std::endl;
+    if (max-min+1 < size * size) {
+        std::cout << "Not enough values in range" << std::endl;
         rangeError = true;
     }
     if (min >= max) {
