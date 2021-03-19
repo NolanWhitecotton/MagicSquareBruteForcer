@@ -169,12 +169,12 @@
     <ClCompile Include="UnitTest1.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="pch.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\MagicSquare\MagicSquare.vcxproj">
       <Project>{aaec8573-fb23-4694-a442-2d1e59cbbf07}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

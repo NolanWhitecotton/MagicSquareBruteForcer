@@ -1,4 +1,6 @@
-#include "MagicSquareBruteForcer.h"
+#include "Args.h"
+#include "ThreadManager.h"
+#include <iostream>//cout
 
 int main(int argc, char *argv[]) {
     //read arguments
@@ -16,17 +18,4 @@ int main(int argc, char *argv[]) {
     //print completion message
     std::chrono::duration<double> calcTime = end - start;
     std::cout << "done in " << round(calcTime.count()*1000) << " ms" << "." << std::endl;
-}
-
-void print_vector(const std::vector<std::string>& s) {
-    using namespace std;
-
-    for (vector<std::string>::const_iterator it = s.begin(); it != s.end(); it++) {
-        cout << *it << " ";
-    }
-    cout << endl;
-}
-
-bool inRange(int input, int min, int max) {
-    return input <= max && input >= min;
 }

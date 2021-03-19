@@ -1,17 +1,24 @@
 #include "pch.h"
 #include "CppUnitTest.h"
 
-#include "../MagicSquare/src/MagicSquareBruteForcer.h"
+#include "../MagicSquare/src/Args.h"
+#include "../MagicSquare/src/SquareTemplate.h"
+#include "../MagicSquare/src/Square.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace UnitTest1{
 	TEST_CLASS(UnitTest1){
 	public:
+		TEST_METHOD(LoadArgs) {
+			Args* generic3SquareArg = new Args(3, 9, 1, true, false, 1);
+			delete generic3SquareArg;
+		}
 
 		TEST_METHOD(TestGenericTemplateConstructor) {
 			//construct
-			SquareTemplate *st = new SquareTemplate(true, 3, 1, 9, false); //-m 9 -c -s 3
+			Args* generic3SquareArg = new Args(3, 9, 1, true, false, 1);
+			SquareTemplate *st = new SquareTemplate(generic3SquareArg);
 
 			//asserts
 			Assert::AreEqual(true, st->getIsCompact());
@@ -23,7 +30,8 @@ namespace UnitTest1{
 
 		TEST_METHOD(TestSquareIntConstructor) {
 			//prep
-			SquareTemplate *st = new SquareTemplate(true, 3, 1, 9, false); //-m 9 -c -s 3
+			Args* generic3SquareArg = new Args(3, 9, 1, true, false, 1);
+			SquareTemplate *st = new SquareTemplate(generic3SquareArg);
 
 			//construct
 			Square* sq = new Square(3, st);
@@ -31,11 +39,15 @@ namespace UnitTest1{
 			//asserts
 			Assert::AreEqual(3, sq->getSize());
 			Assert::AreEqual(true, sq->getTemplate()==st);
+
+			//cleanup
+			delete generic3SquareArg;
 		}
 
 		TEST_METHOD(TestSquareAdd) {
 			//prep
-			SquareTemplate* st = new SquareTemplate(true, 3, 1, 9, false); //-m 9 -c -s 3
+			Args* generic3SquareArg = new Args(3, 9, 1, true, false, 1);
+			SquareTemplate* st = new SquareTemplate(generic3SquareArg);
 			Square* sq = new Square(3, st);
 
 			//test
@@ -46,10 +58,15 @@ namespace UnitTest1{
 			Assert::AreEqual(2, sq->getAddedNumCount());
 			Assert::AreEqual(1, sq->getNum(0));
 			Assert::AreEqual(5, sq->getNum(1));
+
+			//cleanup
+			delete generic3SquareArg;
 		}
-	TEST_METHOD(TestRemove) {
+
+		TEST_METHOD(TestRemove) {
 			//setup square
-			SquareTemplate* st = new SquareTemplate(true, 3, 1, 9, false); //-m 9 -c -s 3
+			Args* generic3SquareArg = new Args(3, 9, 1, true, false, 1);
+			SquareTemplate* st = new SquareTemplate(generic3SquareArg);
 			Square* sq = new Square(3, st);
 			sq->add(2);
 			sq->add(7);
@@ -76,6 +93,9 @@ namespace UnitTest1{
 
 			//check that linesum is not set anymore
 			Assert::AreEqual(0, sq->getLineSumCache());
+
+			//cleanup
+			delete generic3SquareArg;
 		}
 	};
 }
