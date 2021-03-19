@@ -31,31 +31,28 @@ void SquareTemplate::findPossibleRanges(int size, int max) {
 	//recur
 	findRangeRecur(1, 0, size, max, 0);
 
-	//calculate the valid ranges
-	bool start = false;
-	bool end = false;
+	int neededSums = m_squareSize * 2 + 2;//rows, cols, two diags
+	//calc minPosSum
+	int found = false;
 	for (int i = 0; i < nums.size(); i++) {
-		//std::cout << i << ": " << nums[i] << std::endl;
-		if (nums[i] >= (m_squareSize * 2 + 2)) {
-			if (!start) {
-				minPosSum = i;
-				start = true;
-			}
+		if (nums[i] >= neededSums) {
+			minPosSum = i;
+			found = true;
+			break;
 		}
-		else {
-			if (start && !end) {
-				maxPosSum = i - 1;
-				end = true;
-			}
-		}
+	}
+	if (!found) {
+		std::cout << "There are no possible squares given this range." << std::endl;
+		exit(EXIT_FAILURE);
 	}
 
-	//edge cases
-	if (!end) {
-		maxPosSum = (int)nums.size() - 1;
-	}
-	if (!start) {
-		std::cout << "There are no possible squares given this range." << std::endl;
+	//cal maxPosSum
+	maxPosSum = (int)nums.size() - 1;
+	for (int i = nums.size()-1; i > minPosSum; i--) {
+		if (nums[i] >= neededSums) {
+			maxPosSum = i;
+			break;
+		}
 	}
 
 	//print the valid range
