@@ -40,6 +40,10 @@ Args::Args(int argc, char* argv[]) {
     }
 }
 
+//used for tests
+Args::Args(int asize, int amax, int amin, bool comp, bool identical, int threads):
+    size(asize), max(amax), min(amin), compactOutput(comp), outputIdentical(identical), threadCount(threads){}
+
 //checks the ranges on the arguments and returns weather there was an error or not
 bool Args::checkArgRanges() {
     //check arg ranges

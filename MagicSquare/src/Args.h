@@ -13,6 +13,7 @@ struct Args {
 	int threadCount = 1;
 
 	Args(int argc, char* argv[]);
+	Args(int size, int max, int min, bool comp, bool identical, int threads);
 
 	bool checkArgRanges();
 };

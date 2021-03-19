@@ -3,13 +3,11 @@
 #include <iostream> //cout
 #include <mutex>
 
-Square::Square(int size, SquareTemplate* tmplt) {
-    m_setTemplate(tmplt);
+Square::Square(int size, SquareTemplate* tmplt) : m_tmplt(tmplt){
     m_allocArray(size);
 }
 
-Square::Square(const Square& s) {
-    m_setTemplate(s.getTemplate());
+Square::Square(const Square& s) : m_tmplt(s.getTemplate()){
     m_allocArray(s.getSize());
     m_addAllFrom(s);
 }
@@ -218,8 +216,7 @@ void Square::checkNextRecur() {
     }
 }
 
-void Square::m_setTemplate(SquareTemplate* tmplt) {m_tmplt = tmplt;}
-SquareTemplate* Square::getTemplate() const {return m_tmplt;}
+
 
 //diag is true if you want a diag, false if you want row or col
 //row is true if you want a row, false if col

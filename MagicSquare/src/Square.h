@@ -13,7 +13,6 @@ private:
     //constructor methods
     void m_allocArray(int size);
     void m_addAllFrom(const Square& s);
-    void m_setTemplate(SquareTemplate* tmplt);
 
     void m_printSquare(char lineDelim, bool printHeader, bool showIdentical) const;
 public:
@@ -30,7 +29,7 @@ public:
     //data getters
     int getNum(int pos) const;
     int getNum(int r, int c) const;
-    SquareTemplate* getTemplate() const;
+    SquareTemplate* getTemplate() const { return m_tmplt; }
     int getAddedNumCount() const { return m_addedNumCount; }
     int getLineSumCache() const { return m_lineSumCache; }
     int getSize() const { return getTemplate()->getSquareSize(); }
