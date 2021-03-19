@@ -1,22 +1,15 @@
-#include "MagicSquareBruteForcer.h"
+#include "Square.h"
+#include <iomanip> //setw
+#include <iostream> //cout
+#include <mutex>
 
-Square::Square(int size, SquareTemplate* tmplt) {
-    m_setTemplate(tmplt);
+Square::Square(int size, SquareTemplate* tmplt) : m_tmplt(tmplt){
     m_allocArray(size);
-    m_setAllZero();
 }
 
-Square::Square(const Square& s) {
-    m_setTemplate(s.getTemplate());
+Square::Square(const Square& s) : m_tmplt(s.getTemplate()){
     m_allocArray(s.getSize());
     m_addAllFrom(s);
-}
-
-void Square::m_setAllZero() {
-    //set all ints to 0
-    for (int i = 0; i < getSize() * getSize(); i++) {
-        m_numsLinear[i] = 0;
-    }
 }
 
 void Square::m_allocArray(int size) {
@@ -25,15 +18,14 @@ void Square::m_allocArray(int size) {
 
     //create rows
     m_numsLinear = std::make_unique<int[]>((size_t)size*size);
+
+    //set all ints to 0
+    for (int i = 0; i < getSize() * getSize(); i++) {
+        m_numsLinear[i] = 0;
+    }
 }
 
 Square::~Square() {}
-
-int Square::getSize() const { return getTemplate()->getSquareSize(); }
-int Square::getRecurMax() const { return getTemplate()->getRecurMax(); }
-int Square::getCompact() const { return getTemplate()->getIsCompact(); }
-int Square::getAddedNumCount() const { return m_addedNumCount; }
-int Square::getLineSumCache() const { return m_lineSumCache; }
 
 void Square::m_addAllFrom(const Square& s) {
     for (int i = 0; i < s.getAddedNumCount(); i++) {
@@ -194,9 +186,8 @@ bool Square::isValid() const {//TODO (DI) each test should be picked dynamically
 
     //check that the linesum cache is within the valid range
     if (getAddedNumCount() == getSize()) {//if row is cached
-        if (!inRange(getLineSumCache(), getTemplate()->getMinPosSum(), getTemplate()->getMaxPosSum())) {
+        if(getLineSumCache() < getTemplate()->getMinPosSum() || getLineSumCache() > getTemplate()->getMaxPosSum())
             return false;
-        }
     }
 
     return true;
@@ -227,8 +218,7 @@ void Square::checkNextRecur() {
     }
 }
 
-void Square::m_setTemplate(SquareTemplate* tmplt) {m_tmplt = tmplt;}
-SquareTemplate* Square::getTemplate() const {return m_tmplt;}
+
 
 //diag is true if you want a diag, false if you want row or col
 //row is true if you want a row, false if col

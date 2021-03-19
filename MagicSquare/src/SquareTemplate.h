@@ -1,9 +1,7 @@
 #pragma once
-
 #include <vector>
-#include <thread>
 #include <mutex>
-#include <stack>
+#include "Args.h"
 
 class SquareTemplate {
 private:
@@ -28,30 +26,17 @@ public:
     ~SquareTemplate();
 
     //getters
-    bool getIsCompact() const;
-    int  getSquareSize() const;
-    int getRecurMax() const;
-    int getRecurOffset() const;
-    bool getShowIdentical() const;
-
-    //methods
-    int convert2dtoLinear(int r, int c);
-    int getLinearR(int pos);
-    int getLinearC(int pos);
+    bool getIsCompact() const { return m_isCompact; }
+    int  getSquareSize() const { return m_squareSize; }
+    int getRecurMax() const { return m_recurMax; }
+    int getRecurOffset() const {return m_recurOffset;}
+    bool getShowIdentical() const { return m_showIdentical; }
     int getMinPosSum() const { return minPosSum; }
     int getMaxPosSum() const { return maxPosSum; }
+    std::mutex* getOutputMutex() { return m_outputMutex; }
 
-    std::mutex* getOutputMutex();
-};
-
-
-class ThreadManager {
-private:
-    SquareTemplate* tmplt;
-
-    void createTemplate(Args* a);
-    void startCheckThreaded(Args* a);
-
-public:
-    ThreadManager(Args* a);
+    //methods
+    int convert2dtoLinear(int r, int c) { return r * getSquareSize() + c; }
+    int getLinearR(int pos) { return pos / getSquareSize(); }
+    int getLinearC(int pos) { return pos % getSquareSize(); }
 };
