@@ -17,7 +17,8 @@ private:
     int maxPosSum;
 
     std::vector<int> nums;
-    void findRangeRecur(int min, int count, int maxSize, int maxNum, int sum);
+    void findRangeRecur_helper(int min, int count, int maxSize, int maxNum, int sum);
+    void findRangeRecur(int min, int size);
     void findPossibleRanges(int size, int max);
 
 public:

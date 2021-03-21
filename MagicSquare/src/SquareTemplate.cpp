@@ -24,12 +24,12 @@ SquareTemplate::~SquareTemplate() {
 
 void SquareTemplate::findPossibleRanges(int size, int max) {
 	//add nums to vector
-	for (int i = 0; i <= max + max - 1 + max - 2; i++) {
+	for (int i = 0; i <= max*size; i++) {
 		nums.push_back(0);
 	}
 
 	//recur
-	findRangeRecur(1, 0, size, max, 0);
+	findRangeRecur(size, max);
 
 	int neededSums = m_squareSize * 2 + 2;//rows, cols, two diags
 	//calc minPosSum
@@ -59,12 +59,18 @@ void SquareTemplate::findPossibleRanges(int size, int max) {
 	std::cout << "Row Line Sum range = [" << minPosSum << ", " << maxPosSum << "]" << std::endl;
 }
 
-void SquareTemplate::findRangeRecur(int min, int count, int maxSize, int maxNum, int sum) {
-	if (count >= maxSize) {
-		nums[sum]++;
-		return;
-	}
-	for (int i = min; i < maxNum; i++) {
-		findRangeRecur(i, count + 1, maxSize, maxNum, sum + i);
+//recursively finds the number of ways to get to every line ending for the given size and max
+void SquareTemplate::findRangeRecur(int size, int max) {
+	findRangeRecur_helper(1, 0, size, max, 0);
+}
+
+//The helper function of findRangeRecur that handles passing the metadata
+void SquareTemplate::findRangeRecur_helper(int min, int count, int maxSize, int maxNum, int sum) {
+	if (count >= maxSize) { //if size reached
+		nums.at(sum)++;
+	} else {
+		for (int i = min; i < maxNum; i++) {
+			findRangeRecur_helper(i, count + 1, maxSize, maxNum, sum + i);
+		}
 	}
 }
