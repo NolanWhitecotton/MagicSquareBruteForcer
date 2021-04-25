@@ -20,6 +20,30 @@ Magic Square Brute Forcer is a program that allows you to find all possible magi
 
 -Better thread allocation
 
+<h2>Getting Started</h2>
+
+<h3>Cloning and using CMake</h3>
+
+- Clone the repo to an empty folder.
+
+- Install and open CMake (https://cmake.org/download/).
+
+- Select the folder that you cloned that contains "CMakeLists.txt" for "Where is the source code".
+
+- Select any empty folder for "Where to put the binaries".
+
+- Click "Generate".
+
+- Select the generator that you want to use, the code is developed and tested for "Visual Studio 16 2019".
+
+- Click "Finish"
+
+- Click "Open Project".
+
+<h3>If you're using VS16</h3>
+
+- In the solution explorer right click "msbf" and select "Set as Startup Project".
+
 <h2>Usage</h2>
 
 `msbf -s 3 -m 9`
