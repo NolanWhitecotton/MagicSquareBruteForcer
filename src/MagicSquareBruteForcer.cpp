@@ -7,13 +7,13 @@ int main(int argc, char *argv[]) {
     Args* a = new Args(argc, argv);
     
     //start timer
-    std::chrono::steady_clock::time_point start = std::chrono::high_resolution_clock::now();
+    std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
 
     //calc squares
     ThreadManager tm(a);
 
     //end timer
-    std::chrono::steady_clock::time_point end = std::chrono::high_resolution_clock::now();
+    std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();
 
     //print completion message
     std::chrono::duration<double> calcTime = end - start;
