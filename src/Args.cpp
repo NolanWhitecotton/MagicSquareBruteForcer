@@ -26,7 +26,7 @@ Args::Args(int argc, char* argv[]) {
         progressReportFrequency = 0;//TODO (PR) progress reports
         compactOutput = result["c"].as<bool>();
         outputIdentical = result["i"].as<bool>();
-        std::string outpuDir = "";//TODO file output
+        outpuDir = "";//TODO file output
         threadCount = result["t"].as<int>();
     }
     catch (...) {

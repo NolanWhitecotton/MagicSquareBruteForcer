@@ -5,18 +5,20 @@
 
 class SquareTemplate {
 private:
-    bool m_isCompact;
-    int m_squareSize;
-    int m_recurMax;
-    int m_recurOffset;
-    bool m_showIdentical;
+    std::vector<int> nums;
 
     std::mutex* m_outputMutex;
 
+    int m_squareSize;
+    int m_recurMax;
+    int m_recurOffset;
     int minPosSum;
     int maxPosSum;
 
-    std::vector<int> nums;
+    bool m_isCompact;
+    bool m_showIdentical;
+
+
     void findRangeRecur_helper(int min, int count, int maxSize, int maxNum, int sum);
     void findRangeRecur(int min, int size);
     void findPossibleRanges(int size, int max);
