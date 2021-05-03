@@ -48,9 +48,9 @@ void SquareTemplate::findPossibleRanges(int size, int max) {
 
 	//cal maxPosSum
 	maxPosSum = (int)nums.size() - 1;
-	for (int i = nums.size()-1; i > minPosSum; i--) {
+	for (size_t i = nums.size()-1; i > minPosSum; i--) {
 		if (nums[i] >= neededSums) {
-			maxPosSum = i;
+			maxPosSum = (int)i;
 			break;
 		}
 	}
