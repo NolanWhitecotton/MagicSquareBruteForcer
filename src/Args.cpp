@@ -29,8 +29,8 @@ Args::Args(int argc, char* argv[]) {
         std::string outpuDir = "";//TODO file output
         threadCount = result["t"].as<int>();
     }
-    catch (cxxopts::OptionException e) {
-        std::cout << e.what();
+    catch (...) {
+        std::cout << "Error parsing arguments, size and max are required." << std::endl;
         exit(EXIT_FAILURE);
     }
 

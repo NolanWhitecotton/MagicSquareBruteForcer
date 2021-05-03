@@ -17,3 +17,7 @@ add_executable(msbf
 	"src/Square.cpp" "src/Square.h"
 	"src/SquareTemplate.cpp" "src/SquareTemplate.h"
 )
+
+# specify the C++ standard
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
