@@ -34,7 +34,7 @@ void SquareTemplate::findPossibleRanges(int size, int max) {
 	int neededSums = m_squareSize * 2 + 2;//rows, cols, two diags
 	//calc minPosSum
 	int found = false;
-	for (int i = 0; i < nums.size(); i++) {
+	for (int i = 0; i < (int)nums.size(); i++) {
 		if (nums[i] >= neededSums) {
 			minPosSum = i;
 			found = true;

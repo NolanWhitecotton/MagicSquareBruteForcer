@@ -20,8 +20,8 @@ void Square::m_allocArray(int size) {
     m_numsLinear = std::make_unique<int[]>((size_t)size*size);
 
     //set all ints to 0
-    for (int i = 0; i < getSize() * getSize(); i++) {
-        m_numsLinear[i] = 0;
+    for (int i = 0; i < (int)getSize() * (int)getSize(); i++) {
+        m_numsLinear[(size_t)i] = 0;
     }
 }
 
@@ -105,7 +105,7 @@ void Square::m_printSquare(char lineDelim, bool printHeader, bool showIdentical)
 
 void Square::add(int n) {
     //add number
-    m_numsLinear[getAddedNumCount()] = n;//TODO (DI) change which number gets added dynamically
+    m_numsLinear[(size_t)getAddedNumCount()] = n;//TODO (DI) change which number gets added dynamically
 
     m_addedNumCount++;
 
@@ -130,11 +130,11 @@ void Square::removeLastAdd() {
     m_addedNumCount--;
 
     //delete number
-    m_numsLinear[getAddedNumCount()] = 0;//TODO (DI) number should be reset dynamically
+    m_numsLinear[(size_t)getAddedNumCount()] = 0;//TODO (DI) number should be reset dynamically
 }
 
 int Square::getNum(int pos) const {
-    return m_numsLinear[pos];
+    return m_numsLinear[(size_t)pos];
 }
 int Square::getNum(int r, int c) const {
     return m_numsLinear[(size_t)r * getSize() + c];
