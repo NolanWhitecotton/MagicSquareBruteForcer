@@ -2,6 +2,7 @@
 #include <iomanip> //setw
 #include <iostream> //cout
 #include <mutex>
+#include "Validators.h"
 
 Square::Square(int size, SquareTemplate* tmplt) : m_tmplt(tmplt){
     m_allocArray(size);
@@ -142,10 +143,11 @@ int Square::getNum(int r, int c) const {
 
 bool Square::isValid() const {//TODO (DI) each test should be picked dynamically
     /*check that the newest number is not repeated*/
-    for (int i = 0; i < getAddedNumCount() - 1; i++) {
-        if (getNum(i) == getNum(getAddedNumCount()-1)) {
-            return false;
-        }
+    //TODO validators should be created and stored in template constructor
+    UniquenessValidator uv(getAddedNumCount());
+    Validator *v = &uv;
+    if (!v->run(this)) {
+        return false;
     }
     
     /*check if square is minimized*/
