@@ -26,7 +26,7 @@ void SquareTemplate::generateValidators() {
 
 	//add uniqueness validators
 	for (int i = 0; i < m_squareSize * m_squareSize; i++) {//for every square position
-		validators[i].push_back(new UniquenessValidator(i));//TODO deconstruct
+		validators[i].push_back(new UniquenessValidator(i));
 	}
 
 	int pos;
@@ -34,23 +34,30 @@ void SquareTemplate::generateValidators() {
 	//TODO test these placements on higher order squares
 	//top right
 	pos = convert2dtoLinear(0, getSquareSize()) - 1;
-	validators[pos].push_back(new MirrorValidator(0, pos));//TODO deconstruct
+	validators[pos].push_back(new MirrorValidator(0, pos));
 	//bottom left
 	pos = convert2dtoLinear(getSquareSize() - 1, 0);
-	validators[pos].push_back(new MirrorValidator(0, pos));//TODO deconstruct
+	validators[pos].push_back(new MirrorValidator(0, pos));
 	//bottom right
 	pos = convert2dtoLinear(getSquareSize() - 1, getSquareSize() - 1);
-	validators[pos].push_back(new MirrorValidator(0, pos));//TODO deconstruct
+	validators[pos].push_back(new MirrorValidator(0, pos));
 
 	//insert negitive diag mirror
 	pos = convert2dtoLinear(0, 1);
 	int pos2 = convert2dtoLinear(1, 0);
 	validators[pos2].push_back(new MirrorValidator(pos, pos2));
-
 }
 
 SquareTemplate::~SquareTemplate() {
+	//delete mutexes
 	delete m_outputMutex;
+
+	//delete validators
+	for (auto vlist : validators) {
+		for (auto v : vlist) {
+			delete v;
+		}
+	}
 }
 
 void SquareTemplate::findPossibleRanges(int size, int max) {

@@ -141,7 +141,7 @@ int Square::getNum(int r, int c) const {
     return m_numsLinear[(size_t)r * getSize() + c];
 }
 
-bool Square::isValid() const {//TODO (DI) each test should be picked dynamically
+bool Square::isValid() const {
     //run all nessacary validators
     auto list = (getTemplate()->validators[(size_t)getAddedNumCount()-1]);//get the validators for the just added pos
     for (auto val : list) {//for every applicable validator
@@ -151,6 +151,7 @@ bool Square::isValid() const {//TODO (DI) each test should be picked dynamically
     }
     
     //check that the row and column and diagionals are all valid
+    //TODO add this as a validator
     if (getAddedNumCount() > getSize()) {//if row is cached
         //row
         int rSum = getLineSum(LineType::Row, getTemplate()->getLinearR(getAddedNumCount()) - 1);
@@ -167,6 +168,7 @@ bool Square::isValid() const {//TODO (DI) each test should be picked dynamically
     }
 
     //check that the linesum cache is within the valid range
+    //TODO add this as a validator
     if (getAddedNumCount() == getSize()) {//if row is cached
         if(getLineSumCache() < getTemplate()->getMinPosSum() || getLineSumCache() > getTemplate()->getMaxPosSum())
             return false;
@@ -188,12 +190,7 @@ void Square::checkNextRecur() {
         add(i);
 
         if (isValid()) {
-            if (true) {//TODO if fork on depth && depth is reached
-                checkNextRecur();
-            } else {
-                //TODO (FK) write fork methods
-                //TODO (FK) figure out how to add to work queue
-            }
+            checkNextRecur();
         }
 
         removeLastAdd();

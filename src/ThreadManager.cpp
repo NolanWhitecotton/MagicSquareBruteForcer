@@ -17,7 +17,8 @@ void ThreadManager::startCheckThreaded(Args* a) {
 	for (int i = tmplt->getRecurMax(); i > 0; i--) {//backwards so single threaded will be in order
 		Square* newS = new Square(tmplt->getSquareSize(), tmplt);
 		newS->add(i);
-		s.push(newS);
+		if(newS->isValid())
+			s.push(newS);
 	}
 
 	//create threads
