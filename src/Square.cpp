@@ -1,8 +1,10 @@
 #include "Square.h"
+#include "SquareTemplate.h"
+#include "Validators.h"
 #include <iomanip> //setw
 #include <iostream> //cout
 #include <mutex>
-#include "Validators.h"
+
 
 Square::Square(int size, SquareTemplate* tmplt) : m_tmplt(tmplt){
     m_allocArray(size);
@@ -12,6 +14,10 @@ Square::Square(const Square& s) : m_tmplt(s.getTemplate()){
     m_allocArray(s.getSize());
     m_addAllFrom(s);
 }
+
+int Square::getSize() const { return getTemplate()->getSquareSize(); }
+int Square::getRecurMax() const { return getTemplate()->getRecurMax(); }
+int Square::getCompact() const { return getTemplate()->getIsCompact(); }
 
 void Square::m_allocArray(int size) {
     m_lineSumCache = 0;

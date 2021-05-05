@@ -1,7 +1,10 @@
 #include "ThreadManager.h"
-#include <stack>
+#include "SquareTemplate.h"
 #include "Square.h"
+#include "Args.h"
 #include <mutex>
+#include <stack>
+#include <thread>
 
 void ThreadManager::createTemplate(Args* a) {
 	tmplt = new SquareTemplate(a);

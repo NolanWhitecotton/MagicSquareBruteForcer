@@ -1,5 +1,5 @@
 #pragma once
-#include "SquareTemplate.h"
+class SquareTemplate;
 #include <memory>
 
 enum class LineType { 
@@ -40,9 +40,9 @@ public:
     SquareTemplate* getTemplate() const { return m_tmplt; }
     int getAddedNumCount() const { return m_addedNumCount; }
     int getLineSumCache() const { return m_lineSumCache; }
-    int getSize() const { return getTemplate()->getSquareSize(); }
-    int getRecurMax() const { return getTemplate()->getRecurMax(); }
-    int getCompact() const { return getTemplate()->getIsCompact(); }
+    int getSize() const;
+    int getRecurMax() const;
+    int getCompact() const;
 
     //data checker
     bool isValid() const;

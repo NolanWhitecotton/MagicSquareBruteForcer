@@ -1,4 +1,6 @@
 #include "SquareTemplate.h"
+#include "Args.h"
+#include "Validators.h"
 #include <iostream>//cout
 
 SquareTemplate::SquareTemplate(Args *a) {

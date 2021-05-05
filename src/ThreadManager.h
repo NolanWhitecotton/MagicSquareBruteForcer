@@ -1,7 +1,6 @@
 #pragma once
-#include "SquareTemplate.h"
-#include "Args.h"
-#include <thread>
+class SquareTemplate;
+struct Args;
 
 class ThreadManager {
 private:

@@ -1,8 +1,8 @@
 #pragma once
 #include <vector>
 #include <mutex>
-#include "Args.h"
-#include "Validators.h"
+struct Args;
+class Validator;
 
 class SquareTemplate {
 private:
