@@ -10,14 +10,14 @@ private:
 
     std::mutex* m_outputMutex;
 
-    int m_squareSize;
-    int m_recurMax;
-    int m_recurOffset;
-    int minPosSum;
-    int maxPosSum;
+    int m_squareSize=0;
+    int m_recurMax=0;
+    int m_recurOffset=0;
+    int minPosSum=0;
+    int maxPosSum=0;
 
-    bool m_isCompact;
-    bool m_showIdentical;
+    bool m_isCompact=false;
+    bool m_showIdentical=true;
 
 
     void findRangeRecur_helper(int min, int count, int maxSize, int maxNum, int sum);
@@ -27,7 +27,7 @@ private:
 
 public:
     //validator lists
-    std::vector<std::vector<Validator*>> validators;//TODO make this private
+    std::vector<std::vector<Validator*>> validators;//TODO make validator list private
 
     //constructors
     SquareTemplate(Args *a);

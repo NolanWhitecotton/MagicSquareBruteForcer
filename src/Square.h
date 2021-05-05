@@ -15,8 +15,8 @@ private:
     SquareTemplate* m_tmplt;
 
     std::unique_ptr<int[]> m_numsLinear;//size^2 ints
-    int m_addedNumCount;
-    int m_lineSumCache;
+    int m_addedNumCount=0;
+    int m_lineSumCache=0;
 
     //constructor methods
     void m_allocArray(int size);
@@ -51,7 +51,6 @@ public:
     void printSquare() const;
 
     //calculate the sum of a given line in a given direction
-    //int getLineSum(int startR, int startC, int incR, int incC) const;
     int getLineSum(LineType line, int num) const;
 
     //recursion

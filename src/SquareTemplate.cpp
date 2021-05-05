@@ -29,23 +29,22 @@ void SquareTemplate::generateValidators() {
 		validators[i].push_back(new UniquenessValidator(i));
 	}
 
-	int pos;
+	int pos1 = 0, pos2 = 0;
 	//insert corner mirrors
-	//TODO test these placements on higher order squares
 	//top right
-	pos = convert2dtoLinear(0, getSquareSize()) - 1;
-	validators[pos].push_back(new MirrorValidator(0, pos));
+	pos2 = convert2dtoLinear(0, getSquareSize()) - 1;
+	validators[pos2].push_back(new MirrorValidator(0, pos2));
 	//bottom left
-	pos = convert2dtoLinear(getSquareSize() - 1, 0);
-	validators[pos].push_back(new MirrorValidator(0, pos));
+	pos2 = convert2dtoLinear(getSquareSize() - 1, 0);
+	validators[pos2].push_back(new MirrorValidator(0, pos2));
 	//bottom right
-	pos = convert2dtoLinear(getSquareSize() - 1, getSquareSize() - 1);
-	validators[pos].push_back(new MirrorValidator(0, pos));
+	pos2 = convert2dtoLinear(getSquareSize() - 1, getSquareSize() - 1);
+	validators[pos2].push_back(new MirrorValidator(0, pos2));
 
 	//insert negitive diag mirror
-	pos = convert2dtoLinear(0, 1);
-	int pos2 = convert2dtoLinear(1, 0);
-	validators[pos2].push_back(new MirrorValidator(pos, pos2));
+	pos1 = convert2dtoLinear(0, 1);
+	pos2 = convert2dtoLinear(1, 0);
+	validators[pos2].push_back(new MirrorValidator(pos1, pos2));
 }
 
 SquareTemplate::~SquareTemplate() {

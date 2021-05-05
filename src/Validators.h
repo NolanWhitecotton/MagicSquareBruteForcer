@@ -10,7 +10,7 @@ public:
 //validator to check that the specified position is unique within a square
 class UniquenessValidator: public Validator {
 private:
-	int numPos;
+	int numPos = 0;
 
 public:
 	UniquenessValidator(int position) : numPos(position) {}
@@ -21,7 +21,7 @@ public:
 //validator to check that a number is less than another, for mirror minimizations
 class MirrorValidator : public Validator {
 private:
-	int msmaller, mlarger;
+	int msmaller=0, mlarger=0;
 
 public:
 	MirrorValidator(int smallerPos, int biggerPos) : msmaller(smallerPos), mlarger(biggerPos) {}

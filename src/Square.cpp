@@ -151,7 +151,7 @@ bool Square::isValid() const {
     }
     
     //check that the row and column and diagionals are all valid
-    //TODO add this as a validator
+    //TODO add linesums as a validator
     if (getAddedNumCount() > getSize()) {//if row is cached
         //row
         int rSum = getLineSum(LineType::Row, getTemplate()->getLinearR(getAddedNumCount()) - 1);
@@ -168,7 +168,7 @@ bool Square::isValid() const {
     }
 
     //check that the linesum cache is within the valid range
-    //TODO add this as a validator
+    //TODO add posSums as a validator
     if (getAddedNumCount() == getSize()) {//if row is cached
         if(getLineSumCache() < getTemplate()->getMinPosSum() || getLineSumCache() > getTemplate()->getMaxPosSum())
             return false;
@@ -199,8 +199,8 @@ void Square::checkNextRecur() {
 
 int Square::getLineSum(LineType type, int num) const{
     int sum = 0;//the current linesum
-    int incAmt;//the amount of increment by
-    int pos;//the current position
+    int incAmt=1;//the amount of increment by
+    int pos=0;//the current position
 
     //calculate pos and inc ammount for the given bools
     //forwards
