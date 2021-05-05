@@ -16,6 +16,7 @@ add_executable(msbf
 	"src/ThreadManager.cpp" "src/ThreadManager.h"
 	"src/Square.cpp" "src/Square.h"
 	"src/SquareTemplate.cpp" "src/SquareTemplate.h"
+	"src/Validators.cpp" "src/Validators.h"
 )
 
 # specify the C++ standard
