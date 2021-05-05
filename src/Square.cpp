@@ -144,11 +144,13 @@ int Square::getNum(int r, int c) const {
 bool Square::isValid() const {//TODO (DI) each test should be picked dynamically
     /*check that the newest number is not repeated*/
     //TODO validators should be created and stored in template constructor
+    //TODO should test after every add
     UniquenessValidator uv(getAddedNumCount());
     Validator *v = &uv;
     if (!v->run(this)) {
         return false;
     }
+    
     
     /*check if square is minimized*/
     //check if the lowest corner is in the top left
