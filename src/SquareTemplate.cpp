@@ -22,7 +22,7 @@ SquareTemplate::SquareTemplate(Args *a) {
 
 //create and add all validators to the validator list
 void SquareTemplate::generateValidators() {
-	validators.resize(m_squareSize*m_squareSize);//resize vector to square size
+	validators.resize((size_t)m_squareSize*m_squareSize);//resize vector to square size
 
 	//add uniqueness validators
 	for (int i = 0; i < m_squareSize * m_squareSize; i++) {//for every square position

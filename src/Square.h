@@ -2,7 +2,7 @@
 #include "SquareTemplate.h"
 #include <memory>
 
-enum LineType { 
+enum class LineType { 
     Row, 
     Column, 
     PositiveDiagonal, 

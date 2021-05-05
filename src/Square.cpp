@@ -142,10 +142,8 @@ int Square::getNum(int r, int c) const {
 }
 
 bool Square::isValid() const {//TODO (DI) each test should be picked dynamically
-    /*check that the newest number is not repeated*/
-
-    //run all validators
-    auto list = (getTemplate()->validators[getAddedNumCount()-1]);//get the validators for the just added pos
+    //run all nessacary validators
+    auto list = (getTemplate()->validators[(size_t)getAddedNumCount()-1]);//get the validators for the just added pos
     for (auto val : list) {//for every applicable validator
         if (!val->run(this)) {//run it
             return false;
@@ -155,16 +153,16 @@ bool Square::isValid() const {//TODO (DI) each test should be picked dynamically
     //check that the row and column and diagionals are all valid
     if (getAddedNumCount() > getSize()) {//if row is cached
         //row
-        int rSum = getLineSum(Row, getTemplate()->getLinearR(getAddedNumCount()) - 1);
+        int rSum = getLineSum(LineType::Row, getTemplate()->getLinearR(getAddedNumCount()) - 1);
         if (rSum > 0 && rSum != getLineSumCache()) { return false; }
         //col
-        int cSum = getLineSum(Column, getTemplate()->getLinearC(getAddedNumCount()) - 1);
+        int cSum = getLineSum(LineType::Column, getTemplate()->getLinearC(getAddedNumCount()) - 1);
         if (cSum > 0 && cSum != getLineSumCache()) { return false; }
         //+ diag
-        int pdSum = getLineSum(PositiveDiagonal, 0);
+        int pdSum = getLineSum(LineType::PositiveDiagonal, 0);
         if (pdSum > 0 && pdSum != getLineSumCache()) { return false; }
         //- diag
-        int ndSum = getLineSum(NegativeDiagonal, 0);
+        int ndSum = getLineSum(LineType::NegativeDiagonal, 0);
         if (ndSum > 0 && ndSum != getLineSumCache()) { return false; }
     }
 
@@ -210,22 +208,25 @@ int Square::getLineSum(LineType type, int num) const{
     //calculate pos and inc ammount for the given bools
     //forwards
     switch (type) {
-    case PositiveDiagonal:
+    case LineType::PositiveDiagonal:
             pos = getSize() - 1;
             incAmt = getSize() - 1;
             break;
-    case NegativeDiagonal:
+    case LineType::NegativeDiagonal:
             pos = 0;
             incAmt = getSize() + 1;
             break;
-    case Row:
+    case LineType::Row:
             pos = num * getSize();
             incAmt = 1;
             break;
-    case Column:
+    case LineType::Column:
             pos = num;
             incAmt = getSize();
             break;
+    default:
+        return -2;
+        break;
     }
 
     //calculate sum
