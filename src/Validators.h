@@ -1,10 +1,10 @@
 #pragma once
-#include "Square.h"
+class Square;
 
 //a validator is an object that can be run on a given square to test if it meets specific requirements
 class Validator{
 public:
-	virtual bool run(const Square* sq)  = 0;
+	virtual bool run(const Square* sq) const = 0;
 };
 
 //validator to check that the specified position is unique within a square
@@ -15,14 +15,7 @@ private:
 public:
 	UniquenessValidator(int position) : numPos(position) {}
 
-	bool run(const Square* sq) {
-		for (int i = 0; i < numPos - 1; i++) {
-			if (sq->getNum(i) == sq->getNum(numPos - 1)) {
-				return false;
-			}
-		}
-		return true;
-	}
+	bool run(const Square* sq) const;
 };
 
 //validator to check that a number is less than another, for mirror minimizations
@@ -31,11 +24,9 @@ private:
 	int msmaller, mlarger;
 
 public:
-	MirrorValidator(int smallerPos, int biggerPos, int position) : msmaller(smallerPos), mlarger(biggerPos) {}
+	MirrorValidator(int smallerPos, int biggerPos) : msmaller(smallerPos), mlarger(biggerPos) {}
 
-	bool run(const Square* sq) {
-		return (sq->getNum(msmaller) < sq->getNum(mlarger));
-	}
+	bool run(const Square* sq) const;
 };
 
 //validator to check that a linesum is equal to the cache

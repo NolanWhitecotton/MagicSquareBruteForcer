@@ -2,6 +2,7 @@
 #include <vector>
 #include <mutex>
 #include "Args.h"
+#include "Validators.h"
 
 class SquareTemplate {
 private:
@@ -22,8 +23,12 @@ private:
     void findRangeRecur_helper(int min, int count, int maxSize, int maxNum, int sum);
     void findRangeRecur(int min, int size);
     void findPossibleRanges(int size, int max);
+    void generateValidators();
 
 public:
+    //validator lists
+    std::vector<std::vector<Validator*>> validators;//TODO make this private
+
     //constructors
     SquareTemplate(Args *a);
     ~SquareTemplate();

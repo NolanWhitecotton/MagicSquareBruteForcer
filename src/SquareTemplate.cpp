@@ -15,7 +15,38 @@ SquareTemplate::SquareTemplate(Args *a) {
 
 	//compile the ranges
 	findPossibleRanges(m_squareSize, m_recurMax);
+	generateValidators();
+
 	//TODO (DI) create instertion/checking orders
+}
+
+//create and add all validators to the validator list
+void SquareTemplate::generateValidators() {
+	validators.resize(m_squareSize*m_squareSize);//resize vector to square size
+
+	//add uniqueness validators
+	for (int i = 0; i < m_squareSize * m_squareSize; i++) {//for every square position
+		validators[i].push_back(new UniquenessValidator(i));//TODO deconstruct
+	}
+
+	int pos;
+	//insert corner mirrors
+	//TODO test these placements on higher order squares
+	//top right
+	pos = convert2dtoLinear(0, getSquareSize()) - 1;
+	validators[pos].push_back(new MirrorValidator(0, pos));//TODO deconstruct
+	//bottom left
+	pos = convert2dtoLinear(getSquareSize() - 1, 0);
+	validators[pos].push_back(new MirrorValidator(0, pos));//TODO deconstruct
+	//bottom right
+	pos = convert2dtoLinear(getSquareSize() - 1, getSquareSize() - 1);
+	validators[pos].push_back(new MirrorValidator(0, pos));//TODO deconstruct
+
+	//insert negitive diag mirror
+	pos = convert2dtoLinear(0, 1);
+	int pos2 = convert2dtoLinear(1, 0);
+	validators[pos2].push_back(new MirrorValidator(pos, pos2));
+
 }
 
 SquareTemplate::~SquareTemplate() {

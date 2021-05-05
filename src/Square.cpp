@@ -143,37 +143,13 @@ int Square::getNum(int r, int c) const {
 
 bool Square::isValid() const {//TODO (DI) each test should be picked dynamically
     /*check that the newest number is not repeated*/
-    //TODO validators should be created and stored in template constructor
-    //TODO should test after every add
-    UniquenessValidator uv(getAddedNumCount());
-    Validator *v = &uv;
-    if (!v->run(this)) {
-        return false;
-    }
-    
-    
-    /*check if square is minimized*/
-    //check if the lowest corner is in the top left
-    int corners[4] = {
-        getNum(0,0),
-        getNum(0,getSize()-1), 
-        getNum(getSize()-1, 0), 
-        getNum(getSize()-1, getSize()-1)
-    };
 
-    for (int i = 1; i < 4; i++) {
-        if (corners[i] != 0) {
-            if (corners[i] < corners[0]) {
-                return false;
-            }
+    //run all validators
+    auto list = (getTemplate()->validators[getAddedNumCount()-1]);//get the validators for the just added pos
+    for (auto val : list) {//for every applicable validator
+        if (!val->run(this)) {//run it
+            return false;
         }
-    }
-
-    //check if its mirrored on the diag
-    int val01 = getNum(0, 1);
-    int val10 = getNum(1, 0);
-    if (val01 != 0 && val10 != 0 && val01 > val10) {
-        return false;
     }
     
     //check that the row and column and diagionals are all valid
