@@ -2,6 +2,13 @@
 #include "SquareTemplate.h"
 #include <memory>
 
+enum LineType { 
+    Row, 
+    Column, 
+    PositiveDiagonal, 
+    NegativeDiagonal 
+};
+
 class Square {
 private:
     //data
@@ -45,7 +52,7 @@ public:
 
     //calculate the sum of a given line in a given direction
     //int getLineSum(int startR, int startC, int incR, int incC) const;
-    int getLineSum(bool row, bool diag, bool positive, int num) const;
+    int getLineSum(LineType line, int num) const;
 
     //recursion
     void checkNextRecur();
