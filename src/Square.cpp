@@ -149,7 +149,7 @@ int Square::getNum(int r, int c) const {
 
 bool Square::isValid() const {
     //run all nessacary validators
-    auto list = (getTemplate()->validators[(size_t)getAddedNumCount()-1]);//get the validators for the just added pos
+    auto& list = (getTemplate()->validators.at((size_t)getAddedNumCount()-1));//get the validators for the just added pos
     for (auto val : list) {//for every applicable validator
         if (!val->run(this)) {//run it
             return false;
