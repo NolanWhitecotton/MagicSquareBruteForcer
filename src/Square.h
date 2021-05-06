@@ -2,13 +2,6 @@
 class SquareTemplate;
 #include <memory>
 
-enum class LineType { 
-    Row, 
-    Column, 
-    PositiveDiagonal, 
-    NegativeDiagonal 
-};
-
 class Square {
 private:
     //data
@@ -49,9 +42,6 @@ public:
 
     //output
     void printSquare() const;
-
-    //calculate the sum of a given line in a given direction
-    int getLineSum(LineType line, int num) const;
 
     //recursion
     void checkNextRecur();

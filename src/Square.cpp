@@ -155,23 +155,6 @@ bool Square::isValid() const {
             return false;
         }
     }
-    
-    //check that the row and column and diagionals are all valid
-    //TODO add linesums as a validator
-    if (getAddedNumCount() > getSize()) {//if row is cached
-        //row
-        int rSum = getLineSum(LineType::Row, getTemplate()->getLinearR(getAddedNumCount()) - 1);
-        if (rSum > 0 && rSum != getLineSumCache()) { return false; }
-        //col
-        int cSum = getLineSum(LineType::Column, getTemplate()->getLinearC(getAddedNumCount()) - 1);
-        if (cSum > 0 && cSum != getLineSumCache()) { return false; }
-        //+ diag
-        int pdSum = getLineSum(LineType::PositiveDiagonal, 0);
-        if (pdSum > 0 && pdSum != getLineSumCache()) { return false; }
-        //- diag
-        int ndSum = getLineSum(LineType::NegativeDiagonal, 0);
-        if (ndSum > 0 && ndSum != getLineSumCache()) { return false; }
-    }
 
     //check that the linesum cache is within the valid range
     //TODO add posSums as a validator
@@ -201,44 +184,4 @@ void Square::checkNextRecur() {
 
         removeLastAdd();
     }
-}
-
-int Square::getLineSum(LineType type, int num) const{
-    int sum = 0;//the current linesum
-    int incAmt=1;//the amount of increment by
-    int pos=0;//the current position
-
-    //calculate pos and inc ammount for the given bools
-    //forwards
-    switch (type) {
-    case LineType::PositiveDiagonal:
-            pos = getSize() - 1;
-            incAmt = getSize() - 1;
-            break;
-    case LineType::NegativeDiagonal:
-            pos = 0;
-            incAmt = getSize() + 1;
-            break;
-    case LineType::Row:
-            pos = num * getSize();
-            incAmt = 1;
-            break;
-    case LineType::Column:
-            pos = num;
-            incAmt = getSize();
-            break;
-    default:
-        return -2;
-        break;
-    }
-
-    //calculate sum
-    for (int goal = pos + getSize() * incAmt; pos != goal; pos += incAmt) {
-        int toAdd = getNum(pos);
-        if (toAdd == 0)
-            return -1;
-        sum += toAdd;
-    }
-
-    return sum;
 }

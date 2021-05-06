@@ -30,10 +30,26 @@ public:
 	bool run(const Square* sq) const override;
 };
 
+//the types of lines the square checks
+enum class LineType {
+	Row,
+	Column,
+	PositiveDiagonal,
+	NegativeDiagonal
+};
+
 //validator to check that a linesum is equal to the cache
 class LineSumValidator : public Validator {
+private:
+	LineType m_type;
+	int m_num = 0;
+
+	int getLineSum(const Square* sq, LineType type, int num) const;
+
 public:
-	//TODO specifiy which line to sum, use an enum and an int to define them, then only check that one
+	LineSumValidator(LineType type, int num) : m_type(type), m_num(num) {}
+
+	bool run(const Square* sq) const override;
 };
 
 //validator to check that the cache is within the possible range

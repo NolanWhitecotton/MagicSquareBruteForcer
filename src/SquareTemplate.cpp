@@ -31,8 +31,8 @@ void SquareTemplate::generateValidators() {
 		validators[i].push_back(new UniquenessValidator(i));
 	}
 
+	//insert mirror validators
 	int pos1 = 0, pos2 = 0;
-	//insert corner mirrors
 	//top right
 	pos2 = convert2dtoLinear(0, getSquareSize()) - 1;
 	validators[pos2].push_back(new MirrorValidator(0, pos2));
@@ -42,11 +42,24 @@ void SquareTemplate::generateValidators() {
 	//bottom right
 	pos2 = convert2dtoLinear(getSquareSize() - 1, getSquareSize() - 1);
 	validators[pos2].push_back(new MirrorValidator(0, pos2));
-
-	//insert negitive diag mirror
+	//negitive diag mirror
 	pos1 = convert2dtoLinear(0, 1);
 	pos2 = convert2dtoLinear(1, 0);
 	validators[pos2].push_back(new MirrorValidator(pos1, pos2));
+
+	//insert linesum validators
+	for (int i = 0; i < getSquareSize(); i++) {
+		//insert row validator
+		validators[(getSquareSize() * (i + 1)) - 1].push_back(new LineSumValidator(LineType::Row, i));
+
+		//insert col validator
+		validators[(getSquareSize() - 1) * getSquareSize() + i].push_back(new LineSumValidator(LineType::Column, i));
+	}
+	//insert negative diag validator
+	validators[getSquareSize() * getSquareSize() - 1].push_back(new LineSumValidator(LineType::NegativeDiagonal, 0));
+
+	//insert positive diag validator
+	validators[(getSquareSize() - 1) * getSquareSize()].push_back(new LineSumValidator(LineType::PositiveDiagonal, 0));
 }
 
 SquareTemplate::~SquareTemplate() {
