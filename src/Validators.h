@@ -5,6 +5,7 @@ class Square;
 class Validator{
 public:
 	virtual bool run(const Square* sq) const = 0;
+	virtual ~Validator() {};
 };
 
 //validator to check that the specified position is unique within a square
@@ -15,7 +16,7 @@ private:
 public:
 	UniquenessValidator(int position) : numPos(position) {}
 
-	bool run(const Square* sq) const;
+	bool run(const Square* sq) const override;
 };
 
 //validator to check that a number is less than another, for mirror minimizations
@@ -26,7 +27,7 @@ private:
 public:
 	MirrorValidator(int smallerPos, int biggerPos) : msmaller(smallerPos), mlarger(biggerPos) {}
 
-	bool run(const Square* sq) const;
+	bool run(const Square* sq) const override;
 };
 
 //validator to check that a linesum is equal to the cache
