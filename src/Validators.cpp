@@ -40,16 +40,13 @@ int LineSumValidator::getLineSum(const Square* sq, LineType type, int num) const
         incAmt = sq->getSize();
         break;
     default:
-        return -2;
+        return -1;
         break;
     }
 
     //calculate sum
     for (int goal = pos + sq->getSize() * incAmt; pos != goal; pos += incAmt) {
-        int toAdd = sq->getNum(pos);
-        if (toAdd == 0)
-            return -1;
-        sum += toAdd;
+        sum += sq->getNum(pos);
     }
 
     return sum;
