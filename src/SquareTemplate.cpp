@@ -60,6 +60,9 @@ void SquareTemplate::generateValidators() {
 
 	//insert positive diag validator
 	validators[(getSquareSize() - 1) * getSquareSize()].push_back(new LineSumValidator(LineType::PositiveDiagonal, 0));
+
+	//insert CachePossibleValidator
+	validators[getSquareSize() - 1].push_back(new CachePossibleValidator());
 }
 
 SquareTemplate::~SquareTemplate() {

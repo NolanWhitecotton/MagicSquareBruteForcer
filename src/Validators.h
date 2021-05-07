@@ -55,5 +55,8 @@ public:
 //validator to check that the cache is within the possible range
 class CachePossibleValidator : public Validator {
 public:
+	CachePossibleValidator() {}
+
+	bool run(const Square* sq) const override;
 	//TODO check if the linesum cache is between the posSums
 };

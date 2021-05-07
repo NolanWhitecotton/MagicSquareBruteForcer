@@ -156,13 +156,6 @@ bool Square::isValid() const {
         }
     }
 
-    //check that the linesum cache is within the valid range
-    //TODO add posSums as a validator
-    if (getAddedNumCount() == getSize()) {//if row is cached
-        if(getLineSumCache() < getTemplate()->getMinPosSum() || getLineSumCache() > getTemplate()->getMaxPosSum())
-            return false;
-    }
-
     return true;
 }
 
