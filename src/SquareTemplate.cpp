@@ -49,20 +49,21 @@ void SquareTemplate::generateValidators() {
 
 	//insert linesum validators
 	for (int i = 0; i < getSquareSize(); i++) {
+		
 		//insert row validator
-		validators[(getSquareSize() * (i + 1)) - 1].push_back(new LineSumValidator(LineType::Row, i));
+		validators[convert2dtoLinear(i, getSquareSize() - 1)].push_back(new LineSumValidator(LineType::Row, i));
 
 		//insert col validator
-		validators[(getSquareSize() - 1) * getSquareSize() + i].push_back(new LineSumValidator(LineType::Column, i));
+		validators[convert2dtoLinear(getSquareSize() - 1, i)].push_back(new LineSumValidator(LineType::Column, i));
 	}
 	//insert negative diag validator
-	validators[getSquareSize() * getSquareSize() - 1].push_back(new LineSumValidator(LineType::NegativeDiagonal, 0));
+	validators[convert2dtoLinear(getSquareSize() - 1, getSquareSize() - 1)].push_back(new LineSumValidator(LineType::NegativeDiagonal, 0));
 
 	//insert positive diag validator
-	validators[(getSquareSize() - 1) * getSquareSize()].push_back(new LineSumValidator(LineType::PositiveDiagonal, 0));
+	validators[convert2dtoLinear(getSquareSize() - 1,0)].push_back(new LineSumValidator(LineType::PositiveDiagonal, 0));
 
 	//insert CachePossibleValidator
-	validators[getSquareSize() - 1].push_back(new CachePossibleValidator());
+	validators[convert2dtoLinear(0,getSquareSize() - 1)].push_back(new CachePossibleValidator());
 }
 
 SquareTemplate::~SquareTemplate() {
