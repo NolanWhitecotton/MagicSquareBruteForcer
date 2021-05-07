@@ -1,7 +1,10 @@
 #include "ThreadManager.h"
-#include <stack>
+#include "SquareTemplate.h"
 #include "Square.h"
+#include "Args.h"
 #include <mutex>
+#include <stack>
+#include <thread>
 
 void ThreadManager::createTemplate(Args* a) {
 	tmplt = new SquareTemplate(a);
@@ -17,7 +20,8 @@ void ThreadManager::startCheckThreaded(Args* a) {
 	for (int i = tmplt->getRecurMax(); i > 0; i--) {//backwards so single threaded will be in order
 		Square* newS = new Square(tmplt->getSquareSize(), tmplt);
 		newS->add(i);
-		s.push(newS);
+		if(tmplt->doTests(newS))
+			s.push(newS);
 	}
 
 	//create threads

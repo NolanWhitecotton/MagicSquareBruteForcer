@@ -1,4 +1,7 @@
 #include "SquareTemplate.h"
+#include "Args.h"
+#include "Validators.h"
+#include "Square.h"
 #include <iostream>//cout
 
 SquareTemplate::SquareTemplate(Args *a) {
@@ -15,11 +18,65 @@ SquareTemplate::SquareTemplate(Args *a) {
 
 	//compile the ranges
 	findPossibleRanges(m_squareSize, m_recurMax);
+	generateValidators();
+
 	//TODO (DI) create instertion/checking orders
 }
 
+//create and add all validators to the validator list
+void SquareTemplate::generateValidators() {
+	validators.resize((size_t)m_squareSize*m_squareSize);//resize vector to square size
+
+	//add uniqueness validators
+	for (int i = 0; i < m_squareSize * m_squareSize; i++) {//for every square position
+		validators[i].push_back(new UniquenessValidator(i));
+	}
+
+	//insert mirror validators
+	int pos1 = 0, pos2 = 0;
+	//top right
+	pos2 = convert2dtoLinear(0, getSquareSize()) - 1;
+	validators[pos2].push_back(new MirrorValidator(0, pos2));
+	//bottom left
+	pos2 = convert2dtoLinear(getSquareSize() - 1, 0);
+	validators[pos2].push_back(new MirrorValidator(0, pos2));
+	//bottom right
+	pos2 = convert2dtoLinear(getSquareSize() - 1, getSquareSize() - 1);
+	validators[pos2].push_back(new MirrorValidator(0, pos2));
+	//negitive diag mirror
+	pos1 = convert2dtoLinear(0, 1);
+	pos2 = convert2dtoLinear(1, 0);
+	validators[pos2].push_back(new MirrorValidator(pos1, pos2));
+
+	//insert linesum validators
+	for (int i = 0; i < getSquareSize(); i++) {
+		//insert row validator
+		validators[convert2dtoLinear(i, getSquareSize() - 1)].push_back(new LineSumValidator(LineType::Row, i));
+
+		//insert col validator
+		validators[convert2dtoLinear(getSquareSize() - 1, i)].push_back(new LineSumValidator(LineType::Column, i));
+	}
+
+	//insert negative diag validator
+	validators[convert2dtoLinear(getSquareSize() - 1, getSquareSize() - 1)].push_back(new LineSumValidator(LineType::NegativeDiagonal, 0));
+
+	//insert positive diag validator
+	validators[convert2dtoLinear(getSquareSize() - 1,0)].push_back(new LineSumValidator(LineType::PositiveDiagonal, 0));
+
+	//insert CachePossibleValidator
+	validators[convert2dtoLinear(0,getSquareSize() - 1)].push_back(new CachePossibleValidator());
+}
+
 SquareTemplate::~SquareTemplate() {
+	//delete mutexes
 	delete m_outputMutex;
+
+	//delete validators
+	for (auto vlist : validators) {
+		for (auto v : vlist) {
+			delete v;
+		}
+	}
 }
 
 void SquareTemplate::findPossibleRanges(int size, int max) {
@@ -73,4 +130,16 @@ void SquareTemplate::findRangeRecur_helper(int min, int count, int maxSize, int 
 			findRangeRecur_helper(i, count + 1, maxSize, maxNum, sum + i);
 		}
 	}
+}
+
+bool SquareTemplate::doTests(const Square* sq) const {
+	//run all nessacary validators
+	auto& list = (sq->getTemplate()->validators.at((size_t)sq->getAddedNumCount() - 1));//get the validators for the just added pos
+	for (Validator* val : list) {//for every applicable validator
+		if (!val->run(sq)) {//run it
+			return false;
+		}
+	}
+
+	return true;
 }

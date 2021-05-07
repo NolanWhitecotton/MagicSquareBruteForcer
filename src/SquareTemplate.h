@@ -1,32 +1,38 @@
 #pragma once
 #include <vector>
 #include <mutex>
-#include "Args.h"
+struct Args;
+class Validator;
+class Square;
 
 class SquareTemplate {
 private:
-    std::vector<int> nums;
+    std::vector<int> nums; //the number of times that theoretical sums can occur given the range
+    std::vector<std::vector<Validator*>> validators; //the list of tests to run to see if a magic square is possible
 
-    std::mutex* m_outputMutex;
+    std::mutex* m_outputMutex; //mutex for cout
 
-    int m_squareSize;
-    int m_recurMax;
-    int m_recurOffset;
-    int minPosSum;
-    int maxPosSum;
+    int m_squareSize=0;
+    int m_recurMax=0;
+    int m_recurOffset=0;
+    int minPosSum=0;
+    int maxPosSum=0;
 
-    bool m_isCompact;
-    bool m_showIdentical;
+    bool m_isCompact=false;
+    bool m_showIdentical=true;
 
 
     void findRangeRecur_helper(int min, int count, int maxSize, int maxNum, int sum);
     void findRangeRecur(int min, int size);
     void findPossibleRanges(int size, int max);
+    void generateValidators();
 
 public:
     //constructors
     SquareTemplate(Args *a);
     ~SquareTemplate();
+    
+    bool doTests(const Square* sq) const;//run validators on a square
 
     //getters
     bool getIsCompact() const { return m_isCompact; }

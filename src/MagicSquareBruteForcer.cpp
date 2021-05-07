@@ -1,6 +1,7 @@
 #include "Args.h"
 #include "ThreadManager.h"
 #include <iostream>//cout
+#include <chrono>
 
 int main(int argc, char *argv[]) {
     //read arguments
