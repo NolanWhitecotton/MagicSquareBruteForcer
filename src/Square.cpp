@@ -147,21 +147,9 @@ int Square::getNum(int r, int c) const {
     return m_numsLinear[(size_t)r * getSize() + c];
 }
 
-bool Square::isValid() const {
-    //run all nessacary validators
-    auto& list = (getTemplate()->validators.at((size_t)getAddedNumCount()-1));//get the validators for the just added pos
-    for (Validator* val : list) {//for every applicable validator
-        if (!val->run(this)) {//run it
-            return false;
-        }
-    }
-
-    return true;
-}
-
 void Square::checkNextRecur() {
     //TODO (PR) progress reports
-    //base case of complete valid square
+    //base case of complete square
     if (getAddedNumCount() >= getSize()*getSize()) {
         printSquare();
         return;
@@ -171,7 +159,7 @@ void Square::checkNextRecur() {
     for (int i = 1; i <= getRecurMax(); i++) {
         add(i);
 
-        if (isValid()) {
+        if (getTemplate()->doTests(this)) {//run validators
             checkNextRecur();
         }
 

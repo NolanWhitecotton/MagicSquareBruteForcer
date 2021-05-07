@@ -1,6 +1,7 @@
 #include "SquareTemplate.h"
 #include "Args.h"
 #include "Validators.h"
+#include "Square.h"
 #include <iostream>//cout
 
 SquareTemplate::SquareTemplate(Args *a) {
@@ -49,13 +50,13 @@ void SquareTemplate::generateValidators() {
 
 	//insert linesum validators
 	for (int i = 0; i < getSquareSize(); i++) {
-		
 		//insert row validator
 		validators[convert2dtoLinear(i, getSquareSize() - 1)].push_back(new LineSumValidator(LineType::Row, i));
 
 		//insert col validator
 		validators[convert2dtoLinear(getSquareSize() - 1, i)].push_back(new LineSumValidator(LineType::Column, i));
 	}
+
 	//insert negative diag validator
 	validators[convert2dtoLinear(getSquareSize() - 1, getSquareSize() - 1)].push_back(new LineSumValidator(LineType::NegativeDiagonal, 0));
 
@@ -129,4 +130,16 @@ void SquareTemplate::findRangeRecur_helper(int min, int count, int maxSize, int 
 			findRangeRecur_helper(i, count + 1, maxSize, maxNum, sum + i);
 		}
 	}
+}
+
+bool SquareTemplate::doTests(const Square* sq) const {
+	//run all nessacary validators
+	auto& list = (sq->getTemplate()->validators.at((size_t)sq->getAddedNumCount() - 1));//get the validators for the just added pos
+	for (Validator* val : list) {//for every applicable validator
+		if (!val->run(sq)) {//run it
+			return false;
+		}
+	}
+
+	return true;
 }

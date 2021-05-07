@@ -58,5 +58,4 @@ public:
 	CachePossibleValidator() {}
 
 	bool run(const Square* sq) const override;
-	//TODO check if the linesum cache is between the posSums
 };

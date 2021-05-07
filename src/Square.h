@@ -17,15 +17,11 @@ private:
 
     void m_printSquare(char lineDelim, bool printHeader, bool showIdentical) const;
 public:
-    /*contructors, destructors, and overloads*/
-    //create an empty square
-    Square(int size, SquareTemplate* tmplt);
-
-    //copy construcor
-    Square(const Square& s);
-
-    //destructor
-    ~Square();
+    //contructors, destructors, and overloads
+    Square(int size, SquareTemplate* tmplt); //create an empty square
+    Square(const Square& s); //copy construcor
+    
+    ~Square();//destructor
 
     //data getters
     int getNum(int pos) const;
@@ -37,16 +33,10 @@ public:
     int getRecurMax() const;
     int getCompact() const;
 
-    //data checker
-    bool isValid() const;
-
-    //output
-    void printSquare() const;
-
-    //recursion
-    void checkNextRecur();
+    void printSquare() const; //output
+    void checkNextRecur();//check children
 
     //modifiers
     void add(int n);//add n as the next int, update the caches if updateCaches is true
-    void removeLastAdd();
+    void removeLastAdd();//undo the last call to add()
 };

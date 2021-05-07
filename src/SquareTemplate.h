@@ -3,12 +3,14 @@
 #include <mutex>
 struct Args;
 class Validator;
+class Square;
 
 class SquareTemplate {
 private:
-    std::vector<int> nums;
+    std::vector<int> nums; //the number of times that theoretical sums can occur given the range
+    std::vector<std::vector<Validator*>> validators; //the list of tests to run to see if a magic square is possible
 
-    std::mutex* m_outputMutex;
+    std::mutex* m_outputMutex; //mutex for cout
 
     int m_squareSize=0;
     int m_recurMax=0;
@@ -26,12 +28,11 @@ private:
     void generateValidators();
 
 public:
-    //validator lists
-    std::vector<std::vector<Validator*>> validators;//TODO make validator list private
-
     //constructors
     SquareTemplate(Args *a);
     ~SquareTemplate();
+    
+    bool doTests(const Square* sq) const;//run validators on a square
 
     //getters
     bool getIsCompact() const { return m_isCompact; }
