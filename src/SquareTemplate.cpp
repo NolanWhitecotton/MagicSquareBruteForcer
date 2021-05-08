@@ -128,7 +128,7 @@ void SquareTemplate::findRangeRecur_helper(int min, int count, int maxSize, int 
 
 bool SquareTemplate::doTests(const Square* sq) const {
 	//run all nessacary validators
-	auto& list = (sq->getTemplate()->validators.at((size_t)sq->getAddedNumCount() - 1));//get the validators for the just added pos
+	auto& list = (sq->getTemplate().validators.at((size_t)sq->getAddedNumCount() - 1));//get the validators for the just added pos
 	for (Validator* val : list) {//for every applicable validator
 		if (!val->run(sq)) {//run it
 			return false;

@@ -58,7 +58,7 @@ bool LineSumValidator::run(const Square* sq) const {
 
 bool CachePossibleValidator::run(const Square* sq) const {
     return (
-        sq->getLineSumCache() > sq->getTemplate()->getMinPosSum() &&
-        sq->getLineSumCache() < sq->getTemplate()->getMaxPosSum()
+        sq->getLineSumCache() > sq->getTemplate().getMinPosSum() &&
+        sq->getLineSumCache() < sq->getTemplate().getMaxPosSum()
     );
 }

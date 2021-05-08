@@ -6,7 +6,7 @@
 #include <mutex>
 
 
-Square::Square(int size, SquareTemplate* tmplt) : m_tmplt(tmplt){
+Square::Square(int size, SquareTemplate& tmplt) : m_tmplt(tmplt){
     m_allocArray(size);
 }
 
@@ -15,9 +15,9 @@ Square::Square(const Square& s) : m_tmplt(s.getTemplate()){
     m_addAllFrom(s);
 }
 
-int Square::getSize() const { return getTemplate()->getSquareSize(); }
-int Square::getRecurMax() const { return getTemplate()->getRecurMax(); }
-int Square::getCompact() const { return getTemplate()->getIsCompact(); }
+int Square::getSize() const { return getTemplate().getSquareSize(); }
+int Square::getRecurMax() const { return getTemplate().getRecurMax(); }
+int Square::getCompact() const { return getTemplate().getIsCompact(); }
 
 void Square::m_allocArray(int size) {
     m_lineSumCache = 0;
@@ -42,9 +42,9 @@ void Square::m_addAllFrom(const Square& s) {
 
 void Square::printSquare() const {
     if (getCompact()) {
-        m_printSquare('\0', false, m_tmplt->getShowIdentical());
+        m_printSquare('\0', false, m_tmplt.getShowIdentical());
     } else {
-        m_printSquare('\n', true, m_tmplt->getShowIdentical());
+        m_printSquare('\n', true, m_tmplt.getShowIdentical());
     }
 }
 
@@ -57,13 +57,13 @@ void Square::m_printSquare(char lineDelim, bool printHeader, bool showIdentical)
     using namespace std;
 
     //lock mutex
-    getTemplate()->getOutputMutex().lock();
+    getTemplate().getOutputMutex().lock();
 
     //print square(s)
     for (int i = 0; i < (showIdentical ? 0b1000 : 0b001); i++) {//for all rotations/reflections to print
         //print the square header
         if (printHeader)
-            cout << "Size: " << getSize() << " x " << getSize() << endl;
+            std::cout << "Size: " << getSize() << " x " << getSize() << endl;
 
         //get the modifiers from the binary representation of i
         bool firstsub = getBitFlag(i, 1); //read the row backwards
@@ -71,9 +71,9 @@ void Square::m_printSquare(char lineDelim, bool printHeader, bool showIdentical)
         bool reverse = getBitFlag(i, 3); //swap r and c
 
         //calc charWidth
-        int biggestNum = (getTemplate()->getRecurMax() + getTemplate()->getRecurOffset() - 1);
+        int biggestNum = (getTemplate().getRecurMax() + getTemplate().getRecurOffset() - 1);
         int outputWidth = (int)std::to_string(biggestNum).length()+1;
-        if (getTemplate()->getRecurOffset() < 1) {//room for negative signs
+        if (getTemplate().getRecurOffset() < 1) {//room for negative signs
             outputWidth++;
         }
 
@@ -96,18 +96,18 @@ void Square::m_printSquare(char lineDelim, bool printHeader, bool showIdentical)
 
                 //calc num with offset
                 int num = getNum(first, second);
-                num += getTemplate()->getRecurOffset() - 1;
+                num += getTemplate().getRecurOffset() - 1;
 
                 //print number
-                cout << setw(outputWidth) << num;
+                std::cout << setw(outputWidth) << num;
             }
-            cout << lineDelim;
+            std::cout << lineDelim;
         }
-        cout << endl;
+        std::cout << endl;
     }
     
     //unlock mutex
-    getTemplate()->getOutputMutex().unlock();
+    getTemplate().getOutputMutex().unlock();
 }
 
 void Square::add(int n) {
@@ -159,7 +159,7 @@ void Square::checkNextRecur() {
     for (int i = 1; i <= getRecurMax(); i++) {
         add(i);
 
-        if (getTemplate()->doTests(this)) {//run validators
+        if (getTemplate().doTests(this)) {//run validators
             checkNextRecur();
         }
 

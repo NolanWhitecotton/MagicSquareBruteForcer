@@ -1,12 +1,11 @@
 #pragma once
-class SquareTemplate;
 struct Args;
+#include "SquareTemplate.h"
 
 class ThreadManager {
 private:
-    SquareTemplate* tmplt;
+    SquareTemplate tmplt;
 
-    void createTemplate(Args& a);
     void startCheckThreaded(Args& a);
 
 public:
