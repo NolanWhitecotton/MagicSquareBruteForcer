@@ -57,7 +57,7 @@ void Square::m_printSquare(char lineDelim, bool printHeader, bool showIdentical)
     using namespace std;
 
     //lock mutex
-    getTemplate()->getOutputMutex()->lock();
+    getTemplate()->getOutputMutex().lock();
 
     //print square(s)
     for (int i = 0; i < (showIdentical ? 0b1000 : 0b001); i++) {//for all rotations/reflections to print
@@ -107,7 +107,7 @@ void Square::m_printSquare(char lineDelim, bool printHeader, bool showIdentical)
     }
     
     //unlock mutex
-    getTemplate()->getOutputMutex()->unlock();
+    getTemplate()->getOutputMutex().unlock();
 }
 
 void Square::add(int n) {

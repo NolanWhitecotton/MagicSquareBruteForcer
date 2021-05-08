@@ -10,7 +10,7 @@ private:
     std::vector<int> nums; //the number of times that theoretical sums can occur given the range
     std::vector<std::vector<Validator*>> validators; //the list of tests to run to see if a magic square is possible
 
-    std::mutex* m_outputMutex; //mutex for cout
+    std::mutex m_outputMutex; //mutex for cout
 
     int m_squareSize=0;
     int m_recurMax=0;
@@ -42,7 +42,7 @@ public:
     bool getShowIdentical() const { return m_showIdentical; }
     int getMinPosSum() const { return minPosSum; }
     int getMaxPosSum() const { return maxPosSum; }
-    std::mutex* getOutputMutex() { return m_outputMutex; }
+    std::mutex& getOutputMutex() { return m_outputMutex; }
 
     //methods
     int convert2dtoLinear(int r, int c) { return r * getSquareSize() + c; }

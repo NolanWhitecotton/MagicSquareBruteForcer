@@ -13,9 +13,6 @@ SquareTemplate::SquareTemplate(Args& a) {
 	m_recurMax = a.max - a.min + 1;
 	m_recurOffset = a.min;
 
-	//create mutex
-	m_outputMutex = new std::mutex();
-
 	//compile the ranges
 	findPossibleRanges(m_squareSize, m_recurMax);
 	generateValidators();
@@ -68,9 +65,6 @@ void SquareTemplate::generateValidators() {
 }
 
 SquareTemplate::~SquareTemplate() {
-	//delete mutexes
-	delete m_outputMutex;
-
 	//delete validators
 	for (auto vlist : validators) {
 		for (auto v : vlist) {
