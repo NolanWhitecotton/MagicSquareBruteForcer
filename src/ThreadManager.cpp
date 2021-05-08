@@ -6,11 +6,11 @@
 #include <stack>
 #include <thread>
 
-void ThreadManager::createTemplate(Args* a) {
+void ThreadManager::createTemplate(Args& a) {
 	tmplt = new SquareTemplate(a);
 }
 
-void ThreadManager::startCheckThreaded(Args* a) {
+void ThreadManager::startCheckThreaded(Args& a) {
 	//prep operations to run on threads
 	std::vector<std::thread> threadList;
 	std::stack<Square*> s;
@@ -20,12 +20,15 @@ void ThreadManager::startCheckThreaded(Args* a) {
 	for (int i = tmplt->getRecurMax(); i > 0; i--) {//backwards so single threaded will be in order
 		Square* newS = new Square(tmplt->getSquareSize(), tmplt);
 		newS->add(i);
-		if(tmplt->doTests(newS))
+		if (tmplt->doTests(newS)) {
 			s.push(newS);
+		} else {
+			delete newS;
+		}
 	}
 
 	//create threads
-	for (int i = 0; i < a->threadCount; i++) {
+	for (int i = 0; i < a.threadCount; i++) {
 		if (s.empty()) {//check that there arent more threads than queue length
 			break;
 		}
@@ -56,7 +59,7 @@ void ThreadManager::startCheckThreaded(Args* a) {
 	}
 }
 
-ThreadManager::ThreadManager(Args* a) {
+ThreadManager::ThreadManager(Args& a) {
 	createTemplate(a);
 	startCheckThreaded(a);
 }

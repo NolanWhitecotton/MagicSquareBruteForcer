@@ -29,7 +29,7 @@ private:
 
 public:
     //constructors
-    SquareTemplate(Args *a);
+    SquareTemplate(Args& a);
     ~SquareTemplate();
     
     bool doTests(const Square* sq) const;//run validators on a square

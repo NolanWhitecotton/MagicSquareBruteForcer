@@ -5,7 +5,7 @@
 
 int main(int argc, char *argv[]) {
     //read arguments
-    Args* a = new Args(argc, argv);
+    Args a = Args(argc, argv);
     
     //start timer
     std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();

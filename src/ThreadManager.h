@@ -6,9 +6,9 @@ class ThreadManager {
 private:
     SquareTemplate* tmplt;
 
-    void createTemplate(Args* a);
-    void startCheckThreaded(Args* a);
+    void createTemplate(Args& a);
+    void startCheckThreaded(Args& a);
 
 public:
-    ThreadManager(Args* a);
+    ThreadManager(Args& a);
 };
