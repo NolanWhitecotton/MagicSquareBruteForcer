@@ -4,16 +4,14 @@
 #include "Square.h"
 #include <iostream>//cout
 
-SquareTemplate::SquareTemplate(Args& a) {
-	m_isCompact = a.compactOutput;
-	m_squareSize = a.size;
-	m_showIdentical = a.outputIdentical;
+//calculates a normalized max given a max and a min, assume min is the offset
+int CalcMaxWithOffset(int max, int min) {return max - min + 1;}
 
-	//calculate max and offset
-	m_recurMax = a.max - a.min + 1;
-	m_recurOffset = a.min;
-
-	//compile the ranges
+SquareTemplate::SquareTemplate(Args& a) 
+	: m_isCompact(a.compactOutput), m_squareSize(a.size), m_showIdentical(a.outputIdentical),
+	m_recurMax(CalcMaxWithOffset(a.max, a.min)), m_recurOffset(a.min)
+{
+	//generate metadata about the square
 	findPossibleRanges(m_squareSize, m_recurMax);
 	generateValidators();
 
