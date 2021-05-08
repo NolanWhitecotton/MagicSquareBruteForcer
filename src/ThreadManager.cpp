@@ -14,7 +14,7 @@ void ThreadManager::startCheckThreaded(Args& a) {
 	//prep operations to run on threads
 	std::vector<std::thread> threadList;
 	std::stack<Square*> s;
-	std::mutex* stackmutex = new std::mutex();
+	std::mutex stackmutex;
 
 	//queue work to be done
 	for (int i = tmplt->getRecurMax(); i > 0; i--) {//backwards so single threaded will be in order
@@ -36,18 +36,18 @@ void ThreadManager::startCheckThreaded(Args& a) {
 		threadList.emplace_back(
 			[&s, &stackmutex]() {
 				//grab from the queue and calculate it until queue is empty
-				stackmutex->lock();
+				stackmutex.lock();
 				while (!s.empty()) {
 					Square* sq = s.top();
 					s.pop();
-					stackmutex->unlock();
+					stackmutex.unlock();
 
 					sq->checkNextRecur();
 					delete sq;
 
-					stackmutex->lock();
+					stackmutex.lock();
 				}
-				stackmutex->unlock();
+				stackmutex.unlock();
 			}
 		);
 	}
