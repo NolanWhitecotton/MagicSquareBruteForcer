@@ -1,6 +1,7 @@
 #include "SquareTemplate.h"
 #include "Args.h"
 #include "Validators.h"
+#include "Ranges.h"
 #include "Square.h"
 #include <iostream>//cout
 
@@ -18,14 +19,23 @@ SquareTemplate::SquareTemplate(Args *a) {
 
 	//compile the ranges
 	findPossibleRanges(m_squareSize, m_recurMax);
+	generateRanges();
 	generateValidators();
 
 	//TODO (DI) create instertion/checking orders
 }
 
+//generate and add all ranges to the range list
+void SquareTemplate::generateRanges() {
+	//TODO use LineSumRange when applicable
+	for (int i = 0; i < m_squareSize * m_squareSize; i++) {//for every square position
+		ranges.push_back(new FullRange(1, m_recurMax));
+	}
+}
+
 //create and add all validators to the validator list
 void SquareTemplate::generateValidators() {
-	validators.resize((size_t)m_squareSize*m_squareSize);//resize vector to square size
+	validators.resize((size_t)m_squareSize * m_squareSize);//resize vector to square size
 
 	//add uniqueness validators
 	for (int i = 0; i < m_squareSize * m_squareSize; i++) {//for every square position
@@ -65,6 +75,15 @@ void SquareTemplate::generateValidators() {
 
 	//insert CachePossibleValidator
 	validators[convert2dtoLinear(0,getSquareSize() - 1)].push_back(new CachePossibleValidator());
+	//
+}
+
+int SquareTemplate::getMinRange(int pos, const Square* square) {
+	return ranges.at(pos)->getMin(square);
+}
+
+int SquareTemplate::getMaxRange(int pos, const Square* square) {
+	return ranges.at(pos)->getMax(square);
 }
 
 SquareTemplate::~SquareTemplate() {
@@ -76,6 +95,11 @@ SquareTemplate::~SquareTemplate() {
 		for (auto v : vlist) {
 			delete v;
 		}
+	}
+
+	//delete ranges
+	for (auto r : ranges) {
+		delete r;
 	}
 }
 

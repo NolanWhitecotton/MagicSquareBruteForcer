@@ -10,7 +10,7 @@ class SquareTemplate {
 private:
     std::vector<int> nums; //the number of times that theoretical sums can occur given the range
     std::vector<std::vector<Validator*>> validators; //the list of tests to run to see if a magic square is possible
-    std::vector<std::vector<Range*>> ranges; //the list of ranges to iterate through
+    std::vector<Range*> ranges; //the list of ranges to iterate through
 
     std::mutex* m_outputMutex; //mutex for cout
 
@@ -23,11 +23,11 @@ private:
     bool m_isCompact=false;
     bool m_showIdentical=true;
 
-
     void findRangeRecur_helper(int min, int count, int maxSize, int maxNum, int sum);
     void findRangeRecur(int min, int size);
     void findPossibleRanges(int size, int max);
     void generateValidators();
+    void generateRanges();
 
 public:
     //constructors
@@ -45,6 +45,8 @@ public:
     int getMinPosSum() const { return minPosSum; }
     int getMaxPosSum() const { return maxPosSum; }
     std::mutex* getOutputMutex() { return m_outputMutex; }
+    int getMinRange(int pos, const Square* square);
+    int getMaxRange(int pos, const Square* square);
 
     //methods
     int convert2dtoLinear(int r, int c) { return r * getSquareSize() + c; }

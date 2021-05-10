@@ -14,6 +14,8 @@ private:
 	int m_min=0, m_max=0;
 
 public:
+	FullRange(int min, int max) : m_min(min), m_max(max) {}
+
 	int getMin(const Square* sq) const override;
 	int getMax(const Square* sq) const override;
 };

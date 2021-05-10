@@ -155,8 +155,10 @@ void Square::checkNextRecur() {
         return;
     }
     
-    //recur for all valid squares with every legal number appended
-    for (int i = 1; i <= getRecurMax(); i++) {
+    //recur for all valid squares with applicable ranges added
+    int min = getTemplate()->getMinRange(getAddedNumCount()-1, this);
+    int max = getTemplate()->getMaxRange(getAddedNumCount()-1, this);
+    for (int i = min; i <= max; i++) {
         add(i);
 
         if (getTemplate()->doTests(this)) {//run validators
