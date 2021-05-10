@@ -59,3 +59,15 @@ public:
 
 	bool run(const Square* sq) const override;
 };
+
+//calidator to check if a number is within the max and min range
+class RangeValidator : public Validator {
+private:
+	int m_max, m_min;
+	int m_pos;
+
+public:
+	RangeValidator(int max, int min, int pos) : m_max(max), m_min(min), m_pos(pos) {}
+
+	bool run(const Square* sq) const override;
+};

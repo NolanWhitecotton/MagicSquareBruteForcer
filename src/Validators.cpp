@@ -65,3 +65,8 @@ bool CachePossibleValidator::run(const Square* sq) const {
         sq->getLineSumCache() < sq->getTemplate()->getMaxPosSum()
     );
 }
+
+bool RangeValidator::run(const Square* sq) const {
+    int num = sq->getNum(m_pos);
+    return (num >= m_min && num <= m_max);
+}
