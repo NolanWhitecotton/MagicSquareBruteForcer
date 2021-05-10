@@ -63,8 +63,8 @@ public:
 //calidator to check if a number is within the max and min range
 class RangeValidator : public Validator {
 private:
-	int m_max, m_min;
-	int m_pos;
+	int m_max=0, m_min=0;
+	int m_pos=0;
 
 public:
 	RangeValidator(int max, int min, int pos) : m_max(max), m_min(min), m_pos(pos) {}

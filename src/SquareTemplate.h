@@ -4,11 +4,13 @@
 struct Args;
 class Validator;
 class Square;
+class Range;
 
 class SquareTemplate {
 private:
     std::vector<int> nums; //the number of times that theoretical sums can occur given the range
     std::vector<std::vector<Validator*>> validators; //the list of tests to run to see if a magic square is possible
+    std::vector<std::vector<Range*>> ranges; //the list of ranges to iterate through
 
     std::mutex* m_outputMutex; //mutex for cout
 
