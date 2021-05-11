@@ -2,6 +2,14 @@
 class SquareTemplate;
 #include <memory>
 
+//the types of lines the square checks
+enum class LineType {
+    Row,
+    Column,
+    PositiveDiagonal,
+    NegativeDiagonal
+};
+
 class Square {
 private:
     //data
@@ -32,6 +40,7 @@ public:
     int getSize() const;
     int getRecurMax() const;
     int getCompact() const;
+    int getLineSum(LineType type, int num) const;
 
     void printSquare() const; //output
     void checkNextRecur();//check children

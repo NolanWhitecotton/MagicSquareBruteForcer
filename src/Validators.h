@@ -1,5 +1,5 @@
 #pragma once
-class Square;
+#include "Square.h"
 
 //a validator is an object that can be run on a given square to test if it meets specific requirements
 class Validator{
@@ -30,21 +30,11 @@ public:
 	bool run(const Square* sq) const override;
 };
 
-//the types of lines the square checks
-enum class LineType {
-	Row,
-	Column,
-	PositiveDiagonal,
-	NegativeDiagonal
-};
-
 //validator to check that a linesum is equal to the cache
 class LineSumValidator : public Validator {
 private:
 	LineType m_type;
 	int m_num = 0;
-
-	int getLineSum(const Square* sq, LineType type, int num) const;
 
 public:
 	LineSumValidator(LineType type, int num) : m_type(type), m_num(num) {}
