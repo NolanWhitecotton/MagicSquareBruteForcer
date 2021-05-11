@@ -156,8 +156,8 @@ void Square::checkNextRecur() {
     }
     
     //recur for all valid squares with applicable ranges added
-    int min = getTemplate()->getMinRange(getAddedNumCount()-1, this);
-    int max = getTemplate()->getMaxRange(getAddedNumCount()-1, this);
+    int min = getTemplate()->getMinRange(getAddedNumCount(), this);
+    int max = getTemplate()->getMaxRange(getAddedNumCount(), this);
     for (int i = min; i <= max; i++) {
         add(i);
 
@@ -201,8 +201,6 @@ int Square::getLineSum(LineType type, int num) const {
     //calculate sum
     for (int goal = pos + getSize() * incAmt; pos != goal; pos += incAmt) {
         int toAdd = getNum(pos);
-        if (toAdd == 0)
-            return -1;
         sum += toAdd;
     }
 

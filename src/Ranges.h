@@ -1,5 +1,5 @@
 #pragma once
-class Square;
+#include "Square.h"
 
 class Range {
 public:

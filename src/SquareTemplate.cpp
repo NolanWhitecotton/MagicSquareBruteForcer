@@ -27,9 +27,25 @@ SquareTemplate::SquareTemplate(Args *a) {
 
 //generate and add all ranges to the range list
 void SquareTemplate::generateRanges() {
-	//TODO use LineSumRange when applicable
-	for (int i = 0; i < m_squareSize * m_squareSize; i++) {//for every square position
-		ranges.push_back(new FullRange(1, m_recurMax));
+	ranges.resize((size_t)m_squareSize * m_squareSize);
+
+	//insert fullRanges
+	//inner square
+	for (int r = 0; r < m_squareSize - 1; r++) {
+		for (int c = 0; c < m_squareSize - 1; c++) {
+			ranges[convert2dtoLinear(r, c)]=(new FullRange(1, m_recurMax));
+			
+		}
+	}
+	//end first row
+	ranges[convert2dtoLinear(0, m_squareSize-1)] = (new FullRange(1, m_recurMax));
+	
+	//insert LineSums
+	for (int i = 1; i < m_squareSize-1; i++) {//the -1 in m_squareSize is because it is going to get overwritten the cols
+		ranges[convert2dtoLinear(i, m_squareSize-1)] = (new LineSumRange(LineType::Row, i));
+	}
+	for (int i = 0; i < m_squareSize; i++) {
+		ranges[convert2dtoLinear(m_squareSize - 1, i)] = (new LineSumRange(LineType::Column, i));
 	}
 }
 
