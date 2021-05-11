@@ -21,8 +21,14 @@ public:
 };
 
 //get the exact number to complete a linesum given a cache
-//TODO this needs linesum enum and method
 class LineSumRange : public Range {
 private:
-	
+	LineType m_dir;
+	int m_pos = 0;
+
+public:
+	LineSumRange(LineType dir, int pos) : m_dir(dir), m_pos(pos) {}
+
+	int getMin(const Square* sq) const override;
+	int getMax(const Square* sq) const override;
 };
