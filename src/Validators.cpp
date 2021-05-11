@@ -26,7 +26,9 @@ bool CachePossibleValidator::run(const Square* sq) const {
     );
 }
 
+#include <iostream>//cout
 bool RangeValidator::run(const Square* sq) const {
     int num = sq->getNum(m_pos);
-    return (num >= m_min && num <= m_max);
+	bool output = (num >= m_min && num <= m_max);
+	return output;
 }

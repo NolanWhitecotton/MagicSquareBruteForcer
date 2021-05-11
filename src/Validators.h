@@ -53,11 +53,11 @@ public:
 //calidator to check if a number is within the max and min range
 class RangeValidator : public Validator {
 private:
-	int m_max=0, m_min=0;
+	int m_min=0, m_max=0;
 	int m_pos=0;
 
 public:
-	RangeValidator(int max, int min, int pos) : m_max(max), m_min(min), m_pos(pos) {}
+	RangeValidator(int min, int max, int pos) : m_min(min), m_max(max), m_pos(pos) {}
 
 	bool run(const Square* sq) const override;
 };

@@ -91,7 +91,16 @@ void SquareTemplate::generateValidators() {
 
 	//insert CachePossibleValidator
 	validators[convert2dtoLinear(0,getSquareSize() - 1)].push_back(new CachePossibleValidator());
-	//
+	
+	//insert rangeValidators
+	for (int i = 1; i < m_squareSize - 1; i++) {//the -1 in m_squareSize is because it is going to get overwritten the cols
+		pos1 = convert2dtoLinear(i, m_squareSize - 1);
+		validators[pos1].push_back(new RangeValidator(1, m_recurMax,pos1));
+	}
+	for (int i = 0; i < m_squareSize; i++) {
+		pos1 = convert2dtoLinear(m_squareSize - 1, i);
+		validators[pos1].push_back(new RangeValidator(1, m_recurMax,pos1));
+	}
 }
 
 int SquareTemplate::getMinRange(int pos, const Square* square) {
