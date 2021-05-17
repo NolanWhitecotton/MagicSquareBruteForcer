@@ -1,5 +1,5 @@
 #include "Args.h"
-#include "../Dependencies/cxxopts.hpp"
+#include "Dependencies/cxxopts.hpp"
 #include <thread>//hardware concurency
 
 Args::Args(int argc, char* argv[]) {
