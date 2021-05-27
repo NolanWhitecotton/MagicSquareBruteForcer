@@ -24,20 +24,20 @@ int LineSumValidator::getLineSum(const Square* sq, LineType type, int num) const
     //forwards
     switch (type) {
     case LineType::PositiveDiagonal:
-        pos = sq->getSize() - 1;
-        incAmt = sq->getSize() - 1;
+        pos = sq->getTemplate().getSquareSize() - 1;
+        incAmt = sq->getTemplate().getSquareSize() - 1;
         break;
     case LineType::NegativeDiagonal:
         pos = 0;
-        incAmt = sq->getSize() + 1;
+        incAmt = sq->getTemplate().getSquareSize() + 1;
         break;
     case LineType::Row:
-        pos = num * sq->getSize();
+        pos = num * sq->getTemplate().getSquareSize();
         incAmt = 1;
         break;
     case LineType::Column:
         pos = num;
-        incAmt = sq->getSize();
+        incAmt = sq->getTemplate().getSquareSize();
         break;
     default:
         return -1;
@@ -45,7 +45,7 @@ int LineSumValidator::getLineSum(const Square* sq, LineType type, int num) const
     }
 
     //calculate sum
-    for (int goal = pos + sq->getSize() * incAmt; pos != goal; pos += incAmt) {
+    for (int goal = pos + sq->getTemplate().getSquareSize() * incAmt; pos != goal; pos += incAmt) {
         sum += sq->getNum(pos);
     }
 

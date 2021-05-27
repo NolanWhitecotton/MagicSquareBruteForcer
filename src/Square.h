@@ -29,9 +29,6 @@ public:
     SquareTemplate& getTemplate() const { return m_tmplt; }
     int getAddedNumCount() const { return m_addedNumCount; }
     int getLineSumCache() const { return m_lineSumCache; }
-    int getSize() const;
-    int getRecurMax() const;
-    int getCompact() const;
 
     void printSquare() const; //output
     void checkNextRecur();//check children

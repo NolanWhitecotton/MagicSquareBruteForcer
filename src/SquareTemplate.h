@@ -36,7 +36,8 @@ public:
 
     //getters
     bool getIsCompact() const { return m_isCompact; }
-    int  getSquareSize() const { return m_squareSize; }
+    int getSquareSize() const { return m_squareSize; }
+    int getSquareArea() const { return m_squareSize * m_squareSize; } //TODO cache square area?
     int getRecurMax() const { return m_recurMax; }
     int getRecurOffset() const {return m_recurOffset;}
     bool getShowIdentical() const { return m_showIdentical; }
