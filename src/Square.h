@@ -2,6 +2,14 @@
 class SquareTemplate;
 #include <memory>
 
+//the types of lines the square checks
+enum class LineType {
+    Row,
+    Column,
+    PositiveDiagonal,
+    NegativeDiagonal
+};
+
 class Square {
 private:
     //data
