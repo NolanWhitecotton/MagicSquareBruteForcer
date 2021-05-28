@@ -48,6 +48,11 @@ void SquareTemplate::generateRanges() {
 void SquareTemplate::generateValidators() {
 	validators.resize((size_t)m_squareSize * m_squareSize);//resize vector to square size
 
+	//add uniqueness validators
+	for (int i = 0; i < m_squareSize * m_squareSize; i++) {//for every square position
+		validators[i].push_back(new UniquenessValidator(i));
+	}
+
 	//insert mirror validators
 	int pos1 = 0, pos2 = 0;
 	//top right

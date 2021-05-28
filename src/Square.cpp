@@ -152,8 +152,8 @@ void Square::checkNextRecur() {
     }
     
     //recur for all valid squares with applicable ranges added
-    int min = getTemplate()->getMinRange(getAddedNumCount(), this);
-    int max = getTemplate()->getMaxRange(getAddedNumCount(), this);
+    int min = getTemplate().getMinRange(getAddedNumCount(), this);
+    int max = getTemplate().getMaxRange(getAddedNumCount(), this);
     for (int i = min; i <= max; i++) {
         add(i);
 
@@ -174,20 +174,20 @@ int Square::getLineSum(LineType type, int num) const {
     //forwards
     switch (type) {
     case LineType::PositiveDiagonal:
-        pos = getSize() - 1;
-        incAmt = getSize() - 1;
+        pos = getTemplate().getSquareSize() - 1;
+        incAmt = getTemplate().getSquareSize() - 1;
         break;
     case LineType::NegativeDiagonal:
         pos = 0;
-        incAmt = getSize() + 1;
+        incAmt = getTemplate().getSquareSize() + 1;
         break;
     case LineType::Row:
-        pos = num * getSize();
+        pos = num * getTemplate().getSquareSize();
         incAmt = 1;
         break;
     case LineType::Column:
         pos = num;
-        incAmt = getSize();
+        incAmt = getTemplate().getSquareSize();
         break;
     default:
         return -2;
@@ -195,7 +195,7 @@ int Square::getLineSum(LineType type, int num) const {
     }
 
     //calculate sum
-    for (int goal = pos + getSize() * incAmt; pos != goal; pos += incAmt) {
+    for (int goal = pos + getTemplate().getSquareSize() * incAmt; pos != goal; pos += incAmt) {
         int toAdd = getNum(pos);
         sum += toAdd;
     }
