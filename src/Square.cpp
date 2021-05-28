@@ -151,10 +151,8 @@ void Square::checkNextRecur() {
         return;
     }
     
-    //recur for all valid squares with applicable ranges added
-    int min = getTemplate()->getMinRange(getAddedNumCount(), this);
-    int max = getTemplate()->getMaxRange(getAddedNumCount(), this);
-    for (int i = min; i <= max; i++) {
+    //recur for all valid squares with every legal number appended
+    for (int i = 1; i <= getTemplate().getRecurMax(); i++) {
         add(i);
 
         if (getTemplate().doTests(this)) {//run validators
@@ -164,42 +162,3 @@ void Square::checkNextRecur() {
         removeLastAdd();
     }
 }
-
-int Square::getLineSum(LineType type, int num) const {
-    int sum = 0;//the current linesum
-    int incAmt = 1;//the amount of increment by
-    int pos = 0;//the current position
-
-    //calculate pos and inc ammount for the given bools
-    //forwards
-    switch (type) {
-    case LineType::PositiveDiagonal:
-        pos = getSize() - 1;
-        incAmt = getSize() - 1;
-        break;
-    case LineType::NegativeDiagonal:
-        pos = 0;
-        incAmt = getSize() + 1;
-        break;
-    case LineType::Row:
-        pos = num * getSize();
-        incAmt = 1;
-        break;
-    case LineType::Column:
-        pos = num;
-        incAmt = getSize();
-        break;
-    default:
-        return -2;
-        break;
-    }
-
-    //calculate sum
-    for (int goal = pos + getSize() * incAmt; pos != goal; pos += incAmt) {
-        int toAdd = getNum(pos);
-        sum += toAdd;
-    }
-
-    return sum;
-}
-
