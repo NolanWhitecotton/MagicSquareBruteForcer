@@ -202,4 +202,3 @@ int Square::getLineSum(LineType type, int num) const {
 
     return sum;
 }
-
