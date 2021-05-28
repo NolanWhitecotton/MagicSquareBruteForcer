@@ -15,6 +15,7 @@ add_executable(msbf
 	"src/Square.cpp" "src/Square.h"
 	"src/SquareTemplate.cpp" "src/SquareTemplate.h"
 	"src/Validators.cpp" "src/Validators.h"
+	"src/Ranges.cpp" "src/Ranges.h"
 )
 
 # specify the C++ standard
