@@ -5,19 +5,14 @@
 #include "Square.h"
 #include <iostream>//cout
 
-SquareTemplate::SquareTemplate(Args *a) {
-	m_isCompact = a->compactOutput;
-	m_squareSize = a->size;
-	m_showIdentical = a->outputIdentical;
+//calculates a normalized max given a max and a min, assume min is the offset
+int CalcMaxWithOffset(int max, int min) {return max - min + 1;}
 
-	//calculate max and offset
-	m_recurMax = a->max - a->min + 1;
-	m_recurOffset = a->min;
-
-	//create mutex
-	m_outputMutex = new std::mutex();
-
-	//compile the ranges
+SquareTemplate::SquareTemplate(Args& a) 
+	: m_isCompact(a.compactOutput), m_squareSize(a.size), m_showIdentical(a.outputIdentical),
+	m_recurMax(CalcMaxWithOffset(a.max, a.min)), m_recurOffset(a.min)
+{
+	//generate metadata about the square
 	findPossibleRanges(m_squareSize, m_recurMax);
 	generateRanges();
 	generateValidators();
@@ -52,11 +47,6 @@ void SquareTemplate::generateRanges() {
 //create and add all validators to the validator list
 void SquareTemplate::generateValidators() {
 	validators.resize((size_t)m_squareSize * m_squareSize);//resize vector to square size
-
-	//add uniqueness validators
-	for (int i = 0; i < m_squareSize * m_squareSize; i++) {//for every square position
-		validators[i].push_back(new UniquenessValidator(i));
-	}
 
 	//insert mirror validators
 	int pos1 = 0, pos2 = 0;
@@ -112,9 +102,6 @@ int SquareTemplate::getMaxRange(int pos, const Square* square) {
 }
 
 SquareTemplate::~SquareTemplate() {
-	//delete mutexes
-	delete m_outputMutex;
-
 	//delete validators
 	for (auto vlist : validators) {
 		for (auto v : vlist) {
@@ -183,7 +170,7 @@ void SquareTemplate::findRangeRecur_helper(int min, int count, int maxSize, int 
 
 bool SquareTemplate::doTests(const Square* sq) const {
 	//run all nessacary validators
-	auto& list = (sq->getTemplate()->validators.at((size_t)sq->getAddedNumCount() - 1));//get the validators for the just added pos
+	auto& list = (sq->getTemplate().validators.at((size_t)sq->getAddedNumCount() - 1));//get the validators for the just added pos
 	for (Validator* val : list) {//for every applicable validator
 		if (!val->run(sq)) {//run it
 			return false;

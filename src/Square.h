@@ -13,7 +13,7 @@ enum class LineType {
 class Square {
 private:
     //data
-    SquareTemplate* m_tmplt;
+    SquareTemplate& m_tmplt;
 
     std::unique_ptr<int[]> m_numsLinear;//size^2 ints
     int m_addedNumCount=0;
@@ -26,7 +26,7 @@ private:
     void m_printSquare(char lineDelim, bool printHeader, bool showIdentical) const;
 public:
     //contructors, destructors, and overloads
-    Square(int size, SquareTemplate* tmplt); //create an empty square
+    Square(int size, SquareTemplate& tmplt); //create an empty square
     Square(const Square& s); //copy construcor
     
     ~Square();//destructor
@@ -34,13 +34,9 @@ public:
     //data getters
     int getNum(int pos) const;
     int getNum(int r, int c) const;
-    SquareTemplate* getTemplate() const { return m_tmplt; }
+    SquareTemplate& getTemplate() const { return m_tmplt; }
     int getAddedNumCount() const { return m_addedNumCount; }
     int getLineSumCache() const { return m_lineSumCache; }
-    int getSize() const;
-    int getRecurMax() const;
-    int getCompact() const;
-    int getLineSum(LineType type, int num) const;
 
     void printSquare() const; //output
     void checkNextRecur();//check children

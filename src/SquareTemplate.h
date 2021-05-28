@@ -12,7 +12,7 @@ private:
     std::vector<std::vector<Validator*>> validators; //the list of tests to run to see if a magic square is possible
     std::vector<Range*> ranges; //the list of ranges to iterate through
 
-    std::mutex* m_outputMutex; //mutex for cout
+    std::mutex m_outputMutex; //mutex for cout
 
     int m_squareSize=0;
     int m_recurMax=0;
@@ -31,20 +31,21 @@ private:
 
 public:
     //constructors
-    SquareTemplate(Args *a);
+    SquareTemplate(Args& a);
     ~SquareTemplate();
     
     bool doTests(const Square* sq) const;//run validators on a square
 
     //getters
     bool getIsCompact() const { return m_isCompact; }
-    int  getSquareSize() const { return m_squareSize; }
+    int getSquareSize() const { return m_squareSize; }
+    int getSquareArea() const { return m_squareSize * m_squareSize; } //TODO cache square area?
     int getRecurMax() const { return m_recurMax; }
     int getRecurOffset() const {return m_recurOffset;}
     bool getShowIdentical() const { return m_showIdentical; }
     int getMinPosSum() const { return minPosSum; }
     int getMaxPosSum() const { return maxPosSum; }
-    std::mutex* getOutputMutex() { return m_outputMutex; }
+    std::mutex& getOutputMutex() { return m_outputMutex; }
     int getMinRange(int pos, const Square* square);
     int getMaxRange(int pos, const Square* square);
 

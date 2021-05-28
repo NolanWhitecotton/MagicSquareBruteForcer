@@ -6,7 +6,7 @@ project(msbf)
 # add the source files
 add_executable(msbf 
 	# add the dependencies
-	"Dependencies/cxxopts.hpp"
+	"src/Dependencies/cxxopts.hpp"
 	
 	# add src
 	"src/MagicSquareBruteForcer.cpp"	
