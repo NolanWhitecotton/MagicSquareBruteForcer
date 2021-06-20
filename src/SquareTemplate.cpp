@@ -16,8 +16,9 @@ SquareTemplate::SquareTemplate(Args& a)
 	findPossibleRanges(m_squareSize, m_recurMax);
 	generateRanges();
 	generateValidators();
+	cacheIndex = getSquareSize();
 
-	//TODO (DI) create instertion/checking orders
+	//TODO (DI) create dynamic instertion/checking orders
 }
 
 //generate and add all ranges to the range list

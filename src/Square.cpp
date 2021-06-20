@@ -113,7 +113,7 @@ void Square::add(int n) {
     m_addedNumCount++;
 
     //cache if at first row end
-    if (getAddedNumCount() == getTemplate().getSquareSize()) {//TODO (DI) cache should by dynamic
+    if (getAddedNumCount() == getTemplate().getCacheIndex()){
         int sum = 0;
         for (int i = 0; i < getTemplate().getSquareSize(); i++) {
             sum += getNum(i);
@@ -125,7 +125,7 @@ void Square::add(int n) {
 //undoes the last add
 void Square::removeLastAdd() {
     //undo possible cache
-    if (getAddedNumCount() == getTemplate().getSquareSize()) { //TODO (DI) cache should clear dynamically
+    if (getAddedNumCount() == getTemplate().getCacheIndex()) {
         m_lineSumCache = 0;
     }
 
