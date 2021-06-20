@@ -6,9 +6,9 @@
 #include <iostream>//cout
 
 //calculates a normalized max given a max and a min, assume min is the offset
-int CalcMaxWithOffset(int max, int min) {return max - min + 1;}
+int CalcMaxWithOffset(int max, int min) { return max - min + 1; }
 
-SquareTemplate::SquareTemplate(Args& a) 
+SquareTemplate::SquareTemplate(Args& a)
 	: m_isCompact(a.compactOutput), m_squareSize(a.size), m_showIdentical(a.outputIdentical),
 	m_recurMax(CalcMaxWithOffset(a.max, a.min)), m_recurOffset(a.min)
 {
@@ -22,23 +22,23 @@ SquareTemplate::SquareTemplate(Args& a)
 }
 
 //generate and add all ranges to the range list
-void SquareTemplate::generateRanges() {
+void SquareTemplate::generateRanges()
+{
 	ranges.resize((size_t)m_squareSize * m_squareSize);
 
 	//insert fullRanges
 	//inner square
 	for (int r = 0; r < m_squareSize - 1; r++) {
 		for (int c = 0; c < m_squareSize - 1; c++) {
-			ranges[convert2dtoLinear(r, c)]=(new FullRange(1, m_recurMax));
-			
+			ranges[convert2dtoLinear(r, c)] = (new FullRange(1, m_recurMax));
 		}
 	}
 	//end first row
-	ranges[convert2dtoLinear(0, m_squareSize-1)] = (new FullRange(1, m_recurMax));
-	
+	ranges[convert2dtoLinear(0, m_squareSize - 1)] = (new FullRange(1, m_recurMax));
+
 	//insert LineSums
-	for (int i = 1; i < m_squareSize-1; i++) {//the -1 in m_squareSize is because it is going to get overwritten the cols
-		ranges[convert2dtoLinear(i, m_squareSize-1)] = (new LineSumRange(LineType::Row, i));
+	for (int i = 1; i < m_squareSize - 1; i++) {//the -1 in m_squareSize is because it is going to get overwritten the cols
+		ranges[convert2dtoLinear(i, m_squareSize - 1)] = (new LineSumRange(LineType::Row, i));
 	}
 	for (int i = 0; i < m_squareSize; i++) {
 		ranges[convert2dtoLinear(m_squareSize - 1, i)] = (new LineSumRange(LineType::Column, i));
@@ -46,7 +46,8 @@ void SquareTemplate::generateRanges() {
 }
 
 //create and add all validators to the validator list
-void SquareTemplate::generateValidators() {
+void SquareTemplate::generateValidators()
+{
 	validators.resize((size_t)m_squareSize * m_squareSize);//resize vector to square size
 
 	//add uniqueness validators
@@ -83,31 +84,34 @@ void SquareTemplate::generateValidators() {
 	validators[convert2dtoLinear(getSquareSize() - 1, getSquareSize() - 1)].push_back(new LineSumValidator(LineType::NegativeDiagonal, 0));
 
 	//insert positive diag validator
-	validators[convert2dtoLinear(getSquareSize() - 1,0)].push_back(new LineSumValidator(LineType::PositiveDiagonal, 0));
+	validators[convert2dtoLinear(getSquareSize() - 1, 0)].push_back(new LineSumValidator(LineType::PositiveDiagonal, 0));
 
 	//insert CachePossibleValidator
-	validators[convert2dtoLinear(0,getSquareSize() - 1)].push_back(new CachePossibleValidator());
-	
+	validators[convert2dtoLinear(0, getSquareSize() - 1)].push_back(new CachePossibleValidator());
+
 	//insert rangeValidators
 	for (int i = 1; i < m_squareSize - 1; i++) {//the -1 in m_squareSize is because it is going to get overwritten the cols
 		pos1 = convert2dtoLinear(i, m_squareSize - 1);
-		validators[pos1].push_back(new RangeValidator(1, m_recurMax,pos1));
+		validators[pos1].push_back(new RangeValidator(1, m_recurMax, pos1));
 	}
 	for (int i = 0; i < m_squareSize; i++) {
 		pos1 = convert2dtoLinear(m_squareSize - 1, i);
-		validators[pos1].push_back(new RangeValidator(1, m_recurMax,pos1));
+		validators[pos1].push_back(new RangeValidator(1, m_recurMax, pos1));
 	}
 }
 
-int SquareTemplate::getMinRange(int pos, const Square* square) {
+int SquareTemplate::getMinRange(int pos, const Square* square)
+{
 	return ranges.at(pos)->getMin(square);
 }
 
-int SquareTemplate::getMaxRange(int pos, const Square* square) {
+int SquareTemplate::getMaxRange(int pos, const Square* square)
+{
 	return ranges.at(pos)->getMax(square);
 }
 
-SquareTemplate::~SquareTemplate() {
+SquareTemplate::~SquareTemplate()
+{
 	//delete validators
 	for (auto vlist : validators) {
 		for (auto v : vlist) {
@@ -121,9 +125,10 @@ SquareTemplate::~SquareTemplate() {
 	}
 }
 
-void SquareTemplate::findPossibleRanges(int size, int max) {
+void SquareTemplate::findPossibleRanges(int size, int max)
+{
 	//add nums to vector
-	for (int i = 0; i <= max*size; i++) {
+	for (int i = 0; i <= max * size; i++) {
 		nums.push_back(0);
 	}
 
@@ -147,7 +152,7 @@ void SquareTemplate::findPossibleRanges(int size, int max) {
 
 	//cal maxPosSum
 	maxPosSum = (int)nums.size() - 1;
-	for (size_t i = nums.size()-1; i > minPosSum; i--) {
+	for (size_t i = nums.size() - 1; i > minPosSum; i--) {
 		if (nums[i] >= neededSums) {
 			maxPosSum = (int)i;
 			break;
@@ -159,12 +164,14 @@ void SquareTemplate::findPossibleRanges(int size, int max) {
 }
 
 //recursively finds the number of ways to get to every line ending for the given size and max
-void SquareTemplate::findRangeRecur(int size, int max) {
+void SquareTemplate::findRangeRecur(int size, int max)
+{
 	findRangeRecur_helper(1, 0, size, max, 0);
 }
 
 //The helper function of findRangeRecur that handles passing the metadata
-void SquareTemplate::findRangeRecur_helper(int min, int count, int maxSize, int maxNum, int sum) {
+void SquareTemplate::findRangeRecur_helper(int min, int count, int maxSize, int maxNum, int sum)
+{
 	if (count >= maxSize) { //if size reached
 		nums.at(sum)++;
 	} else {
@@ -174,7 +181,8 @@ void SquareTemplate::findRangeRecur_helper(int min, int count, int maxSize, int 
 	}
 }
 
-bool SquareTemplate::doTests(const Square* sq) const {
+bool SquareTemplate::doTests(const Square* sq) const
+{
 	//run all nessacary validators
 	auto& list = (sq->getTemplate().validators.at((size_t)sq->getAddedNumCount() - 1));//get the validators for the just added pos
 	for (Validator* val : list) {//for every applicable validator
