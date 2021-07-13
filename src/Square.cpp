@@ -4,7 +4,7 @@
 #include <iomanip> //setw
 #include <iostream> //cout
 #include <mutex>
-
+#include <string>
 
 Square::Square(int size, SquareTemplate& tmplt) : m_tmplt(tmplt){
     m_allocArray(size);
@@ -68,7 +68,7 @@ void Square::m_printSquare(char lineDelim, bool printHeader, bool showIdentical)
 
         //calc charWidth
         int biggestNum = (getTemplate().getRecurMax() + getTemplate().getRecurOffset() - 1);
-        int outputWidth = (int)std::to_string(biggestNum).length()+1;
+        int outputWidth = (int)std::to_string(biggestNum).length()+1;//this might be way faster if /10 is used instead of to_string
         if (getTemplate().getRecurOffset() < 1) {//room for negative signs
             outputWidth++;
         }

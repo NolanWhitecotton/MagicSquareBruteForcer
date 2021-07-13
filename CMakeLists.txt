@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
 # set the project name
-project(msbf)
+project(msbf CXX)
 
 # add the source files
 add_executable(msbf 
